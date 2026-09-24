@@ -1,6 +1,6 @@
 # InfluencEarn — Architecture
 
-Status: **Phase 1 complete** (foundation: design system, landing, auth, profiles, role switching, app shell).
+Status: **Phase 2 complete** (campaigns + wallet foundation). Phase 1: design system, landing, auth, profiles, role switching, app shell.
 
 ---
 
@@ -15,10 +15,10 @@ exported HTML is used at runtime.
 | Landing | Public marketing page | `/` |
 | Auth | Sign up, role setup, login, reset, profile setup, role switcher, social gate, social settings | `/signup`, `/login`, `/forgot-password`, `/reset-password`, `/onboarding/*`, header switcher |
 | Advertiser Dashboard | Sidebar + top bar shell, KPIs, campaign table | App shell layout |
-| Campaigns, Create Campaign | List/detail, 4-step wizard | Phase 2 |
+| Campaigns, Create Campaign | List/detail, 4-step wizard | `/campaigns`, `/campaigns/new`, `/campaigns/[id]`, `/edit`, `/fund` (phase 2) |
 | Influencer | Marketplace, applications, tasks, submissions, wallet, social accounts | Phase 3 |
 | Admin | Users, campaigns, task reviews, payouts, transactions, reports | Phase 4 (shell + guard now) |
-| Wallet | Balance, top-up, history, withdrawals, rules | Phase 2/5 (behind provider abstraction) |
+| Wallet | Balance, top-up, history, withdrawals, rules | `/wallet` balance + history (phase 2); top-ups/withdrawals need a real provider |
 
 ### Design tokens (extracted)
 
@@ -54,6 +54,10 @@ Defined once in `src/app/globals.css` (`@theme`), consumed as Tailwind utilities
 | 11 | Wallet | Visa/Mastercard/PayPal/Wise, "Cards are the only way in" | Not implemented; payment provider is undecided (see §5) |
 | 12 | Top bar | Wallet balance chip, notification bell, "?" | Omitted until wallet (phase 2) and notifications (phase 3) exist — no fake balances |
 | 13 | Sidebar | Links to unbuilt sections | Shown as disabled "Soon" items, not links to 404s |
+| 14 | Create Campaign | Step 3 "Proof & dates" with screenshot / insights proofs | Step 3 is "Instructions & dates"; proof is derived per task type; screenshots never required |
+| 15 | Create Campaign | "X" platform; card/bank/PayPal funding sources | 4 platforms only; wallet is the only funding source |
+| 16 | Campaigns list | Applications / Selected columns, Pause, Duplicate, Delete | No application data yet → columns omitted; only Edit / Fund / Cancel (pre-funding) exist |
+| 17 | Wallet | Cards on file, withdrawals, "held/reserved" copy, receipts | Not built; balance described as derived from transaction history, never as custody/escrow |
 
 ### Accessibility adjustments
 
@@ -192,3 +196,67 @@ Planned interfaces (`src/features/payments/providers/`):
 
 Campaign funding debits the internal ledger atomically in a DB function (idempotent), so swapping
 providers never touches campaign logic. No "escrow" wording anywhere.
+
+---
+
+## 6. Phase 2 — campaigns + wallet foundation
+
+### Decisions
+
+- **Postgres is the authority for money and state.** Status changes and every ledger write happen in
+  `SECURITY DEFINER` functions; clients have no write grants on financial tables and no grant on
+  `campaigns.status`. TypeScript mirrors the rules (`src/domain/campaigns/state-machine.ts`,
+  `src/domain/wallet/ledger.ts`) for UI and unit tests.
+- **Atomic draft saves.** `save_campaign_draft` (SECURITY INVOKER, so RLS applies) writes the campaign and
+  replaces its child rows in one transaction.
+- **Funding in one database transaction.** `fund_and_publish_campaign` locks the campaign and wallet rows,
+  recomputes the total, checks the balance, posts a balanced journal, records `campaign_funding`, and moves
+  `funding_required → published → applications_open`.
+- **Idempotency.** One `campaign_funding` row per campaign (unique), per-user unique idempotency keys on
+  journal and payment rows, row locks to serialise concurrent requests. A retry returns `already_funded`.
+- **Deadlines** are stored as timestamps at 23:59:59 UTC of the chosen date.
+
+### Campaign state machine
+
+`draft → funding_required → published → applications_open → selection_in_progress → in_progress ⇄ review_pending → completed`;
+`draft | funding_required → cancelled`; `funding_required → draft`. Enforced by the `campaigns_guard_update`
+trigger (`campaign_transition_allowed`). Content and budget are frozen once funded (trigger + RLS). Cancelling
+a funded campaign is refused until a refund flow exists.
+
+### Tables (added)
+
+`creator_categories`, `campaign_task_type_rules` (reference data) · `campaigns` · `campaign_platforms` ·
+`campaign_tasks` (FK to campaign and to (campaign, platform)) · `campaign_requirements` (1:1) ·
+`campaign_creator_categories` · `campaign_locations` (ISO country + optional region/city) ·
+`campaign_status_events` · `platform_settings` · `wallet_accounts` (user wallet, campaign reserve, platform
+revenue, provider clearing) · `payment_transactions` · `ledger_transactions` · `wallet_ledger_entries` ·
+`campaign_funding` · views `wallet_account_balances`, `wallet_statement` (security_invoker).
+
+### Ledger
+
+Double entry: each `ledger_transactions` row has entries that sum to 0 (deferred constraint trigger,
+`SECURITY DEFINER` so it sees system accounts). Entries and journal rows are append-only (trigger rejects
+UPDATE/DELETE for everyone). Entry types in use: `mock_deposit`, `campaign_funding_debit`,
+`campaign_funding_reserve`, `platform_fee`.
+
+| Operation | User wallet | Other account |
+| --- | --- | --- |
+| Test deposit (dev only) | +amount | mock provider clearing −amount |
+| Fund campaign | −(budget + fee) | campaign reserve +budget, platform revenue +fee |
+
+### Mock provider safeguards
+
+1. `getWalletFundingProvider()` returns `null` when `NODE_ENV=production` (no real provider yet).
+2. `MockWalletFundingProvider` throws on construction and on execution in production.
+3. `record_test_deposit` refuses unless `platform_settings.test_funds_enabled` is true; that flag is only set
+   by `supabase/seed.sql`, which runs on local resets, never on hosted projects.
+4. Rows are flagged `is_test`; the UI labels test funds "Development only".
+
+### Verification (phase 2)
+
+- pgTAP: 60 assertions (16 phase 1 + 44 phase 2), run locally against Postgres.
+- Vitest: 81 unit tests.
+- End-to-end HTTP smoke test against the production build + local Supabase (signup → email confirm →
+  onboarding → campaign draft → funding → wallet → role switch → sign out; cross-user and admin checks):
+  40/40. It found a real bug (the balanced-journal trigger ran under RLS at commit), fixed in the migration and
+  now covered by pgTAP.

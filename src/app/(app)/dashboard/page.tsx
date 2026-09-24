@@ -1,11 +1,14 @@
 import { FileText, Megaphone } from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 
+import { Button } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { firstNameOf } from "@/features/account/onboarding";
 import { requireOnboardedAccount } from "@/features/account/queries";
+import { getMyCampaignTabCounts } from "@/features/campaigns/queries";
 import { GettingStarted, type ChecklistStep } from "@/features/dashboard/components/getting-started";
 import { PageHeader } from "@/features/shell/components/page-header";
 
@@ -23,6 +26,9 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
   const firstName = firstNameOf(profile.full_name);
   const hasProfileDetails = Boolean(profile.city || profile.phone || profile.bio || profile.avatar_path);
   const isAdvertiser = profile.active_workspace === "advertiser";
+  const counts = isAdvertiser ? await getMyCampaignTabCounts() : null;
+  const hasCampaigns = (counts?.all ?? 0) > 0;
+  const hasFundedCampaign = counts ? counts.published + counts.applications_open + counts.in_progress + counts.completed > 0 : false;
 
   const profileStep: ChecklistStep = {
     title: "Complete your profile",
@@ -38,8 +44,8 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
         {
           title: "Create and fund your first campaign",
           description: "Set requirements and budget. It goes live once funded from your wallet.",
-          done: false,
-          comingSoon: true,
+          done: hasFundedCampaign,
+          action: hasCampaigns ? { href: "/campaigns", label: "View campaigns" } : { href: "/campaigns/new", label: "Create campaign" },
         },
       ]
     : [
@@ -71,8 +77,17 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
           {isAdvertiser ? (
             <EmptyState
               icon={Megaphone}
-              title="No campaigns yet"
-              description="Campaigns you create will appear here with their funding status, applicants and work waiting for your review."
+              title={hasCampaigns ? `${counts?.all} ${counts?.all === 1 ? "campaign" : "campaigns"}` : "No campaigns yet"}
+              description={
+                hasCampaigns
+                  ? "Manage drafts, fund campaigns and track their status from the Campaigns page."
+                  : "Campaigns you create will appear here with their funding status, applicants and work waiting for your review."
+              }
+              action={
+                <Button asChild>
+                  <Link href={hasCampaigns ? "/campaigns" : "/campaigns/new"}>{hasCampaigns ? "Open campaigns" : "Create campaign"}</Link>
+                </Button>
+              }
             />
           ) : (
             <EmptyState

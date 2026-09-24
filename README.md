@@ -23,6 +23,16 @@ npm run dev               # http://localhost:3000
 
 Local auth emails (confirmation, password reset) are captured by Mailpit at http://127.0.0.1:54324.
 
+Lighter local stack (skips Studio, storage, realtime, analytics):
+`npx supabase start -x studio,imgproxy,vector,logflare,edge-runtime,realtime,supavisor,postgres-meta,storage-api`
+(profile photo uploads need `storage-api`).
+
+### Test funds (development only)
+
+`npm run dev` shows an **Add test funds** panel on the Wallet and funding pages. It uses a mock provider and
+works only when `NODE_ENV` is not `production` **and** the local database flag set by `supabase/seed.sql` is on.
+Amounts ending in `.13` are declined, to exercise failures. No real payment provider is integrated.
+
 ## Scripts
 
 | Script | What it does |

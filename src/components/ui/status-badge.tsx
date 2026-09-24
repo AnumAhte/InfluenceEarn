@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils/cn";
 
-export type StatusTone = "success" | "warning" | "danger" | "info" | "neutral";
+export type StatusTone = "success" | "warning" | "danger" | "info" | "neutral" | "dark" | "outline";
 
 const toneClasses: Record<StatusTone, string> = {
   success: "bg-success-bg text-success-fg",
@@ -10,6 +10,8 @@ const toneClasses: Record<StatusTone, string> = {
   danger: "bg-danger-bg text-danger-fg",
   info: "bg-primary-100 text-primary-hover",
   neutral: "bg-surface-muted text-ink-secondary",
+  dark: "bg-night text-white",
+  outline: "border border-line bg-surface text-ink-secondary",
 };
 
 /**

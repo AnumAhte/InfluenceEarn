@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { firstFieldErrors, formString, type ActionState } from "@/lib/forms/action-state";
 import { createClient } from "@/lib/supabase/server";
+import { safeRedirectPath } from "@/lib/utils/safe-redirect";
 
 import { profileSchema, validateAvatarFile, workspaceSchema } from "./schemas";
 
@@ -47,7 +48,7 @@ export async function switchWorkspace(formData: FormData) {
   if (error) throw new Error("Could not switch role. Please try again.", { cause: error });
 
   revalidatePath("/", "layout");
-  redirect("/dashboard");
+  redirect(safeRedirectPath(formString(formData, "returnTo") || null, "/dashboard"));
 }
 
 /** Onboarding step 2 can be skipped; details can be added later in settings. */
