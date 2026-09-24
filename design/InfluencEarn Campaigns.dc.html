@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Plus Jakarta Sans", -apple-system, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; background: #F6F9F8; color: #08201F; }
+  a { color: #0E8494; text-decoration: none; }
+  a:hover { color: #0A5F6B; }
+  ::selection { background: #A9DAE1; }
+  textarea, input { font-family: inherit; }
+</style>
+</helmet>
+
+<div style="padding:56px 56px 96px;display:flex;flex-direction:column;gap:64px;background:#F6F9F8">
+
+  <div style="display:flex;flex-direction:column;gap:10px;max-width:780px;flex:none">
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="assets/ie-mark.png" alt="influencearn" width="30" height="30" style="display:block;flex-shrink:0;border-radius:9px" />
+      <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:16px;font-weight:700;letter-spacing:-0.025em">influence<span style="color:#4E8A1E">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span><span style="font-size:8.3px;font-weight:600;letter-spacing:0.08em;color:#4E8A1E">.com</span><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span></span></span>
+    </div>
+    <h1 style="margin:0;font-size:36px;font-weight:700;letter-spacing:-0.03em;line-height:1.15">Campaign management</h1>
+    <p style="margin:0;font-size:16px;color:#4A6260;line-height:1.6">The advertiser's campaign list, campaign detail, applicant selection, task review, payment and timeline. Tabs, filters, the row menus, applicant selection and the review panel are live. All figures are example data inside the mockup.</p>
+  </div>
+
+  <!-- 01 CAMPAIGNS LIST -->
+  <section data-screen-label="Campaigns list" style="display:flex;flex-direction:column;gap:20px;flex:none">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">01</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Campaigns · desktop</span>
+      <span style="font-size:14px;color:#6A817F">Status tabs filter the table · ⋯ menu shows only the actions that apply to that status</span>
+    </div>
+
+    <div style="width:1440px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#F6F9F8;box-shadow:0 32px 80px -40px rgba(8,32,31,.28);overflow:hidden;display:grid;grid-template-columns:248px 1fr">
+
+      <aside style="background:#0B2523;padding:20px 14px;display:flex;flex-direction:column;gap:24px;min-height:1080px">
+        <div style="display:flex;align-items:center;gap:10px;padding:4px 8px 0">
+          <img src="assets/ie-mark.png" alt="influencearn" width="30" height="30" style="display:block;flex-shrink:0;border-radius:9px" />
+          <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:15.5px;font-weight:700;letter-spacing:-0.025em;color:#FFFFFF">influence<span style="color:#8FD14F">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span><span style="font-size:8.1px;font-weight:600;letter-spacing:0.08em;color:#8FD14F">.com</span><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span></span></span>
+        </div>
+        <nav style="display:flex;flex-direction:column;gap:3px">
+          <span style="display:flex;align-items:center;gap:10px;font-size:14px;color:#C2CFCD;border-radius:11px;padding:10px 12px;cursor:pointer" style-hover="background:rgba(255,255,255,.06)"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Dashboard</span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:#FFFFFF;background:rgba(255,255,255,.1);border-radius:11px;padding:10px 12px"><span style="width:16px;height:16px;border:2px solid #82C8D2;border-radius:4px;display:block;flex:none"></span>Campaigns<span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#FFFFFF;background:rgba(255,255,255,.14);border-radius:999px;padding:2px 8px">10</span></span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14px;color:#C2CFCD;border-radius:11px;padding:10px 12px;cursor:pointer" style-hover="background:rgba(255,255,255,.06)"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:50%;display:block;flex:none"></span>Applicants<span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#C2CFCD;background:rgba(255,255,255,.1);border-radius:999px;padding:2px 8px">884</span></span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14px;color:#C2CFCD;border-radius:11px;padding:10px 12px;cursor:pointer" style-hover="background:rgba(255,255,255,.06)"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Tasks &amp; reviews<span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#FFFFFF;background:#D97706;border-radius:999px;padding:2px 8px">14</span></span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14px;color:#C2CFCD;border-radius:11px;padding:10px 12px;cursor:pointer" style-hover="background:rgba(255,255,255,.06)"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Payments</span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14px;color:#C2CFCD;border-radius:11px;padding:10px 12px;cursor:pointer" style-hover="background:rgba(255,255,255,.06)"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Notifications<span style="margin-left:auto;width:7px;height:7px;border-radius:50%;background:#0E8494;display:block"></span></span>
+          <div style="height:1px;background:rgba(255,255,255,.1);margin:12px 8px"></div>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14px;color:#C2CFCD;border-radius:11px;padding:10px 12px;cursor:pointer" style-hover="background:rgba(255,255,255,.06)"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:50%;display:block;flex:none"></span>My profile</span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14px;color:#C2CFCD;border-radius:11px;padding:10px 12px;cursor:pointer" style-hover="background:rgba(255,255,255,.06)"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Settings</span>
+        </nav>
+        <div style="margin-top:auto;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px">
+          <span style="font-size:13px;font-weight:600;color:#FFFFFF">2 campaigns need payment</span>
+          <span style="font-size:12.5px;color:#93A6A4;line-height:1.55">A campaign stays a draft until its payment completes. After payment it is published.</span>
+          <span style="font-size:12.5px;font-weight:600;color:#82C8D2">Open payments →</span>
+        </div>
+      </aside>
+
+      <div style="display:flex;flex-direction:column;background:#F6F9F8">
+
+        <div style="height:68px;background:#FFFFFF;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 28px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="display:flex;align-items:center;gap:10px;height:40px;padding:0 12px 0 10px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;cursor:pointer" style-hover="background:#F6F9F8">
+              <span style="width:24px;height:24px;border-radius:7px;background:#0B2523;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:11px;font-weight:700">A</span>
+              <span style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.15">
+                <span style="font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Current role</span>
+                <span style="font-size:13.5px;font-weight:600;color:#08201F">Advertiser</span>
+              </span>
+              <span style="font-size:10px;color:#6A817F;margin-left:2px">▼</span>
+            </span>
+            <span style="font-size:13px;color:#6A817F">Campaigns</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="width:38px;height:38px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative" style-hover="background:#F6F9F8"><span style="width:14px;height:14px;border:2px solid #4A6260;border-radius:4px;display:block"></span><span style="position:absolute;top:8px;right:9px;width:7px;height:7px;border-radius:50%;background:#DC2626;border:2px solid #FFFFFF"></span></span>
+            <span style="width:38px;height:38px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:650;color:#4A6260" style-hover="background:#F6F9F8">?</span>
+            <span style="width:1px;height:24px;background:#E0E8E7;display:block;margin:0 4px"></span>
+            <span style="display:flex;align-items:center;gap:9px;padding:4px 10px 4px 4px;border-radius:12px;border:1px solid #E0E8E7;cursor:pointer" style-hover="background:#F6F9F8">
+              <span style="width:30px;height:30px;border-radius:9px;background:#0B2523;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#FFFFFF">AN</span>
+              <span style="display:flex;flex-direction:column;line-height:1.2"><span style="font-size:13px;font-weight:600">Ana Rivera</span><span style="font-size:11.5px;color:#6A817F">Brand House</span></span>
+              <span style="font-size:10px;color:#6A817F">▼</span>
+            </span>
+          </div>
+        </div>
+
+        <div style="padding:32px;display:flex;flex-direction:column;gap:24px">
+
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:32px">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Campaigns</h2>
+              <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">Create, manage, and track all your influencer campaigns.</p>
+            </div>
+            <button type="button" style="font:inherit;font-size:14.5px;font-weight:550;height:44px;padding:0 20px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 2px 8px rgba(10,95,107,.28);flex:none" style-hover="background:#0A5F6B">+ Create campaign</button>
+          </div>
+
+          <!-- TABS -->
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;border-bottom:1px solid #E0E8E7;padding-bottom:2px">
+            <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="10">
+              <button type="button" onClick="{{ t.onClick }}" style="font:inherit;display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:{{ t.weight }};color:{{ t.fg }};background:transparent;border:none;border-bottom:2px solid {{ t.underline }};padding:10px 12px;margin-bottom:-3px;cursor:pointer">
+                {{ t.label }}
+                <span style="font-size:11.5px;font-weight:600;color:{{ t.countFg }};background:{{ t.countBg }};border-radius:999px;padding:2px 7px;font-variant-numeric:tabular-nums">{{ t.count }}</span>
+              </button>
+            </sc-for>
+          </div>
+
+          <!-- SEARCH + FILTERS -->
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:16px 18px;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <label style="flex:1;display:flex;align-items:center;gap:10px;height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;background:#F6F9F8" style-focus="border-color:#0E8494">
+                <span style="width:14px;height:14px;border:2px solid #6A817F;border-radius:50%;display:block;flex:none"></span>
+                <input type="text" value="{{ query }}" onChange="{{ onQuery }}" placeholder="Search campaigns..." style="flex:1;font-size:14.5px;color:#08201F;background:transparent;border:none;outline:none" />
+                <sc-if value="{{ hasQuery }}">
+                  <span onClick="{{ clearQuery }}" style="font-size:13px;color:#6A817F;cursor:pointer;flex:none">✕</span>
+                </sc-if>
+              </label>
+              <button type="button" style="font:inherit;font-size:13.5px;font-weight:550;height:44px;padding:0 16px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer;flex:none" style-hover="background:#EFF4F3">Sort: Newest ▼</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <sc-for list="{{ filters }}" as="f" hint-placeholder-count="5">
+                <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:550;color:{{ f.fg }};background:{{ f.bg }};border:1px solid {{ f.border }};border-radius:11px;padding:9px 12px;cursor:pointer" style-hover="background:#EFF4F3">
+                  <span style="font-size:11.5px;font-weight:600;letter-spacing:0.03em;text-transform:uppercase;color:#6A817F">{{ f.label }}</span>
+                  {{ f.value }}
+                  <span style="font-size:9px;color:#6A817F">▼</span>
+                </span>
+              </sc-for>
+              <button type="button" onClick="{{ clearFilters }}" style="font:inherit;font-size:13px;font-weight:550;color:#0E8494;background:transparent;border:none;padding:9px 6px;cursor:pointer;margin-left:2px" style-hover="color:#0A5F6B">Clear filters</button>
+              <span style="margin-left:auto;font-size:13px;color:#6A817F">{{ resultLine }}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:12px;border-top:1px solid #EFF4F3">
+              <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F;margin-right:2px">Platform</span>
+              <sc-for list="{{ platforms }}" as="p" hint-placeholder-count="5">
+                <button type="button" onClick="{{ p.onClick }}" style="font:inherit;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:550;color:{{ p.fg }};background:{{ p.bg }};border:1px solid {{ p.border }};border-radius:999px;padding:7px 13px;cursor:pointer">
+                  <span style="width:18px;height:18px;border-radius:5px;background:{{ p.chipBg }};color:{{ p.chipFg }};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex:none">{{ p.code }}</span>
+                  {{ p.label }}
+                </button>
+              </sc-for>
+            </div>
+          </div>
+
+          <!-- TABLE -->
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04)">
+            <div style="display:grid;grid-template-columns:2.3fr 1.1fr 1fr 1fr 0.85fr 1.1fr 1.35fr 1.05fr 1.15fr;padding:13px 22px;background:#F6F9F8;border-bottom:1px solid #E0E8E7;border-radius:16px 16px 0 0;font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">
+              <span>Campaign</span><span>Platform</span><span>Creators needed</span><span>Applications</span><span>Selected</span><span>Budget</span><span>Status</span><span>Created</span><span style="text-align:right">Action</span>
+            </div>
+            <sc-for list="{{ rows }}" as="c" hint-placeholder-count="6">
+              <div style="display:grid;grid-template-columns:2.3fr 1.1fr 1fr 1fr 0.85fr 1.1fr 1.35fr 1.05fr 1.15fr;padding:15px 22px;border-bottom:1px solid #EFF4F3;align-items:center;font-size:13.5px;color:#08201F;position:relative;z-index:{{ c.z }}" style-hover="background:#FBFDFC">
+                <span style="display:flex;flex-direction:column;gap:3px;min-width:0;padding-right:12px">
+                  <span style="font-weight:600;letter-spacing:-0.01em">{{ c.name }}</span>
+                  <span style="font-size:12px;color:#6A817F">{{ c.category }} · {{ c.deadline }}</span>
+                </span>
+                <span style="display:flex;align-items:center;gap:8px;color:#4A6260">
+                  <span style="width:22px;height:22px;border-radius:6px;background:{{ c.platBg }};color:{{ c.platFg }};display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;flex:none">{{ c.platCode }}</span>
+                  {{ c.platform }}
+                </span>
+                <span style="font-variant-numeric:tabular-nums;color:#4A6260">{{ c.needed }}</span>
+                <span style="font-variant-numeric:tabular-nums;font-weight:600">{{ c.applications }}</span>
+                <span style="font-variant-numeric:tabular-nums;color:#4A6260">{{ c.selected }}</span>
+                <span style="font-variant-numeric:tabular-nums;font-weight:600">{{ c.budget }}</span>
+                <span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:5px 10px;background:{{ c.badgeBg }};color:{{ c.badgeFg }};border:1px solid {{ c.badgeBorder }}">{{ c.status }}</span></span>
+                <span style="font-size:13px;color:#6A817F">{{ c.created }}</span>
+                <span style="display:flex;align-items:center;justify-content:flex-end;gap:8px;position:relative">
+                  <span style="font-size:13px;font-weight:550;color:#0E8494;cursor:pointer">{{ c.primary }}</span>
+                  <button type="button" onClick="{{ c.onMenu }}" style="font:inherit;width:30px;height:30px;border-radius:9px;border:1px solid {{ c.menuBorder }};background:{{ c.menuBg }};color:#4A6260;font-size:14px;line-height:1;cursor:pointer;flex:none" style-hover="background:#EFF4F3">⋯</button>
+                  <sc-if value="{{ c.menuOpen }}">
+                    <span style="position:absolute;top:36px;right:0;width:196px;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;box-shadow:0 24px 60px -20px rgba(8,32,31,.28);padding:6px;display:flex;flex-direction:column;gap:1px;z-index:40">
+                      <sc-for list="{{ c.menuItems }}" as="m" hint-placeholder-count="3">
+                        <span style="display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:500;color:{{ m.fg }};border-radius:10px;padding:9px 11px;cursor:pointer" style-hover="background:#EFF4F3">
+                          <span style="width:14px;height:14px;border:2px solid {{ m.icon }};border-radius:4px;display:block;flex:none"></span>{{ m.label }}
+                        </span>
+                      </sc-for>
+                      <span style="font-size:11.5px;color:#6A817F;line-height:1.45;padding:8px 11px 4px;border-top:1px solid #EFF4F3;margin-top:4px">{{ c.menuNote }}</span>
+                    </span>
+                  </sc-if>
+                </span>
+              </div>
+            </sc-for>
+            <sc-if value="{{ noResults }}">
+              <div style="padding:56px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center">
+                <span style="width:46px;height:46px;border-radius:14px;background:#EFF4F3;display:flex;align-items:center;justify-content:center"><span style="width:15px;height:15px;border:2.5px solid #4A6260;border-radius:50%;display:block"></span></span>
+                <span style="font-size:16px;font-weight:650;letter-spacing:-0.015em">No campaigns match your search.</span>
+                <span style="font-size:13.5px;color:#4A6260;line-height:1.6;max-width:340px">Try a different name, or clear the search and filters to see all {{ totalCount }} campaigns.</span>
+                <button type="button" onClick="{{ clearFilters }}" style="margin-top:6px;font:inherit;font-size:14px;font-weight:550;height:42px;padding:0 16px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">Clear filters</button>
+              </div>
+            </sc-if>
+            <div style="padding:14px 22px;background:#F6F9F8;border-top:1px solid #E0E8E7;border-radius:0 0 16px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+              <span style="font-size:13px;color:#6A817F">{{ resultLine }}</span>
+              <span style="display:flex;align-items:center;gap:6px">
+                <span style="font-size:13px;font-weight:550;color:#93A6A4;border:1px solid #E0E8E7;background:#FFFFFF;border-radius:10px;padding:7px 12px">Previous</span>
+                <span style="font-size:13px;font-weight:600;color:#FFFFFF;background:#0B2523;border-radius:10px;padding:7px 12px">1</span>
+                <span style="font-size:13px;font-weight:550;color:#08201F;border:1px solid #E0E8E7;background:#FFFFFF;border-radius:10px;padding:7px 12px;cursor:pointer">Next</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 CAMPAIGN DETAIL -->
+  <section data-screen-label="Campaign detail" style="display:flex;flex-direction:column;gap:20px;flex:none">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">02</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Campaign detail · desktop</span>
+      <span style="font-size:14px;color:#6A817F">Overview, information, progress, applicants with manual selection, reviews, payment, timeline</span>
+    </div>
+
+    <div style="width:1440px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#F6F9F8;box-shadow:0 32px 80px -40px rgba(8,32,31,.28);overflow:hidden;display:flex;flex-direction:column">
+
+      <!-- detail header -->
+      <div style="background:#FFFFFF;border-bottom:1px solid #E0E8E7;padding:22px 32px 24px;display:flex;flex-direction:column;gap:18px">
+        <span style="display:flex;align-items:center;gap:8px;font-size:13px;color:#6A817F"><span style="color:#0E8494;font-weight:550;cursor:pointer">Campaigns</span> / Summer Collection Promotion</span>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:32px">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <h2 style="margin:0;font-size:26px;font-weight:700;letter-spacing:-0.03em">Summer Collection Promotion</h2>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:#08201F;background:#EFF4F3;border-radius:999px;padding:5px 11px 5px 6px"><span style="width:20px;height:20px;border-radius:6px;background:#0B2523;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700">IG</span>Instagram</span>
+              <span style="font-size:12.5px;font-weight:600;color:#4A6260;background:#EFF4F3;border-radius:999px;padding:5px 11px">Fashion</span>
+              <span style="font-size:12px;font-weight:600;color:#15803D;background:#DCFCE7;border-radius:999px;padding:5px 11px">Applications open</span>
+              <span style="font-size:12.5px;color:#6A817F">Created Aug 14, 2026 · applications close Aug 26 · tasks due Sep 5</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;flex:none">
+            <button type="button" style="font:inherit;font-size:14px;font-weight:550;height:42px;padding:0 16px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#EFF4F3">Edit</button>
+            <button type="button" style="font:inherit;font-size:14px;font-weight:550;height:42px;padding:0 16px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#EFF4F3">Pause campaign</button>
+            <button type="button" style="font:inherit;font-size:14px;font-weight:550;height:42px;padding:0 16px;border-radius:12px;border:1px solid #FECACA;background:#FFFFFF;color:#B91C1C;cursor:pointer" style-hover="background:#FEF2F2">Cancel campaign</button>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;padding-top:6px">
+          <sc-for list="{{ detailTabs }}" as="d" hint-placeholder-count="5">
+            <span style="font-size:13.5px;font-weight:{{ d.weight }};color:{{ d.fg }};border-bottom:2px solid {{ d.underline }};padding:8px 12px 10px;margin-bottom:-25px;cursor:pointer">{{ d.label }}</span>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="padding:32px;display:flex;flex-direction:column;gap:24px">
+
+        <!-- overview cards -->
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:14px">
+          <sc-for list="{{ overview }}" as="o" hint-placeholder-count="6">
+            <div style="background:{{ o.bg }};border:{{ o.border }};border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:7px;box-shadow:0 1px 2px rgba(8,32,31,.04)">
+              <span style="font-size:12.5px;font-weight:500;color:{{ o.labelFg }}">{{ o.label }}</span>
+              <span style="font-size:27px;font-weight:700;letter-spacing:-0.03em;line-height:1;font-variant-numeric:tabular-nums;color:{{ o.valueFg }}">{{ o.value }}</span>
+              <span style="font-size:12px;color:{{ o.metaFg }}">{{ o.meta }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1.62fr 1fr;gap:20px;align-items:start">
+
+          <div style="display:flex;flex-direction:column;gap:20px">
+
+            <!-- campaign information -->
+            <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+              <div style="padding:20px 24px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between">
+                <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Campaign information</span>
+                <span style="font-size:13px;font-weight:550;color:#0E8494;cursor:pointer">Edit details</span>
+              </div>
+              <div style="padding:22px 24px;display:flex;flex-direction:column;gap:22px">
+                <div style="display:flex;flex-direction:column;gap:7px">
+                  <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Campaign description</span>
+                  <p style="margin:0;font-size:14.5px;color:#08201F;line-height:1.65;text-wrap:pretty">Promote our summer ready-to-wear drop with one Instagram Reel showing at least two outfits from the collection. Shoot in daylight, tag @brandhouse, and use the campaign hashtag in the caption.</p>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px 24px">
+                  <div style="display:flex;flex-direction:column;gap:5px"><span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Campaign type</span><span style="font-size:14.5px;font-weight:550">Product promotion</span></div>
+                  <div style="display:flex;flex-direction:column;gap:5px"><span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Required platforms</span><span style="font-size:14.5px;font-weight:550">Instagram</span></div>
+                  <div style="display:flex;flex-direction:column;gap:5px"><span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Minimum followers</span><span style="font-size:14.5px;font-weight:550;font-variant-numeric:tabular-nums">10,000</span></div>
+                  <div style="display:flex;flex-direction:column;gap:5px"><span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Payment per influencer</span><span style="font-size:14.5px;font-weight:550;font-variant-numeric:tabular-nums">$10</span></div>
+                  <div style="display:flex;flex-direction:column;gap:5px"><span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Number of influencers</span><span style="font-size:14.5px;font-weight:550;font-variant-numeric:tabular-nums">100</span></div>
+                  <div style="display:flex;flex-direction:column;gap:5px"><span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Category</span><span style="font-size:14.5px;font-weight:550">Fashion</span></div>
+                  <div style="display:flex;flex-direction:column;gap:5px"><span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Application deadline</span><span style="font-size:14.5px;font-weight:550">Aug 26, 2026</span></div>
+                  <div style="display:flex;flex-direction:column;gap:5px"><span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Task deadline</span><span style="font-size:14.5px;font-weight:550">Sep 5, 2026</span></div>
+                  <div style="display:flex;flex-direction:column;gap:5px"><span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Created</span><span style="font-size:14.5px;font-weight:550">Aug 14, 2026</span></div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;padding-top:20px;border-top:1px solid #EFF4F3">
+                  <div style="display:flex;flex-direction:column;gap:10px">
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Campaign instructions</span>
+                    <div style="display:flex;flex-direction:column;gap:8px">
+                      <span style="display:flex;gap:10px;font-size:14px;color:#08201F;line-height:1.55"><span style="width:5px;height:5px;border-radius:50%;background:#0E8494;margin-top:8px;flex:none"></span>Post between Aug 27 and Sep 5.</span>
+                      <span style="display:flex;gap:10px;font-size:14px;color:#08201F;line-height:1.55"><span style="width:5px;height:5px;border-radius:50%;background:#0E8494;margin-top:8px;flex:none"></span>Keep the post live for at least 30 days.</span>
+                      <span style="display:flex;gap:10px;font-size:14px;color:#08201F;line-height:1.55"><span style="width:5px;height:5px;border-radius:50%;background:#0E8494;margin-top:8px;flex:none"></span>No competing brand in the same post.</span>
+                    </div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:10px">
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Deliverables</span>
+                    <div style="display:flex;flex-direction:column;gap:8px">
+                      <span style="display:flex;align-items:center;gap:10px;font-size:14px;color:#08201F;border:1px solid #E0E8E7;border-radius:11px;padding:10px 12px;background:#F6F9F8"><span style="width:20px;height:20px;border-radius:6px;background:#0B2523;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex:none">IG</span>1 Instagram Reel, 15–30 seconds<span style="margin-left:auto;font-size:12px;color:#6A817F">Required</span></span>
+                      <span style="display:flex;align-items:center;gap:10px;font-size:14px;color:#08201F;border:1px solid #E0E8E7;border-radius:11px;padding:10px 12px;background:#F6F9F8"><span style="width:20px;height:20px;border-radius:6px;background:#0B2523;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex:none">IG</span>1 Story with product link<span style="margin-left:auto;font-size:12px;color:#6A817F">Required</span></span>
+                      <span style="display:flex;align-items:center;gap:10px;font-size:14px;color:#08201F;border:1px solid #E0E8E7;border-radius:11px;padding:10px 12px;background:#F6F9F8"><span style="width:20px;height:20px;border-radius:6px;background:#EFF4F3;color:#4A6260;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex:none">↗</span>Public post link submitted for review<span style="margin-left:auto;font-size:12px;color:#6A817F">Proof</span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- applicants -->
+            <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04)">
+              <div style="padding:20px 24px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:20px">
+                <div style="display:flex;flex-direction:column;gap:4px">
+                  <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Applicants</span>
+                  <span style="font-size:13px;color:#6A817F">You review and select every creator yourself</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;flex:none">
+                  <span style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+                    <span style="font-size:13px;font-weight:600;color:#08201F;font-variant-numeric:tabular-nums">{{ selectionLine }}</span>
+                    <span style="width:150px;height:7px;border-radius:999px;background:#EFF4F3;overflow:hidden;display:block"><span style="display:block;height:100%;background:#0E8494;width:{{ selectionPct }}"></span></span>
+                  </span>
+                  <span style="font-size:12px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border-radius:999px;padding:6px 11px">{{ remainingLine }}</span>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1.9fr 1.25fr 1fr 1fr 1.05fr 1.1fr 1.9fr;padding:12px 24px;background:#F6F9F8;border-bottom:1px solid #E0E8E7;font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">
+                <span>Influencer</span><span>Social platform</span><span>Followers</span><span>Category</span><span>Applied</span><span>Status</span><span style="text-align:right">Action</span>
+              </div>
+              <sc-for list="{{ applicants }}" as="a" hint-placeholder-count="6">
+                <div style="display:grid;grid-template-columns:1.9fr 1.25fr 1fr 1fr 1.05fr 1.1fr 1.9fr;padding:14px 24px;border-bottom:1px solid #EFF4F3;align-items:center;font-size:13.5px;color:#08201F;background:{{ a.rowBg }}">
+                  <span style="display:flex;align-items:center;gap:11px;min-width:0">
+                    <span style="width:36px;height:36px;border-radius:10px;background:#EFF4F3;border:1px solid #E0E8E7;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#08201F;flex:none">{{ a.initials }}</span>
+                    <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-weight:600">{{ a.name }}</span><span style="font-size:12px;color:#6A817F">{{ a.city }}</span></span>
+                  </span>
+                  <span style="display:flex;align-items:center;gap:8px;min-width:0"><span style="width:22px;height:22px;border-radius:6px;background:#EFF4F3;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;color:#08201F;flex:none">{{ a.code }}</span><span style="font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ a.handle }}</span></span>
+                  <span style="font-variant-numeric:tabular-nums;font-weight:600">{{ a.followers }}</span>
+                  <span style="color:#4A6260">{{ a.category }}</span>
+                  <span style="font-size:13px;color:#6A817F">{{ a.applied }}</span>
+                  <span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:5px 10px;background:{{ a.badgeBg }};color:{{ a.badgeFg }};border:1px solid {{ a.badgeBorder }}">{{ a.badge }}</span></span>
+                  <span style="display:flex;align-items:center;justify-content:flex-end;gap:8px">
+                    <sc-if value="{{ a.isOpen }}" hint-placeholder-val="{{ true }}">
+                      <span style="display:flex;align-items:center;gap:8px">
+                        <span style="font-size:12.5px;font-weight:550;color:#0E8494;cursor:pointer">View profile</span>
+                        <button type="button" onClick="{{ a.onSelect }}" style="font:inherit;font-size:12.5px;font-weight:550;height:32px;padding:0 13px;border-radius:10px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer" style-hover="background:#0A5F6B">Select</button>
+                        <button type="button" onClick="{{ a.onShortlist }}" style="font:inherit;font-size:12.5px;font-weight:550;height:32px;padding:0 12px;border-radius:10px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#EFF4F3">{{ a.shortlistLabel }}</button>
+                        <button type="button" onClick="{{ a.onReject }}" style="font:inherit;font-size:12.5px;font-weight:550;height:32px;padding:0 12px;border-radius:10px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;cursor:pointer" style-hover="background:#EFF4F3">Reject</button>
+                      </span>
+                    </sc-if>
+                    <sc-if value="{{ a.isSelected }}">
+                      <span style="display:flex;align-items:center;gap:8px">
+                        <span style="font-size:12.5px;font-weight:550;color:#0E8494;cursor:pointer">View profile</span>
+                        <button type="button" onClick="{{ a.onRemove }}" style="font:inherit;font-size:12.5px;font-weight:550;height:32px;padding:0 12px;border-radius:10px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;cursor:pointer" style-hover="background:#EFF4F3">Remove selection</button>
+                      </span>
+                    </sc-if>
+                    <sc-if value="{{ a.isRejected }}">
+                      <button type="button" onClick="{{ a.onUndo }}" style="font:inherit;font-size:12.5px;font-weight:550;height:32px;padding:0 12px;border-radius:10px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;cursor:pointer" style-hover="background:#EFF4F3">Undo</button>
+                    </sc-if>
+                  </span>
+                </div>
+              </sc-for>
+              <div style="padding:14px 24px;background:#F6F9F8;border-radius:0 0 16px 16px;display:flex;align-items:flex-start;gap:10px">
+                <span style="width:6px;height:6px;border-radius:50%;background:#0E8494;margin-top:6px;flex:none"></span>
+                <span style="font-size:12.5px;color:#4A6260;line-height:1.55">Follower counts come from the influencer's linked social account and the details they entered. Open the profile and the linked account to check the numbers before you select.</span>
+                <span style="margin-left:auto;font-size:13px;font-weight:550;color:#0E8494;cursor:pointer;flex:none">All 320 applicants →</span>
+              </div>
+            </div>
+
+            <!-- tasks & review -->
+            <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04)">
+              <div style="padding:20px 24px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:20px">
+                <div style="display:flex;flex-direction:column;gap:4px">
+                  <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Tasks &amp; review</span>
+                  <span style="font-size:13px;color:#6A817F">Creators who submitted their post link · pick a row to open it in the review panel</span>
+                </div>
+                <span style="font-size:12px;font-weight:600;color:#B45309;background:#FEF3C7;border-radius:999px;padding:5px 10px;flex:none">7 pending review</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1.6fr 1.3fr 1.1fr 2fr 1fr 1.1fr 1fr;padding:12px 24px;background:#F6F9F8;border-bottom:1px solid #E0E8E7;font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">
+                <span>Influencer</span><span>Campaign</span><span>Task type</span><span>Submitted link</span><span>Submitted</span><span>Status</span><span style="text-align:right">Action</span>
+              </div>
+              <sc-for list="{{ submissions }}" as="s" hint-placeholder-count="4">
+                <div style="display:grid;grid-template-columns:1.6fr 1.3fr 1.1fr 2fr 1fr 1.1fr 1fr;padding:14px 24px;border-bottom:1px solid #EFF4F3;align-items:center;font-size:13.5px;color:#08201F;background:{{ s.rowBg }}">
+                  <span style="display:flex;align-items:center;gap:11px;min-width:0">
+                    <span style="width:34px;height:34px;border-radius:10px;background:#0B2523;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#FFFFFF;flex:none">{{ s.initials }}</span>
+                    <span style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ s.name }}</span>
+                  </span>
+                  <span style="color:#4A6260;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:10px">{{ s.campaign }}</span>
+                  <span style="color:#4A6260;font-size:13px">{{ s.taskType }}</span>
+                  <span style="display:flex;align-items:center;gap:8px;min-width:0;padding-right:12px">
+                    <span style="font-size:13px;color:#08201F;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ s.link }}</span>
+                    <span style="font-size:12px;font-weight:600;color:#0E8494;cursor:pointer;flex:none">Open ↗</span>
+                  </span>
+                  <span style="font-size:13px;color:#6A817F">{{ s.submitted }}</span>
+                  <span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:5px 10px;background:{{ s.badgeBg }};color:{{ s.badgeFg }}">{{ s.badge }}</span></span>
+                  <span style="text-align:right">
+                    <button type="button" onClick="{{ s.onReview }}" style="font:inherit;font-size:12.5px;font-weight:550;height:32px;padding:0 14px;border-radius:10px;border:1px solid {{ s.btnBorder }};background:{{ s.btnBg }};color:{{ s.btnFg }};cursor:pointer">{{ s.btnLabel }}</button>
+                  </span>
+                </div>
+              </sc-for>
+              <div style="padding:14px 24px;background:#F6F9F8;border-radius:0 0 16px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+                <span style="font-size:12.5px;color:#6A817F;line-height:1.5">After you approve a completion, the agency is notified and releases that influencer's payment.</span>
+                <span style="font-size:13px;font-weight:550;color:#0E8494;cursor:pointer;flex:none">All submissions →</span>
+              </div>
+            </div>
+
+            <!-- review panel -->
+            <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+              <div style="padding:20px 24px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:16px">
+                <div style="display:flex;flex-direction:column;gap:4px">
+                  <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Review submission</span>
+                  <span style="font-size:13px;color:#6A817F">Open the link, check the work against the deliverables, then decide</span>
+                </div>
+                <span style="font-size:12px;font-weight:600;border-radius:999px;padding:5px 10px;background:{{ review.badgeBg }};color:{{ review.badgeFg }};flex:none">{{ review.badge }}</span>
+              </div>
+              <div style="padding:22px 24px;display:flex;flex-direction:column;gap:20px">
+                <div style="display:flex;align-items:center;gap:14px">
+                  <span style="width:44px;height:44px;border-radius:12px;background:#0B2523;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#FFFFFF;flex:none">{{ review.initials }}</span>
+                  <span style="display:flex;flex-direction:column;gap:3px">
+                    <span style="font-size:15.5px;font-weight:650;letter-spacing:-0.015em">{{ review.name }}</span>
+                    <span style="font-size:13px;color:#4A6260">{{ review.handle }} · {{ review.followers }} followers · {{ review.taskType }}</span>
+                  </span>
+                  <span style="margin-left:auto;font-size:13px;color:#6A817F;flex:none">Submitted {{ review.submitted }}</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;border:1px solid #E0E8E7;border-radius:12px;padding:14px;background:#F6F9F8">
+                  <span style="width:30px;height:30px;border-radius:9px;background:#FFFFFF;border:1px solid #E0E8E7;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:#08201F;flex:none">{{ review.code }}</span>
+                  <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Submitted link</span>
+                    <span style="font-size:14px;color:#08201F;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ review.link }}</span>
+                  </span>
+                  <button type="button" style="margin-left:auto;font:inherit;font-size:13.5px;font-weight:550;height:40px;padding:0 15px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer;flex:none" style-hover="background:#EFF4F3">Open post ↗</button>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+                  <div style="display:flex;flex-direction:column;gap:9px">
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Check against</span>
+                    <span style="display:flex;align-items:center;gap:9px;font-size:13.5px;color:#08201F"><span style="width:16px;height:16px;border-radius:5px;border:1.5px solid #C2CFCD;display:block;flex:none"></span>1 Reel, 15–30 seconds</span>
+                    <span style="display:flex;align-items:center;gap:9px;font-size:13.5px;color:#08201F"><span style="width:16px;height:16px;border-radius:5px;border:1.5px solid #C2CFCD;display:block;flex:none"></span>Two outfits from the collection</span>
+                    <span style="display:flex;align-items:center;gap:9px;font-size:13.5px;color:#08201F"><span style="width:16px;height:16px;border-radius:5px;border:1.5px solid #C2CFCD;display:block;flex:none"></span>Brand tagged and hashtag used</span>
+                    <span style="display:flex;align-items:center;gap:9px;font-size:13.5px;color:#08201F"><span style="width:16px;height:16px;border-radius:5px;border:1.5px solid #C2CFCD;display:block;flex:none"></span>Post is public and live</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:9px">
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Payment on approval</span>
+                    <div style="border:1px solid #E0E8E7;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px">
+                      <span style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13px;color:#4A6260">Influencer payment</span><span style="font-size:14px;font-weight:600;font-variant-numeric:tabular-nums">$10</span></span>
+                      <span style="font-size:12.5px;color:#6A817F;line-height:1.5">Released by the agency after your approval. Rejecting keeps the task open for a resubmission.</span>
+                    </div>
+                  </div>
+                </div>
+                <sc-if value="{{ showReason }}">
+                  <div style="display:flex;flex-direction:column;gap:10px;border:1px solid #FECACA;background:#FEF2F2;border-radius:12px;padding:16px">
+                    <span style="font-size:13.5px;font-weight:600;color:#B91C1C">Rejection reason <span style="font-weight:500;color:#4A6260">(optional)</span></span>
+                    <textarea value="{{ reason }}" onChange="{{ onReason }}" rows="3" placeholder="Tell the influencer what to fix, e.g. the brand was not tagged." style="font-size:14px;color:#08201F;line-height:1.55;border:1px solid #E0E8E7;border-radius:11px;padding:11px 12px;background:#FFFFFF;outline:none;resize:vertical"></textarea>
+                    <div style="display:flex;gap:10px">
+                      <button type="button" onClick="{{ confirmReject }}" style="font:inherit;font-size:13.5px;font-weight:550;height:40px;padding:0 16px;border-radius:11px;border:1px solid #B91C1C;background:#B91C1C;color:#FFFFFF;cursor:pointer">Confirm rejection</button>
+                      <button type="button" onClick="{{ cancelReject }}" style="font:inherit;font-size:13.5px;font-weight:550;height:40px;padding:0 16px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer">Cancel</button>
+                    </div>
+                  </div>
+                </sc-if>
+                <div style="display:flex;align-items:center;gap:10px;padding-top:4px;border-top:1px solid #EFF4F3;padding-top:18px">
+                  <button type="button" onClick="{{ onApprove }}" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 20px;border-radius:12px;border:1px solid {{ review.approveBorder }};background:{{ review.approveBg }};color:{{ review.approveFg }};cursor:pointer">{{ review.approveLabel }}</button>
+                  <button type="button" onClick="{{ onReject }}" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 18px;border-radius:12px;border:1px solid {{ review.rejectBorder }};background:#FFFFFF;color:{{ review.rejectFg }};cursor:pointer">{{ review.rejectLabel }}</button>
+                  <span style="margin-left:auto;font-size:13px;color:#6A817F">{{ review.hint }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- right column -->
+          <div style="display:flex;flex-direction:column;gap:20px">
+
+            <!-- progress -->
+            <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+              <div style="padding:20px 22px;border-bottom:1px solid #E0E8E7;display:flex;flex-direction:column;gap:4px">
+                <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Application progress</span>
+                <span style="font-size:13px;color:#6A817F">Against 100 creators needed</span>
+              </div>
+              <div style="padding:20px 22px;display:flex;flex-direction:column;gap:18px">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid #EFF4F3">
+                  <span style="display:flex;flex-direction:column;gap:4px"><span style="font-size:13px;color:#4A6260">Applications</span><span style="font-size:30px;font-weight:700;letter-spacing:-0.03em;line-height:1;font-variant-numeric:tabular-nums">320</span></span>
+                  <span style="font-size:12.5px;color:#6A817F">Open until Aug 26</span>
+                </div>
+                <sc-for list="{{ progress }}" as="p" hint-placeholder-count="4">
+                  <div style="display:flex;flex-direction:column;gap:8px">
+                    <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13px;color:#4A6260">{{ p.label }}</span><span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ p.value }}</span></div>
+                    <span style="height:8px;border-radius:999px;background:#EFF4F3;overflow:hidden;display:block"><span style="display:block;height:100%;background:{{ p.color }};width:{{ p.pct }}"></span></span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <!-- payment -->
+            <div style="background:#FFFFFF;border:1px solid {{ pay.cardBorder }};border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+              <div style="padding:20px 22px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:12px">
+                <span style="display:flex;flex-direction:column;gap:4px">
+                  <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Campaign payment</span>
+                  <span style="font-size:13px;color:#6A817F">Paid upfront by you before publishing</span>
+                </span>
+                <span style="font-size:12px;font-weight:600;border-radius:999px;padding:5px 10px;background:{{ pay.badgeBg }};color:{{ pay.badgeFg }};flex:none">{{ pay.badge }}</span>
+              </div>
+              <div style="padding:20px 22px;display:flex;flex-direction:column;gap:14px">
+                <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13.5px;color:#4A6260">Creators selected</span><span style="font-size:14px;font-weight:600;font-variant-numeric:tabular-nums">100</span></div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13.5px;color:#4A6260">Creator payment</span><span style="font-size:14px;font-weight:600;font-variant-numeric:tabular-nums">$1,000</span></div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13.5px;color:#4A6260">Platform fee (20%)</span><span style="font-size:14px;font-weight:600;font-variant-numeric:tabular-nums">$200</span></div>
+                <div style="height:1px;background:#E0E8E7"></div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:14px;font-weight:600">{{ pay.totalLabel }}</span><span style="font-size:22px;font-weight:700;letter-spacing:-0.025em;font-variant-numeric:tabular-nums">$1,200</span></div>
+                <sc-if value="{{ pay.isPaid }}" hint-placeholder-val="{{ true }}">
+                  <span style="display:flex;flex-direction:column;gap:10px">
+                    <span style="display:flex;align-items:center;justify-content:space-between;background:#DCFCE7;border-radius:12px;padding:12px 14px"><span style="font-size:13px;font-weight:600;color:#15803D">Paid Aug 14, 2026 · bank transfer</span><span style="font-size:13px;font-weight:700;color:#15803D">✓</span></span>
+                    <span style="font-size:12.5px;color:#6A817F;line-height:1.55">Influencer payments are released by the agency as you approve each completed task. 35 of 100 released so far.</span>
+                  </span>
+                </sc-if>
+                <sc-if value="{{ pay.isPending }}">
+                  <span style="display:flex;flex-direction:column;gap:12px">
+                    <span style="display:flex;gap:10px;background:#FEF3C7;border-radius:12px;padding:12px 14px"><span style="width:6px;height:6px;border-radius:50%;background:#B45309;margin-top:6px;flex:none"></span><span style="font-size:12.5px;color:#B45309;line-height:1.5;font-weight:500">This campaign is not published yet. It goes live for influencers once the payment completes.</span></span>
+                    <button type="button" style="font:inherit;font-size:15px;font-weight:550;height:48px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Pay &amp; publish</button>
+                    <span style="font-size:12.5px;color:#6A817F;line-height:1.55">You can keep editing the campaign until it is published.</span>
+                  </span>
+                </sc-if>
+              </div>
+            </div>
+
+            <!-- timeline -->
+            <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+              <div style="padding:20px 22px;border-bottom:1px solid #E0E8E7"><span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Campaign timeline</span></div>
+              <div style="padding:22px;display:flex;flex-direction:column">
+                <sc-for list="{{ timeline }}" as="t" hint-placeholder-count="9">
+                  <div style="display:grid;grid-template-columns:22px 1fr;gap:14px">
+                    <span style="display:flex;flex-direction:column;align-items:center;gap:0">
+                      <span style="width:{{ t.dotSize }};height:{{ t.dotSize }};border-radius:50%;background:{{ t.dotBg }};border:2px solid {{ t.dotBorder }};display:block;flex:none"></span>
+                      <span style="width:2px;flex:1;background:{{ t.lineBg }};display:block;min-height:{{ t.lineH }}"></span>
+                    </span>
+                    <span style="display:flex;flex-direction:column;gap:3px;padding-bottom:16px">
+                      <span style="font-size:14px;font-weight:{{ t.weight }};color:{{ t.fg }};letter-spacing:-0.01em">{{ t.label }}</span>
+                      <span style="font-size:12.5px;color:#6A817F">{{ t.meta }}</span>
+                    </span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 EMPTY STATES -->
+  <section data-screen-label="Empty states" style="display:flex;flex-direction:column;gap:20px;flex:none">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">03</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Empty states</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(5,320px);gap:20px;flex:none">
+      <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:30px 26px;display:flex;flex-direction:column;gap:12px;align-items:flex-start;box-shadow:0 1px 2px rgba(8,32,31,.04)">
+        <div style="width:44px;height:44px;border-radius:13px;background:#E7F5F7;display:flex;align-items:center;justify-content:center;margin-bottom:6px"><div style="width:15px;height:15px;border:2.5px solid #0E8494;border-radius:4px"></div></div>
+        <span style="font-size:16px;font-weight:650;letter-spacing:-0.015em">No campaigns yet.</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6">Create your first campaign to start finding creators.</span>
+        <button type="button" style="margin-top:8px;font:inherit;font-size:14px;font-weight:550;height:42px;padding:0 16px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer" style-hover="background:#0A5F6B">Create campaign</button>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:30px 26px;display:flex;flex-direction:column;gap:12px;align-items:flex-start;box-shadow:0 1px 2px rgba(8,32,31,.04)">
+        <div style="width:44px;height:44px;border-radius:13px;background:#EFF4F3;display:flex;align-items:center;justify-content:center;margin-bottom:6px"><div style="width:15px;height:15px;border:2.5px solid #4A6260;border-radius:50%"></div></div>
+        <span style="font-size:16px;font-weight:650;letter-spacing:-0.015em">No campaigns match your search.</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6">Try another name, or clear the filters to see every campaign again.</span>
+        <button type="button" style="margin-top:8px;font:inherit;font-size:14px;font-weight:550;height:42px;padding:0 16px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">Clear filters</button>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:30px 26px;display:flex;flex-direction:column;gap:12px;align-items:flex-start;box-shadow:0 1px 2px rgba(8,32,31,.04)">
+        <div style="width:44px;height:44px;border-radius:13px;background:#EFF4F3;display:flex;align-items:center;justify-content:center;margin-bottom:6px"><div style="width:15px;height:15px;border:2.5px solid #4A6260;border-radius:4px"></div></div>
+        <span style="font-size:16px;font-weight:650;letter-spacing:-0.015em">No applications yet.</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6">This campaign is live. Influencers who meet your requirements appear here as they apply.</span>
+        <button type="button" style="margin-top:8px;font:inherit;font-size:14px;font-weight:550;height:42px;padding:0 16px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">Check requirements</button>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:30px 26px;display:flex;flex-direction:column;gap:12px;align-items:flex-start;box-shadow:0 1px 2px rgba(8,32,31,.04)">
+        <div style="width:44px;height:44px;border-radius:13px;background:#E7F5F7;display:flex;align-items:center;justify-content:center;margin-bottom:6px"><div style="width:15px;height:15px;border:2.5px solid #0E8494;border-radius:50%"></div></div>
+        <span style="font-size:16px;font-weight:650;letter-spacing:-0.015em">No creators selected yet.</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6">Go through the applicants and select the creators you want. Nothing is selected for you.</span>
+        <button type="button" style="margin-top:8px;font:inherit;font-size:14px;font-weight:550;height:42px;padding:0 16px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer" style-hover="background:#0A5F6B">Review applicants</button>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:30px 26px;display:flex;flex-direction:column;gap:12px;align-items:flex-start;box-shadow:0 1px 2px rgba(8,32,31,.04)">
+        <div style="width:44px;height:44px;border-radius:13px;background:#DCFCE7;display:flex;align-items:center;justify-content:center;margin-bottom:6px"><span style="font-size:18px;color:#15803D;font-weight:700">✓</span></div>
+        <span style="font-size:16px;font-weight:650;letter-spacing:-0.015em">Nothing waiting for review.</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6">Every submitted task has been reviewed. New submissions land here with their post link.</span>
+        <button type="button" style="margin-top:8px;font:inherit;font-size:14px;font-weight:550;height:42px;padding:0 16px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">View selected creators</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 MOBILE -->
+  <section data-screen-label="Campaigns mobile" style="display:flex;flex-direction:column;gap:20px;flex:none">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">04</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Mobile</span>
+      <span style="font-size:14px;color:#6A817F">Cards instead of tables, scrollable status tabs, expandable card, bottom-sheet actions</span>
+    </div>
+    <div style="display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap">
+
+      <!-- mobile list -->
+      <div style="width:390px;flex:none;display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:12.5px;font-weight:550;color:#6A817F">Campaigns list · one card expanded</span>
+        <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#F6F9F8;box-shadow:0 24px 60px -32px rgba(8,32,31,.14);overflow:hidden;display:flex;flex-direction:column">
+          <div style="height:58px;background:#FFFFFF;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;gap:12px;padding:0 16px">
+            <span style="width:36px;height:36px;border-radius:11px;border:1px solid #E0E8E7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;flex:none"><span style="width:14px;height:2px;background:#08201F;display:block"></span><span style="width:14px;height:2px;background:#08201F;display:block"></span><span style="width:14px;height:2px;background:#08201F;display:block"></span></span>
+            <span style="font-size:16px;font-weight:650;letter-spacing:-0.02em">Campaigns</span>
+            <span style="margin-left:auto;width:36px;height:36px;border-radius:11px;border:1px solid #E0E8E7;display:flex;align-items:center;justify-content:center;position:relative;flex:none"><span style="width:13px;height:13px;border:2px solid #4A6260;border-radius:4px;display:block"></span><span style="position:absolute;top:7px;right:8px;width:7px;height:7px;border-radius:50%;background:#DC2626;border:2px solid #FFFFFF"></span></span>
+            <span style="width:36px;height:36px;border-radius:11px;background:#0B2523;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#FFFFFF;flex:none">AN</span>
+          </div>
+
+          <div style="background:#FFFFFF;border-bottom:1px solid #E0E8E7;padding:14px 16px;display:flex;flex-direction:column;gap:12px">
+            <p style="margin:0;font-size:13.5px;color:#4A6260;line-height:1.5">Create, manage, and track all your influencer campaigns.</p>
+            <span style="display:flex;align-items:center;gap:10px;height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 13px;background:#F6F9F8">
+              <span style="width:14px;height:14px;border:2px solid #6A817F;border-radius:50%;display:block;flex:none"></span>
+              <span style="font-size:14.5px;color:#93A6A4">Search campaigns...</span>
+            </span>
+            <div style="display:flex;gap:8px;overflow-x:auto">
+              <span style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#FFFFFF;background:#0B2523;border-radius:999px;padding:8px 13px;flex:none">All <span style="font-size:11.5px;background:rgba(255,255,255,.18);border-radius:999px;padding:1px 6px">10</span></span>
+              <span style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:550;color:#08201F;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:999px;padding:8px 13px;flex:none">Applications open <span style="font-size:11.5px;color:#6A817F">2</span></span>
+              <span style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:550;color:#08201F;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:999px;padding:8px 13px;flex:none">Review pending <span style="font-size:11.5px;color:#6A817F">1</span></span>
+            </div>
+            <div style="display:flex;gap:8px">
+              <span style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:550;color:#08201F;border:1px solid #E0E8E7;border-radius:11px;padding:9px 12px;background:#FFFFFF">Filters <span style="font-size:11px;font-weight:600;color:#FFFFFF;background:#0E8494;border-radius:999px;padding:1px 6px">2</span></span>
+              <span style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:550;color:#08201F;border:1px solid #E0E8E7;border-radius:11px;padding:9px 12px;background:#FFFFFF">Newest ▼</span>
+              <span style="margin-left:auto;font-size:13px;font-weight:550;color:#0E8494;align-self:center">Clear</span>
+            </div>
+          </div>
+
+          <div style="padding:16px 16px 92px;display:flex;flex-direction:column;gap:12px">
+
+            <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(8,32,31,.04)">
+              <div style="display:flex;align-items:flex-start;gap:10px">
+                <span style="width:34px;height:34px;border-radius:10px;background:#0B2523;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;flex:none">IG</span>
+                <span style="display:flex;flex-direction:column;gap:3px;min-width:0">
+                  <span style="font-size:15px;font-weight:650;letter-spacing:-0.015em;line-height:1.3">Summer Collection Promotion</span>
+                  <span style="font-size:12.5px;color:#6A817F">Fashion · Instagram · created Aug 14</span>
+                </span>
+                <span style="margin-left:auto;width:32px;height:32px;border-radius:9px;border:1px solid #E0E8E7;display:flex;align-items:center;justify-content:center;font-size:14px;color:#4A6260;flex:none">⋯</span>
+              </div>
+              <span style="font-size:12px;font-weight:600;color:#15803D;background:#DCFCE7;border-radius:999px;padding:5px 10px;align-self:flex-start">Applications open</span>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:12px 0;border-top:1px solid #EFF4F3;border-bottom:1px solid #EFF4F3">
+                <span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:11.5px;color:#6A817F">Needed</span><span style="font-size:15px;font-weight:650;font-variant-numeric:tabular-nums">100</span></span>
+                <span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:11.5px;color:#6A817F">Applications</span><span style="font-size:15px;font-weight:650;font-variant-numeric:tabular-nums">320</span></span>
+                <span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:11.5px;color:#6A817F">Selected</span><span style="font-size:15px;font-weight:650;font-variant-numeric:tabular-nums">68</span></span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;color:#4A6260">Payment</span><span style="font-size:14px;font-weight:650;font-variant-numeric:tabular-nums">$1,000</span></div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;color:#4A6260">Applications close</span><span style="font-size:13.5px;font-weight:550">Aug 26, 2026</span></div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;color:#4A6260">Task deadline</span><span style="font-size:13.5px;font-weight:550">Sep 5, 2026</span></div>
+              </div>
+              <button type="button" style="font:inherit;font-size:15px;font-weight:550;height:48px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer">View campaign</button>
+              <span style="font-size:12.5px;font-weight:550;color:#0E8494;text-align:center">Hide details ▲</span>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(8,32,31,.04)">
+              <div style="display:flex;align-items:flex-start;gap:10px">
+                <span style="width:34px;height:34px;border-radius:10px;background:#0B2523;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;flex:none">TT</span>
+                <span style="display:flex;flex-direction:column;gap:3px;min-width:0">
+                  <span style="font-size:15px;font-weight:650;letter-spacing:-0.015em;line-height:1.3">Pantry Staples Bundle</span>
+                  <span style="font-size:12.5px;color:#6A817F">Food · TikTok · created Aug 8</span>
+                </span>
+                <span style="margin-left:auto;width:32px;height:32px;border-radius:9px;border:1px solid #E0E8E7;display:flex;align-items:center;justify-content:center;font-size:14px;color:#4A6260;flex:none">⋯</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:12px;font-weight:600;color:#B45309;background:#FEF3C7;border-radius:999px;padding:5px 10px">Review pending</span>
+                <span style="font-size:12.5px;color:#6A817F">6 submissions</span>
+              </div>
+              <div style="display:flex;align-items:baseline;justify-content:space-between;padding-top:12px;border-top:1px solid #EFF4F3">
+                <span style="font-size:12.5px;color:#4A6260">40 selected of 40 · $600</span>
+                <span style="font-size:12.5px;font-weight:550;color:#0E8494">Show details ▼</span>
+              </div>
+              <button type="button" style="font:inherit;font-size:15px;font-weight:550;height:48px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer">Review 6 tasks</button>
+            </div>
+
+            <div style="background:#FFFFFF;border:1.5px solid #D97706;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 8px 24px -18px rgba(217,119,6,.4)">
+              <div style="display:flex;align-items:flex-start;gap:10px">
+                <span style="width:34px;height:34px;border-radius:10px;background:#0B2523;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;flex:none">IG</span>
+                <span style="display:flex;flex-direction:column;gap:3px;min-width:0">
+                  <span style="font-size:15px;font-weight:650;letter-spacing:-0.015em;line-height:1.3">Coffee House Launch</span>
+                  <span style="font-size:12.5px;color:#6A817F">Food · Instagram · created Aug 2</span>
+                </span>
+                <span style="margin-left:auto;width:32px;height:32px;border-radius:9px;border:1px solid #E0E8E7;display:flex;align-items:center;justify-content:center;font-size:14px;color:#4A6260;flex:none">⋯</span>
+              </div>
+              <span style="font-size:12px;font-weight:600;color:#B45309;background:#FEF3C7;border-radius:999px;padding:5px 10px;align-self:flex-start">Payment pending</span>
+              <span style="font-size:13px;color:#4A6260;line-height:1.55;padding-top:12px;border-top:1px solid #EFF4F3">Not published yet. $500 + $100 platform fee due.</span>
+              <button type="button" style="font:inherit;font-size:15px;font-weight:550;height:48px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer">Pay &amp; publish</button>
+            </div>
+          </div>
+
+          <div style="position:relative;margin-top:-76px;padding:14px 16px;background:rgba(255,255,255,.94);border-top:1px solid #E0E8E7;backdrop-filter:blur(8px)">
+            <button type="button" style="width:100%;font:inherit;font-size:15.5px;font-weight:550;height:52px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 4px 16px -6px rgba(10,95,107,.28)">+ Create campaign</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- bottom sheet -->
+      <div style="width:390px;flex:none;display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:12.5px;font-weight:550;color:#6A817F">Bottom-sheet actions · applications open</span>
+        <div style="width:390px;height:680px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#08201F;box-shadow:0 24px 60px -32px rgba(8,32,31,.14);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;position:relative">
+          <div style="position:absolute;inset:0;background:rgba(8,32,31,.55)"></div>
+          <div style="position:relative;background:#FFFFFF;border-radius:22px 22px 0 0;padding:12px 16px 20px;display:flex;flex-direction:column;gap:6px">
+            <span style="width:44px;height:4px;border-radius:999px;background:#E0E8E7;align-self:center;margin-bottom:10px"></span>
+            <div style="display:flex;flex-direction:column;gap:3px;padding:0 4px 10px;border-bottom:1px solid #EFF4F3">
+              <span style="font-size:15.5px;font-weight:650;letter-spacing:-0.015em">Summer Collection Promotion</span>
+              <span style="font-size:12.5px;color:#6A817F">Applications open · 320 applications</span>
+            </div>
+            <span style="display:flex;align-items:center;gap:12px;font-size:15px;font-weight:500;color:#08201F;padding:15px 8px;border-radius:12px"><span style="width:18px;height:18px;border:2px solid #4A6260;border-radius:5px;display:block;flex:none"></span>Edit campaign</span>
+            <span style="display:flex;align-items:center;gap:12px;font-size:15px;font-weight:500;color:#08201F;padding:15px 8px;border-radius:12px"><span style="width:18px;height:18px;border:2px solid #4A6260;border-radius:5px;display:block;flex:none"></span>Duplicate</span>
+            <span style="display:flex;align-items:center;gap:12px;font-size:15px;font-weight:500;color:#08201F;padding:15px 8px;border-radius:12px"><span style="width:18px;height:18px;border:2px solid #4A6260;border-radius:5px;display:block;flex:none"></span>Pause campaign</span>
+            <span style="display:flex;align-items:center;gap:12px;font-size:15px;font-weight:500;color:#B91C1C;padding:15px 8px;border-radius:12px"><span style="width:18px;height:18px;border:2px solid #B91C1C;border-radius:5px;display:block;flex:none"></span>Cancel campaign</span>
+            <span style="font-size:12.5px;color:#6A817F;line-height:1.5;padding:6px 8px 12px">Delete is only available for drafts and cancelled campaigns.</span>
+            <button type="button" style="font:inherit;font-size:15.5px;font-weight:550;height:52px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- mobile detail -->
+      <div style="width:390px;flex:none;display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:12.5px;font-weight:550;color:#6A817F">Campaign detail · mobile</span>
+        <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#F6F9F8;box-shadow:0 24px 60px -32px rgba(8,32,31,.14);overflow:hidden;display:flex;flex-direction:column">
+          <div style="height:58px;background:#FFFFFF;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;gap:12px;padding:0 16px">
+            <span style="width:36px;height:36px;border-radius:11px;border:1px solid #E0E8E7;display:flex;align-items:center;justify-content:center;font-size:15px;color:#08201F;flex:none">←</span>
+            <span style="font-size:15px;font-weight:650;letter-spacing:-0.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Summer Collection</span>
+            <span style="margin-left:auto;width:36px;height:36px;border-radius:11px;border:1px solid #E0E8E7;display:flex;align-items:center;justify-content:center;font-size:14px;color:#4A6260;flex:none">⋯</span>
+          </div>
+          <div style="padding:16px 16px 20px;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#08201F;background:#EFF4F3;border-radius:999px;padding:4px 10px 4px 4px"><span style="width:18px;height:18px;border-radius:5px;background:#0B2523;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700">IG</span>Instagram</span>
+              <span style="font-size:12px;font-weight:600;color:#4A6260;background:#EFF4F3;border-radius:999px;padding:5px 10px">Fashion</span>
+              <span style="font-size:12px;font-weight:600;color:#15803D;background:#DCFCE7;border-radius:999px;padding:5px 10px">Applications open</span>
+            </div>
+            <div style="display:flex;gap:6px;overflow-x:auto">
+              <span style="font-size:13px;font-weight:600;color:#FFFFFF;background:#0B2523;border-radius:999px;padding:8px 13px;flex:none">Overview</span>
+              <span style="font-size:13px;font-weight:550;color:#08201F;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:999px;padding:8px 13px;flex:none">Applicants</span>
+              <span style="font-size:13px;font-weight:550;color:#08201F;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:999px;padding:8px 13px;flex:none">Reviews</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:5px"><span style="font-size:12px;color:#4A6260">Applications</span><span style="font-size:22px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums">320</span></div>
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:5px"><span style="font-size:12px;color:#4A6260">Selected</span><span style="font-size:22px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums">68 / 100</span></div>
+              <div style="background:#FFFFFF;border:1.5px solid #D97706;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:5px"><span style="font-size:12px;color:#B45309;font-weight:600">Pending reviews</span><span style="font-size:22px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums">7</span></div>
+              <div style="background:#0B2523;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:5px"><span style="font-size:12px;color:#C2CFCD">Total paid</span><span style="font-size:19px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:#FFFFFF">$1,200</span></div>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:15px;font-weight:650;letter-spacing:-0.02em">Progress</span><span style="font-size:12.5px;color:#6A817F">of 100 creators</span></div>
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;color:#4A6260">Selected</span><span style="font-size:13px;font-weight:600;font-variant-numeric:tabular-nums">68 / 100</span></div>
+                <span style="height:8px;border-radius:999px;background:#EFF4F3;overflow:hidden;display:block"><span style="display:block;height:100%;width:68%;background:#0E8494"></span></span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;color:#4A6260">Completed</span><span style="font-size:13px;font-weight:600;font-variant-numeric:tabular-nums">42 / 100</span></div>
+                <span style="height:8px;border-radius:999px;background:#EFF4F3;overflow:hidden;display:block"><span style="display:block;height:100%;width:42%;background:#0E8494"></span></span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;color:#4A6260">Approved</span><span style="font-size:13px;font-weight:600;font-variant-numeric:tabular-nums">35 / 100</span></div>
+                <span style="height:8px;border-radius:999px;background:#EFF4F3;overflow:hidden;display:block"><span style="display:block;height:100%;width:35%;background:#16A34A"></span></span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;color:#4A6260">Paid</span><span style="font-size:13px;font-weight:600;font-variant-numeric:tabular-nums">35 / 100</span></div>
+                <span style="height:8px;border-radius:999px;background:#EFF4F3;overflow:hidden;display:block"><span style="display:block;height:100%;width:35%;background:#0B2523"></span></span>
+              </div>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:15px;font-weight:650;letter-spacing:-0.02em">Waiting for review</span><span style="font-size:12px;font-weight:600;color:#B45309;background:#FEF3C7;border-radius:999px;padding:4px 9px">7</span></div>
+              <div style="display:flex;align-items:center;gap:11px">
+                <span style="width:36px;height:36px;border-radius:10px;background:#0B2523;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#FFFFFF;flex:none">SK</span>
+                <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:600">Sara Haddad</span><span style="font-size:12px;color:#6A817F">Instagram Reel · 2 hours ago</span></span>
+              </div>
+              <span style="display:flex;align-items:center;gap:10px;border:1px solid #E0E8E7;border-radius:11px;padding:10px 12px;background:#F6F9F8">
+                <span style="font-size:12.5px;color:#08201F;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">instagram.com/p/Cx82kLmQvR4</span>
+                <span style="margin-left:auto;font-size:12px;font-weight:600;color:#0E8494;flex:none">Open ↗</span>
+              </span>
+              <div style="display:flex;gap:10px">
+                <button type="button" style="flex:1;font:inherit;font-size:14px;font-weight:550;height:46px;border-radius:11px;border:1px solid #15803D;background:#15803D;color:#FFFFFF;cursor:pointer">Approve</button>
+                <button type="button" style="flex:1;font:inherit;font-size:14px;font-weight:550;height:46px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;cursor:pointer">Reject</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1600,&quot;height&quot;:1100},&quot;startingTab&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;All&quot;,&quot;Drafts&quot;,&quot;Payment Pending&quot;,&quot;Published&quot;,&quot;Applications Open&quot;,&quot;Selection&quot;,&quot;In Progress&quot;,&quot;Review Pending&quot;,&quot;Completed&quot;,&quot;Cancelled&quot;],&quot;default&quot;:&quot;All&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Behaviour&quot;},&quot;paymentComplete&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behaviour&quot;}}">
+class Component extends DCLogic {
+  state = {
+    tab: null,
+    query: '',
+    menu: null,
+    platform: 'All platforms',
+    applicantState: {},
+    reviewId: 's1',
+    reviewState: {},
+    showReason: false,
+    reason: ''
+  };
+
+  get tab() { return this.state.tab ?? (this.props.startingTab || 'All'); }
+
+  campaigns() {
+    return [
+      { id: 'c1', name: 'Summer Collection Promotion', category: 'Fashion', deadline: 'closes Aug 26', platform: 'Instagram', code: 'IG', needed: '100', applications: '320', selected: '68', budget: '$1,000', status: 'Applications Open', created: 'Aug 14, 2026', primary: 'View' },
+      { id: 'c2', name: 'Gaming Headset Unboxing', category: 'Tech', deadline: 'closes Aug 30', platform: 'YouTube', code: 'YT', needed: '8', applications: '0', selected: '0', budget: '$320', status: 'Published', created: 'Aug 12, 2026', primary: 'View' },
+      { id: 'c3', name: 'Home Delivery App Promo', category: 'Lifestyle', deadline: 'closes Aug 24', platform: 'Facebook', code: 'FB', needed: '20', applications: '54', selected: '0', budget: '$400', status: 'Applications Open', created: 'Aug 10, 2026', primary: 'View' },
+      { id: 'c4', name: 'Pantry Staples Bundle', category: 'Food', deadline: 'tasks due Aug 20', platform: 'TikTok', code: 'TT', needed: '40', applications: '128', selected: '40', budget: '$600', status: 'Review Pending', created: 'Aug 8, 2026', primary: 'Review' },
+      { id: 'c5', name: 'Campus Fintech Walkthrough', category: 'Tech', deadline: 'selecting creators', platform: 'YouTube', code: 'YT', needed: '12', applications: '64', selected: '4', budget: '$360', status: 'Selection', created: 'Aug 5, 2026', primary: 'Select' },
+      { id: 'c6', name: 'Coffee House Launch', category: 'Food', deadline: 'not published yet', platform: 'Instagram', code: 'IG', needed: '25', applications: '—', selected: '—', budget: '$500', status: 'Payment Pending', created: 'Aug 2, 2026', primary: 'Pay' },
+      { id: 'c7', name: 'Eid Menu Teasers', category: 'Food', deadline: 'requirements not set', platform: 'Not set', code: '—', needed: '—', applications: '—', selected: '—', budget: '—', status: 'Draft', created: 'Jul 30, 2026', primary: 'Continue' },
+      { id: 'c8', name: 'Skincare Routine Series', category: 'Beauty', deadline: 'tasks due Aug 28', platform: 'Instagram', code: 'IG', needed: '30', applications: '210', selected: '30', budget: '$750', status: 'In Progress', created: 'Jul 22, 2026', primary: 'View' },
+      { id: 'c9', name: 'Back to School Sale', category: 'Retail', deadline: 'cancelled Jul 25', platform: 'TikTok', code: 'TT', needed: '50', applications: '12', selected: '0', budget: '$900', status: 'Cancelled', created: 'Jul 18, 2026', primary: 'View' },
+      { id: 'c10', name: 'Winter Knit Drop', category: 'Fashion', deadline: 'all payouts released', platform: 'Instagram', code: 'IG', needed: '10', applications: '96', selected: '10', budget: '$420', status: 'Completed', created: 'Jun 12, 2026', primary: 'View' }
+    ];
+  }
+
+  badge(status) {
+    const map = {
+      'Draft': ['#EFF4F3', '#4A6260', '#E0E8E7'],
+      'Payment Pending': ['#FEF3C7', '#B45309', '#FEF3C7'],
+      'Published': ['#E7F5F7', '#0A5F6B', '#E7F5F7'],
+      'Applications Open': ['#DCFCE7', '#15803D', '#DCFCE7'],
+      'Selection': ['#E7F5F7', '#0A5F6B', '#E7F5F7'],
+      'In Progress': ['#0B2523', '#FFFFFF', '#0B2523'],
+      'Review Pending': ['#FEF3C7', '#B45309', '#FEF3C7'],
+      'Completed': ['#FFFFFF', '#4A6260', '#E0E8E7'],
+      'Cancelled': ['#FEE2E2', '#B91C1C', '#FEE2E2']
+    };
+    return map[status] || map['Draft'];
+  }
+
+  menuFor(status) {
+    const items = { edit: 'Edit', dup: 'Duplicate', pause: 'Pause', cancel: 'Cancel', del: 'Delete', pay: 'Pay & publish', resume: 'Resume' };
+    const by = {
+      'Draft': [items.edit, items.dup, items.del],
+      'Payment Pending': [items.edit, items.pay, items.dup, items.cancel, items.del],
+      'Published': [items.edit, items.dup, items.pause, items.cancel],
+      'Applications Open': [items.edit, items.dup, items.pause, items.cancel],
+      'Selection': [items.dup, items.pause, items.cancel],
+      'In Progress': [items.dup, items.cancel],
+      'Review Pending': [items.dup, items.cancel],
+      'Completed': [items.dup],
+      'Cancelled': [items.dup, items.del]
+    };
+    const notes = {
+      'Draft': 'Not published, so it can be deleted.',
+      'Payment Pending': 'Editing stays open until payment completes.',
+      'Published': 'Pausing hides it from influencers.',
+      'Applications Open': 'Pausing stops new applications.',
+      'Selection': 'Requirements are locked while selecting.',
+      'In Progress': 'Creators are working on their tasks.',
+      'Review Pending': 'Finish your reviews before cancelling.',
+      'Completed': 'Completed campaigns are read only.',
+      'Cancelled': 'Cancelled campaigns can be removed.'
+    };
+    return {
+      items: (by[status] || []).map(label => ({
+        label,
+        fg: (label === 'Delete' || label === 'Cancel') ? '#B91C1C' : '#08201F',
+        icon: (label === 'Delete' || label === 'Cancel') ? '#B91C1C' : '#4A6260'
+      })),
+      note: notes[status] || ''
+    };
+  }
+
+  renderVals() {
+    const all = this.campaigns();
+    const tabDefs = [
+      ['All', null], ['Drafts', 'Draft'], ['Payment Pending', 'Payment Pending'], ['Published', 'Published'],
+      ['Applications Open', 'Applications Open'], ['Selection', 'Selection'], ['In Progress', 'In Progress'],
+      ['Review Pending', 'Review Pending'], ['Completed', 'Completed'], ['Cancelled', 'Cancelled']
+    ];
+    const active = this.tab;
+
+    const tabs = tabDefs.map(([label, status]) => {
+      const count = status ? all.filter(c => c.status === status).length : all.length;
+      const on = label === active;
+      return {
+        label, count,
+        weight: on ? 650 : 500,
+        fg: on ? '#08201F' : '#6A817F',
+        underline: on ? '#0E8494' : 'transparent',
+        countBg: on ? '#E7F5F7' : '#EFF4F3',
+        countFg: on ? '#0A5F6B' : '#6A817F',
+        onClick: () => this.setState({ tab: label, menu: null })
+      };
+    });
+
+    const activeStatus = (tabDefs.find(t => t[0] === active) || [])[1];
+    const q = this.state.query.trim().toLowerCase();
+    const plat = this.state.platform;
+    let rows = all.filter(c => (!activeStatus || c.status === activeStatus))
+      .filter(c => (plat === 'All platforms' || c.platform === plat))
+      .filter(c => !q || c.name.toLowerCase().indexOf(q) >= 0 || c.category.toLowerCase().indexOf(q) >= 0);
+
+    const total = rows.length;
+    rows = rows.map((c, i) => {
+      const b = this.badge(c.status);
+      const m = this.menuFor(c.status);
+      const open = this.state.menu === c.id;
+      const dark = c.status === 'In Progress';
+      return Object.assign({}, c, {
+        platCode: c.code,
+        platBg: c.code === '—' ? '#EFF4F3' : '#0B2523',
+        platFg: c.code === '—' ? '#6A817F' : '#FFFFFF',
+        badgeBg: b[0], badgeFg: b[1], badgeBorder: b[2],
+        status: c.status,
+        menuOpen: open,
+        menuItems: m.items,
+        menuNote: m.note,
+        menuBg: open ? '#E7F5F7' : '#FFFFFF',
+        menuBorder: open ? '#0E8494' : '#E0E8E7',
+        z: open ? 30 : (total - i),
+        onMenu: () => this.setState(s => ({ menu: s.menu === c.id ? null : c.id }))
+      });
+    });
+
+    const platforms = ['All platforms', 'Instagram', 'TikTok', 'Facebook', 'YouTube'].map(label => {
+      const codes = { 'All platforms': 'All', Instagram: 'IG', TikTok: 'TT', Facebook: 'FB', YouTube: 'YT' };
+      const on = this.state.platform === label;
+      return {
+        label, code: codes[label],
+        fg: on ? '#FFFFFF' : '#08201F',
+        bg: on ? '#0B2523' : '#FFFFFF',
+        border: on ? '#0B2523' : '#E0E8E7',
+        chipBg: on ? 'rgba(255,255,255,.16)' : '#EFF4F3',
+        chipFg: on ? '#FFFFFF' : '#4A6260',
+        onClick: () => this.setState({ platform: label, menu: null })
+      };
+    });
+
+    const filters = [
+      ['Category', 'All'], ['Status', active], ['Date range', 'Last 90 days'], ['Budget', 'Any']
+    ].map(([label, value]) => ({
+      label, value,
+      fg: '#08201F',
+      bg: '#FFFFFF',
+      border: '#E0E8E7'
+    }));
+
+    // applicants
+    const applicantData = [
+      { id: 'a1', name: 'Zainab Iqbal', initials: 'ZI', city: 'New York', code: 'IG', handle: '@zainabiqbal', followers: '48,200', category: 'Fashion', applied: 'Aug 12', init: 'selected' },
+      { id: 'a2', name: 'Tomas Herrera', initials: 'BA', city: 'London', code: 'IG', handle: '@bilalahmed', followers: '112,000', category: 'Lifestyle', applied: 'Aug 12', init: null },
+      { id: 'a3', name: 'Mariam Okonkwo', initials: 'MT', city: 'Berlin', code: 'IG', handle: '@maryamtariq', followers: '26,500', category: 'Fashion', applied: 'Aug 11', init: 'shortlisted' },
+      { id: 'a4', name: 'Lucas Ferreira', initials: 'UJ', city: 'Faisalabad', code: 'IG', handle: '@lucasferreira', followers: '33,900', category: 'Lifestyle', applied: 'Aug 11', init: null },
+      { id: 'a5', name: 'Hina Malik', initials: 'HM', city: 'Multan', code: 'IG', handle: '@hinamalik', followers: '19,400', category: 'Beauty', applied: 'Aug 10', init: 'selected' },
+      { id: 'a6', name: 'Ahsan Raza', initials: 'AR', city: 'New York', code: 'IG', handle: '@ahsanraza', followers: '8,900', category: 'Fitness', applied: 'Aug 10', init: 'rejected' }
+    ];
+
+    const stateOf = a => (a.id in this.state.applicantState) ? this.state.applicantState[a.id] : a.init;
+
+    const applicants = applicantData.map(a => {
+      const st = stateOf(a);
+      const badges = {
+        selected: ['#E7F5F7', '#0A5F6B', '#E7F5F7', 'Selected'],
+        shortlisted: ['#EFF4F3', '#4A6260', '#E0E8E7', 'Shortlisted'],
+        rejected: ['#FEE2E2', '#B91C1C', '#FEE2E2', 'Rejected']
+      };
+      const b = badges[st] || ['#FFFFFF', '#4A6260', '#E0E8E7', 'Applied'];
+      return Object.assign({}, a, {
+        badge: b[3], badgeBg: b[0], badgeFg: b[1], badgeBorder: b[2],
+        rowBg: st === 'selected' ? '#F6F9F8' : '#FFFFFF',
+        isOpen: st !== 'selected' && st !== 'rejected',
+        isSelected: st === 'selected',
+        isRejected: st === 'rejected',
+        shortlistLabel: st === 'shortlisted' ? 'Shortlisted ✓' : 'Shortlist',
+        onSelect: () => this.setApplicant(a.id, 'selected'),
+        onShortlist: () => this.setApplicant(a.id, st === 'shortlisted' ? null : 'shortlisted'),
+        onReject: () => this.setApplicant(a.id, 'rejected'),
+        onRemove: () => this.setApplicant(a.id, null),
+        onUndo: () => this.setApplicant(a.id, null)
+      });
+    });
+
+    const shownSelected = applicants.filter(a => a.isSelected).length;
+    const selectedCount = 66 + shownSelected;
+    const target = 100;
+
+    // submissions
+    const subData = [
+      { id: 's1', name: 'Sara Haddad', initials: 'SK', handle: '@sarahkhan', followers: '52,300', campaign: 'Summer Collection', taskType: 'Instagram Reel', code: 'IG', link: 'instagram.com/p/Cx82kLmQvR4', submitted: '2 hours ago' },
+      { id: 's2', name: 'Fatima Noor', initials: 'FN', handle: '@fatimanoor', followers: '31,700', campaign: 'Summer Collection', taskType: 'Instagram Story', code: 'IG', link: 'instagram.com/stories/fatimanoor/812', submitted: 'Yesterday' },
+      { id: 's3', name: 'Mei Tanaka', initials: 'HS', handle: '@meitanaka', followers: '44,100', campaign: 'Summer Collection', taskType: 'Instagram Reel', code: 'IG', link: 'instagram.com/p/Cx7Y2pLkTn0', submitted: 'Aug 12' },
+      { id: 's4', name: 'David Kim', initials: 'DI', handle: '@danishiqbal', followers: '17,800', campaign: 'Summer Collection', taskType: 'Instagram Reel', code: 'IG', link: 'instagram.com/p/Cx6QwMnBa91', submitted: 'Aug 11' }
+    ];
+
+    const revState = id => this.state.reviewState[id] || null;
+
+    const submissions = subData.map(s => {
+      const st = revState(s.id);
+      const on = this.state.reviewId === s.id;
+      const b = st === 'approved' ? ['#DCFCE7', '#15803D', 'Approved'] : st === 'rejected' ? ['#FEE2E2', '#B91C1C', 'Rejected'] : ['#FEF3C7', '#B45309', 'Submitted'];
+      return Object.assign({}, s, {
+        badgeBg: b[0], badgeFg: b[1], badge: b[2],
+        rowBg: on ? '#F6F9F8' : '#FFFFFF',
+        btnLabel: on ? 'Reviewing' : 'Review',
+        btnBg: on ? '#E7F5F7' : '#FFFFFF',
+        btnFg: on ? '#0A5F6B' : '#08201F',
+        btnBorder: on ? '#A9DAE1' : '#E0E8E7',
+        onReview: () => this.setState({ reviewId: s.id, showReason: false, reason: '' })
+      });
+    });
+
+    const cur = subData.find(s => s.id === this.state.reviewId) || subData[0];
+    const curSt = revState(cur.id);
+    const approved = curSt === 'approved';
+    const rejected = curSt === 'rejected';
+    const rb = approved ? ['#DCFCE7', '#15803D', 'Approved'] : rejected ? ['#FEE2E2', '#B91C1C', 'Rejected'] : ['#FEF3C7', '#B45309', 'Waiting for review'];
+
+    const review = Object.assign({}, cur, {
+      badgeBg: rb[0], badgeFg: rb[1], badge: rb[2],
+      approveLabel: approved ? 'Approved ✓' : 'Approve completion',
+      approveBg: approved ? '#DCFCE7' : '#15803D',
+      approveFg: approved ? '#15803D' : '#FFFFFF',
+      approveBorder: approved ? '#DCFCE7' : '#15803D',
+      rejectLabel: rejected ? 'Rejected' : 'Reject',
+      rejectFg: rejected ? '#B91C1C' : '#4A6260',
+      rejectBorder: rejected ? '#FECACA' : '#E0E8E7',
+      hint: approved ? 'Agency notified to release this payment' : rejected ? 'The task stays open for a resubmission' : 'Open the link before you decide'
+    });
+
+    const paid = this.props.paymentComplete !== false;
+    const pay = {
+      isPaid: paid,
+      isPending: !paid,
+      badge: paid ? 'Paid' : 'Payment pending',
+      badgeBg: paid ? '#DCFCE7' : '#FEF3C7',
+      badgeFg: paid ? '#15803D' : '#B45309',
+      cardBorder: paid ? '#E0E8E7' : '#D97706',
+      totalLabel: paid ? 'Total paid' : 'Total due'
+    };
+
+    const progress = [
+      { label: 'Selected', value: selectedCount + ' / 100', pct: Math.round(selectedCount / target * 100) + '%', color: '#0E8494' },
+      { label: 'Completed', value: '42 / 100', pct: '42%', color: '#0E8494' },
+      { label: 'Approved', value: '35 / 100', pct: '35%', color: '#16A34A' },
+      { label: 'Paid', value: '35 / 100', pct: '35%', color: '#0B2523' }
+    ];
+
+    const overview = [
+      ['Creators needed', '100', 'Set at creation', 'plain'],
+      ['Applications', '320', 'Open until Aug 26', 'plain'],
+      ['Selected', String(selectedCount), 'Chosen by you', 'accent'],
+      ['Tasks completed', '42', 'Links submitted', 'plain'],
+      ['Pending reviews', '7', 'Waiting on you', 'warn'],
+      ['Completed', '35', 'Approved and paid', 'dark']
+    ].map(([label, value, meta, kind]) => ({
+      label, value, meta,
+      bg: kind === 'dark' ? '#0B2523' : '#FFFFFF',
+      border: kind === 'warn' ? '1.5px solid #D97706' : kind === 'accent' ? '1.5px solid #A9DAE1' : kind === 'dark' ? 'none' : '1px solid #E0E8E7',
+      labelFg: kind === 'dark' ? '#C2CFCD' : kind === 'warn' ? '#B45309' : '#4A6260',
+      valueFg: kind === 'dark' ? '#FFFFFF' : '#08201F',
+      metaFg: kind === 'dark' ? '#93A6A4' : kind === 'warn' ? '#B45309' : '#6A817F'
+    }));
+
+    const tl = [
+      ['Campaign created', 'Aug 14, 2026 · 10:02 AM', 'done'],
+      ['Payment successful', 'Aug 14, 2026 · $1,200 · bank transfer', 'done'],
+      ['Campaign published', 'Aug 14, 2026 · 11:20 AM', 'done'],
+      ['Applications open', '320 applications so far · closes Aug 26', 'current'],
+      ['Creators selected', selectedCount + ' of 100 selected by you', 'current'],
+      ['Tasks in progress', '42 of 100 tasks submitted', 'next'],
+      ['Reviews', '35 approved · 7 waiting on you', 'next'],
+      ['Payments released', '35 influencers paid by the agency', 'next'],
+      ['Campaign completed', 'After every task is approved and paid', 'next']
+    ];
+    const timeline = tl.map(([label, meta, kind], i) => ({
+      label, meta,
+      dotSize: kind === 'current' ? '12px' : '10px',
+      dotBg: kind === 'done' ? '#0E8494' : kind === 'current' ? '#FFFFFF' : '#FFFFFF',
+      dotBorder: kind === 'done' ? '#0E8494' : kind === 'current' ? '#0E8494' : '#C2CFCD',
+      lineBg: i === tl.length - 1 ? 'transparent' : (kind === 'done' ? '#A9DAE1' : '#E0E8E7'),
+      lineH: i === tl.length - 1 ? '0px' : '20px',
+      weight: kind === 'next' ? 500 : 600,
+      fg: kind === 'next' ? '#6A817F' : '#08201F'
+    }));
+
+    const detailTabs = ['Overview', 'Applicants', 'Selected creators', 'Tasks & reviews', 'Payment'].map((label, i) => ({
+      label,
+      weight: i === 0 ? 650 : 500,
+      fg: i === 0 ? '#08201F' : '#6A817F',
+      underline: i === 0 ? '#0E8494' : 'transparent'
+    }));
+
+    return {
+      tabs, rows, platforms, filters,
+      totalCount: all.length,
+      noResults: total === 0,
+      resultLine: total === 0 ? 'No campaigns to show' : 'Showing ' + total + ' of ' + all.length + ' campaigns',
+      query: this.state.query,
+      hasQuery: this.state.query.length > 0,
+      onQuery: e => this.setState({ query: e.target.value, menu: null }),
+      clearQuery: () => this.setState({ query: '' }),
+      clearFilters: () => this.setState({ tab: 'All', query: '', platform: 'All platforms', menu: null }),
+      applicants,
+      selectionLine: selectedCount + ' of ' + target + ' selected',
+      selectionPct: Math.round(selectedCount / target * 100) + '%',
+      remainingLine: (target - selectedCount) + ' still needed',
+      submissions, review,
+      showReason: this.state.showReason,
+      reason: this.state.reason,
+      onReason: e => this.setState({ reason: e.target.value }),
+      onApprove: () => { const id = cur.id; this.setState(s => ({ reviewState: Object.assign({}, s.reviewState, { [id]: s.reviewState[id] === 'approved' ? null : 'approved' }), showReason: false })); },
+      onReject: () => this.setState(s => ({ showReason: !s.showReason })),
+      confirmReject: () => { const id = cur.id; this.setState(s => ({ reviewState: Object.assign({}, s.reviewState, { [id]: 'rejected' }), showReason: false })); },
+      cancelReject: () => this.setState({ showReason: false, reason: '' }),
+      overview, progress, pay, timeline, detailTabs
+    };
+  }
+
+  setApplicant(id, v) { this.setState(s => ({ applicantState: Object.assign({}, s.applicantState, { [id]: v }) })); }
+}
+
+</script>
+</body>
+</html>

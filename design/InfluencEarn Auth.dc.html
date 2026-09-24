@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Plus Jakarta Sans", -apple-system, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; background: #F6F9F8; color: #08201F; }
+  a { color: #0E8494; text-decoration: none; }
+  a:hover { color: #0A5F6B; }
+  ::selection { background: #A9DAE1; }
+  input { font-family: inherit; }
+  input::placeholder { color: #93A6A4; }
+</style>
+</helmet>
+
+<div style="padding:56px 56px 96px;display:flex;flex-direction:column;gap:72px;background:#F6F9F8">
+
+  <div style="display:flex;flex-direction:column;gap:10px;max-width:720px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="assets/ie-mark.png" alt="influencearn" width="30" height="30" style="display:block;flex-shrink:0;border-radius:9px" />
+      <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:16px;font-weight:700;letter-spacing:-0.025em">influence<span style="color:#4E8A1E">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span><span style="font-size:8.3px;font-weight:600;letter-spacing:0.08em;color:#4E8A1E">.com</span><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span></span></span>
+    </div>
+    <h1 style="margin:0;font-size:36px;font-weight:700;letter-spacing:-0.03em;line-height:1.15">Authentication &amp; account setup</h1>
+    <p style="margin:0;font-size:16px;color:#4A6260;line-height:1.6">Nine screens covering signup, role setup, login, password recovery, profile onboarding, role switching, the campaign social-account gate and social account settings. Desktop and mobile.</p>
+  </div>
+
+  <!-- 01 SIGN UP -->
+  <section data-screen-label="01 Sign up" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">01</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Sign up</span>
+      <span style="font-size:14px;color:#6A817F">No social accounts required</span>
+    </div>
+    <div style="display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap">
+      <div style="width:1120px;flex:none;border:1px solid #E0E8E7;border-radius:20px;overflow:hidden;background:#FFFFFF;box-shadow:0 24px 60px -32px rgba(8,32,31,.14);display:grid;grid-template-columns:420px 1fr">
+        <div style="background:#0B2523;padding:40px 36px;display:flex;flex-direction:column;gap:32px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <img src="assets/ie-mark.png" alt="influencearn" width="30" height="30" style="display:block;flex-shrink:0;border-radius:9px" />
+            <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:16px;font-weight:700;letter-spacing:-0.025em;color:#FFFFFF">influence<span style="color:#8FD14F">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span><span style="font-size:8.3px;font-weight:600;letter-spacing:0.08em;color:#8FD14F">.com</span><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span></span></span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:24px">
+            <span style="font-size:24px;font-weight:700;letter-spacing:-0.025em;line-height:1.25;color:#FFFFFF">Campaigns built around real work.</span>
+            <span style="font-size:14.5px;color:#93A6A4;line-height:1.6">Built for brands, agencies, and creators worldwide.</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px;margin-top:8px">
+            <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:#16A34A;font-size:14px;line-height:1.6">✓</span><span style="font-size:14px;color:#C2CFCD;line-height:1.6">Campaigns are funded before they go live</span></div>
+            <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:#16A34A;font-size:14px;line-height:1.6">✓</span><span style="font-size:14px;color:#C2CFCD;line-height:1.6">Requirements are set by the advertiser, upfront</span></div>
+            <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:#16A34A;font-size:14px;line-height:1.6">✓</span><span style="font-size:14px;color:#C2CFCD;line-height:1.6">One account, both roles, no second login</span></div>
+          </div>
+          <div style="margin-top:auto;border-top:1px solid rgba(255,255,255,.1);padding-top:20px;display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:13px;color:#93A6A4;line-height:1.6">Takes under a minute. You only add a phone number and city after your first login.</span>
+          </div>
+        </div>
+        <div style="padding:48px 56px;display:flex;flex-direction:column;gap:24px;justify-content:center">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.025em">Create your account</h2>
+            <p style="margin:0;font-size:15px;color:#4A6260;line-height:1.6">One account for brands and creators. Switch roles whenever you need.</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <label style="display:flex;flex-direction:column;gap:7px">
+              <span style="font-size:13px;font-weight:550;color:#08201F">Full name</span>
+              <input type="text" placeholder="Ayesha Khan" style="height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;color:#08201F;background:#FFFFFF;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" />
+            </label>
+            <label style="display:flex;flex-direction:column;gap:7px">
+              <span style="font-size:13px;font-weight:550;color:#08201F">Email address</span>
+              <input type="email" placeholder="you@company.com" style="height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;color:#08201F;background:#FFFFFF;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" />
+            </label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <label style="display:flex;flex-direction:column;gap:7px">
+                <span style="font-size:13px;font-weight:550;color:#08201F">Password</span>
+                <input type="password" placeholder="At least 8 characters" style="height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;color:#08201F;background:#FFFFFF;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" />
+              </label>
+              <label style="display:flex;flex-direction:column;gap:7px">
+                <span style="font-size:13px;font-weight:550;color:#08201F">Confirm password</span>
+                <input type="password" placeholder="Re-enter password" style="height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;color:#08201F;background:#FFFFFF;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" />
+              </label>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;background:#EFF4F3;border-radius:12px;padding:12px 14px">
+            <span style="width:6px;height:6px;border-radius:50%;background:#0E8494;margin-top:6px;flex:none"></span>
+            <span style="font-size:13px;color:#4A6260;line-height:1.55">You can connect your social accounts later when you apply to campaigns.</span>
+          </div>
+          <button type="button" style="font:inherit;font-size:15px;font-weight:550;height:48px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Create account</button>
+          <div style="display:flex;justify-content:center;gap:6px;font-size:14px;color:#4A6260">
+            Already have an account? <a href="#login" style="font-weight:550">Sign in</a>
+          </div>
+          <span style="font-size:12.5px;color:#6A817F;line-height:1.6;text-align:center">By creating an account you agree to our Terms and Privacy Policy.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:12.5px;font-weight:550;color:#6A817F">Mobile · 390px</span>
+        <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#FFFFFF;box-shadow:0 24px 60px -32px rgba(8,32,31,.14);overflow:hidden">
+          <div style="background:#0B2523;padding:24px 24px 28px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <img src="assets/ie-mark.png" alt="influencearn" width="28" height="28" style="display:block;flex-shrink:0;border-radius:8px" />
+              <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:15px;font-weight:700;letter-spacing:-0.02em;color:#FFFFFF">influence<span style="color:#8FD14F">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span><span style="font-size:7.8px;font-weight:600;letter-spacing:0.08em;color:#8FD14F">.com</span><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span></span></span>
+            </div>
+            <span style="font-size:19px;font-weight:700;letter-spacing:-0.02em;line-height:1.3;color:#FFFFFF">Campaigns built around real work.</span>
+          </div>
+          <div style="padding:24px;display:flex;flex-direction:column;gap:20px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <h2 style="margin:0;font-size:23px;font-weight:700;letter-spacing:-0.025em">Create your account</h2>
+              <p style="margin:0;font-size:14px;color:#4A6260;line-height:1.55">One account for brands and creators. Switch roles whenever you need.</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <label style="display:flex;flex-direction:column;gap:7px"><span style="font-size:13px;font-weight:550">Full name</span><input type="text" placeholder="Ayesha Khan" style="height:48px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:15px;background:#FFFFFF;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" /></label>
+              <label style="display:flex;flex-direction:column;gap:7px"><span style="font-size:13px;font-weight:550">Email address</span><input type="email" placeholder="you@company.com" style="height:48px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:15px;background:#FFFFFF;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" /></label>
+              <label style="display:flex;flex-direction:column;gap:7px"><span style="font-size:13px;font-weight:550">Password</span><input type="password" placeholder="At least 8 characters" style="height:48px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:15px;background:#FFFFFF;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" /></label>
+              <label style="display:flex;flex-direction:column;gap:7px"><span style="font-size:13px;font-weight:550">Confirm password</span><input type="password" placeholder="Re-enter password" style="height:48px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:15px;background:#FFFFFF;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" /></label>
+            </div>
+            <span style="font-size:13px;color:#4A6260;line-height:1.55;background:#EFF4F3;border-radius:12px;padding:12px 14px">You can connect your social accounts later when you apply to campaigns.</span>
+            <button type="button" style="font:inherit;font-size:15.5px;font-weight:550;height:52px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer" style-hover="background:#0A5F6B">Create account</button>
+            <div style="display:flex;justify-content:center;gap:6px;font-size:14px;color:#4A6260">Already have an account? <a href="#login" style="font-weight:550">Sign in</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 ROLE SETUP -->
+  <section data-screen-label="02 Role setup" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">02</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Role setup</span>
+      <span style="font-size:14px;color:#6A817F">Shown once, right after signup — cards are selectable</span>
+    </div>
+    <div style="display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap">
+      <div style="width:1120px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#FFFFFF;box-shadow:0 24px 60px -32px rgba(8,32,31,.14);padding:56px;display:flex;flex-direction:column;gap:40px;align-items:center">
+        <div style="display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;max-width:560px">
+          <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">Step 1 of 2</span>
+          <h2 style="margin:0;font-size:32px;font-weight:700;letter-spacing:-0.03em">How will you use InfluencEarn?</h2>
+          <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">Pick the role you want to start in. Nothing is locked in.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;width:100%;max-width:840px">
+          <div onClick="{{ pickAdvertiser }}" style="border:{{ advBorder }};background:{{ advBg }};border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:14px;cursor:pointer;box-shadow:{{ advShadow }}">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="width:44px;height:44px;border-radius:12px;background:#E7F5F7;display:flex;align-items:center;justify-content:center"><div style="width:16px;height:16px;border:2.5px solid #0E8494;border-radius:4px"></div></div>
+              <span style="width:22px;height:22px;border-radius:50%;border:{{ advDotBorder }};background:{{ advDotBg }};display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:12px;font-weight:700">{{ advTick }}</span>
+            </div>
+            <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Advertiser</span>
+            <span style="font-size:14.5px;color:#4A6260;line-height:1.6">Create campaigns and work with influencers.</span>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;padding-top:16px;border-top:1px solid #E0E8E7">
+              <span style="font-size:13.5px;color:#4A6260">Set requirements and payment per influencer</span>
+              <span style="font-size:13.5px;color:#4A6260">Review submitted work and approve completion</span>
+            </div>
+            <button type="button" style="margin-top:12px;font:inherit;font-size:14.5px;font-weight:550;height:46px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer" style-hover="background:#0A5F6B">Use as Advertiser</button>
+          </div>
+          <div onClick="{{ pickCreator }}" style="border:{{ crBorder }};background:{{ crBg }};border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:14px;cursor:pointer;box-shadow:{{ crShadow }}">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="width:44px;height:44px;border-radius:12px;background:#EFF4F3;display:flex;align-items:center;justify-content:center"><div style="width:16px;height:16px;border:2.5px solid #4A6260;border-radius:50%"></div></div>
+              <span style="width:22px;height:22px;border-radius:50%;border:{{ crDotBorder }};background:{{ crDotBg }};display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:12px;font-weight:700">{{ crTick }}</span>
+            </div>
+            <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Influencer / Creator</span>
+            <span style="font-size:14.5px;color:#4A6260;line-height:1.6">Discover campaigns and earn by completing creator tasks.</span>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;padding-top:16px;border-top:1px solid #E0E8E7">
+              <span style="font-size:13.5px;color:#4A6260">See payment per influencer before applying</span>
+              <span style="font-size:13.5px;color:#4A6260">Connect a social account only when a campaign needs it</span>
+            </div>
+            <button type="button" style="margin-top:12px;font:inherit;font-size:14.5px;font-weight:550;height:46px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">Use as Creator</button>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;background:#EFF4F3;border-radius:12px;padding:12px 16px">
+          <span style="width:6px;height:6px;border-radius:50%;background:#0E8494"></span>
+          <span style="font-size:13.5px;color:#4A6260">You can switch between Advertiser and Creator anytime.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:12.5px;font-weight:550;color:#6A817F">Mobile · 390px</span>
+        <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#FFFFFF;box-shadow:0 24px 60px -32px rgba(8,32,31,.14);padding:24px;display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:11.5px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">Step 1 of 2</span>
+            <h2 style="margin:0;font-size:23px;font-weight:700;letter-spacing:-0.025em;line-height:1.2">How will you use InfluencEarn?</h2>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="border:1.5px solid #0E8494;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px;box-shadow:0 12px 32px -20px rgba(10,95,107,.3)">
+              <div style="width:40px;height:40px;border-radius:12px;background:#E7F5F7;display:flex;align-items:center;justify-content:center"><div style="width:15px;height:15px;border:2.5px solid #0E8494;border-radius:4px"></div></div>
+              <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">Advertiser</span>
+              <span style="font-size:14px;color:#4A6260;line-height:1.55">Create campaigns and work with influencers.</span>
+              <button type="button" style="margin-top:6px;font:inherit;font-size:15px;font-weight:550;height:48px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer">Use as Advertiser</button>
+            </div>
+            <div style="border:1px solid #E0E8E7;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px">
+              <div style="width:40px;height:40px;border-radius:12px;background:#EFF4F3;display:flex;align-items:center;justify-content:center"><div style="width:15px;height:15px;border:2.5px solid #4A6260;border-radius:50%"></div></div>
+              <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">Influencer / Creator</span>
+              <span style="font-size:14px;color:#4A6260;line-height:1.55">Discover campaigns and earn by completing creator tasks.</span>
+              <button type="button" style="margin-top:6px;font:inherit;font-size:15px;font-weight:550;height:48px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer">Use as Creator</button>
+            </div>
+          </div>
+          <span style="font-size:13px;color:#4A6260;background:#EFF4F3;border-radius:12px;padding:12px 14px;line-height:1.55">You can switch between Advertiser and Creator anytime.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 LOGIN + 04 FORGOT -->
+  <section id="login" data-screen-label="03 Login and password reset" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">03 / 04</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Login &amp; password reset</span>
+      <span style="font-size:14px;color:#6A817F">Reset screen toggles to its success state</span>
+    </div>
+    <div style="display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap">
+      <div style="width:520px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#FFFFFF;box-shadow:0 24px 60px -32px rgba(8,32,31,.14);padding:48px 44px;display:flex;flex-direction:column;gap:24px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <img src="assets/ie-mark.png" alt="influencearn" width="30" height="30" style="display:block;flex-shrink:0;border-radius:9px" />
+          <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:16px;font-weight:700;letter-spacing:-0.025em">influence<span style="color:#4E8A1E">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span><span style="font-size:8.3px;font-weight:600;letter-spacing:0.08em;color:#4E8A1E">.com</span><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span></span></span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.025em">Welcome back</h2>
+          <p style="margin:0;font-size:15px;color:#4A6260;line-height:1.6">Sign in to manage your campaigns or applications.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <label style="display:flex;flex-direction:column;gap:7px">
+            <span style="font-size:13px;font-weight:550">Email</span>
+            <input type="email" placeholder="you@company.com" style="height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;background:#FFFFFF;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" />
+          </label>
+          <label style="display:flex;flex-direction:column;gap:7px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between">
+              <span style="font-size:13px;font-weight:550">Password</span>
+              <a href="#reset" style="font-size:13px;font-weight:550">Forgot password?</a>
+            </div>
+            <input type="password" placeholder="Enter your password" style="height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;background:#FFFFFF;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" />
+          </label>
+        </div>
+        <button type="button" style="font:inherit;font-size:15px;font-weight:550;height:48px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Sign in</button>
+        <div style="display:flex;justify-content:center;gap:6px;font-size:14px;color:#4A6260">Don't have an account? <a href="#" style="font-weight:550">Create one</a></div>
+      </div>
+
+      <div id="reset" style="width:520px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#FFFFFF;box-shadow:0 24px 60px -32px rgba(8,32,31,.14);padding:48px 44px;display:flex;flex-direction:column;gap:24px">
+        <sc-if value="{{ resetIdle }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:24px">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <h2 style="margin:0;font-size:26px;font-weight:700;letter-spacing:-0.025em">Reset your password</h2>
+              <p style="margin:0;font-size:15px;color:#4A6260;line-height:1.6">Enter the email on your account and we'll send a reset link.</p>
+            </div>
+            <label style="display:flex;flex-direction:column;gap:7px">
+              <span style="font-size:13px;font-weight:550">Email</span>
+              <input type="email" placeholder="you@company.com" style="height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;background:#FFFFFF;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" />
+            </label>
+            <button type="button" onClick="{{ sendReset }}" style="font:inherit;font-size:15px;font-weight:550;height:48px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Send reset link</button>
+            <div style="display:flex;justify-content:center;font-size:14px;color:#4A6260"><a href="#login" style="font-weight:550">Back to sign in</a></div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ resetSent }}">
+          <div style="display:flex;flex-direction:column;gap:20px;align-items:flex-start">
+            <div style="width:48px;height:48px;border-radius:14px;background:#DCFCE7;display:flex;align-items:center;justify-content:center"><span style="font-size:20px;color:#15803D;font-weight:700">✓</span></div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <h2 style="margin:0;font-size:26px;font-weight:700;letter-spacing:-0.025em">Check your email</h2>
+              <p style="margin:0;font-size:15px;color:#4A6260;line-height:1.6">Check your email for a password reset link. It expires in 30 minutes.</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;background:#EFF4F3;border-radius:12px;padding:12px 14px;width:100%">
+              <span style="width:6px;height:6px;border-radius:50%;background:#4A6260;flex:none"></span>
+              <span style="font-size:13.5px;color:#4A6260">Sent to ayesha@brandhouse.com</span>
+            </div>
+            <div style="display:flex;gap:12px;width:100%">
+              <button type="button" onClick="{{ resetAgain }}" style="flex:1;font:inherit;font-size:14.5px;font-weight:550;height:46px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">Use another email</button>
+              <button type="button" style="flex:1;font:inherit;font-size:14.5px;font-weight:550;height:46px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer" style-hover="background:#0A5F6B">Open email app</button>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:12.5px;font-weight:550;color:#6A817F">Mobile · 390px</span>
+        <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#FFFFFF;box-shadow:0 24px 60px -32px rgba(8,32,31,.14);padding:24px;display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <img src="assets/ie-mark.png" alt="influencearn" width="28" height="28" style="display:block;flex-shrink:0;border-radius:8px" />
+            <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:15px;font-weight:700;letter-spacing:-0.02em">influence<span style="color:#4E8A1E">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span><span style="font-size:7.8px;font-weight:600;letter-spacing:0.08em;color:#4E8A1E">.com</span><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span></span></span>
+          </div>
+          <h2 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.025em">Welcome back</h2>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <label style="display:flex;flex-direction:column;gap:7px"><span style="font-size:13px;font-weight:550">Email</span><input type="email" placeholder="you@company.com" style="height:48px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:15px;background:#FFFFFF;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" /></label>
+            <label style="display:flex;flex-direction:column;gap:7px"><div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13px;font-weight:550">Password</span><a href="#reset" style="font-size:13px;font-weight:550">Forgot password?</a></div><input type="password" placeholder="Enter your password" style="height:48px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:15px;background:#FFFFFF;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" /></label>
+          </div>
+          <button type="button" style="font:inherit;font-size:15.5px;font-weight:550;height:52px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer">Sign in</button>
+          <div style="display:flex;justify-content:center;gap:6px;font-size:14px;color:#4A6260">Don't have an account? <a href="#" style="font-weight:550">Create one</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 ONBOARDING -->
+  <section data-screen-label="05 Profile onboarding" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">05</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Profile setup</span>
+      <span style="font-size:14px;color:#6A817F">First login · skippable · no social accounts asked for</span>
+    </div>
+    <div style="display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap">
+      <div style="width:760px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#FFFFFF;box-shadow:0 24px 60px -32px rgba(8,32,31,.14);overflow:hidden">
+        <div style="padding:32px 40px 0;display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:24px">
+            <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">Step 2 of 2</span>
+            <button type="button" style="font:inherit;font-size:13.5px;font-weight:550;color:#6A817F;background:transparent;border:none;cursor:pointer;padding:6px 8px;border-radius:9px" style-hover="background:#EFF4F3">Skip for now</button>
+          </div>
+          <div style="height:4px;border-radius:999px;background:#E0E8E7;overflow:hidden"><div style="width:100%;height:100%;background:#0E8494"></div></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <h2 style="margin:0;font-size:26px;font-weight:700;letter-spacing:-0.025em">Complete your profile</h2>
+            <p style="margin:0;font-size:15px;color:#4A6260;line-height:1.6">Four quick details so advertisers know who they're working with.</p>
+          </div>
+        </div>
+        <div style="padding:28px 40px 36px;display:flex;flex-direction:column;gap:24px">
+          <div style="display:flex;align-items:center;gap:20px;padding:20px;border:1px solid #E0E8E7;border-radius:16px;background:#F6F9F8">
+            <div style="width:64px;height:64px;border-radius:50%;background:#0B2523;display:flex;align-items:center;justify-content:center;flex:none"><span style="font-size:22px;font-weight:650;color:#FFFFFF;letter-spacing:-0.02em">AK</span></div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:14.5px;font-weight:600">Profile photo</span>
+              <span style="font-size:13.5px;color:#4A6260;line-height:1.5">JPG or PNG, up to 2 MB. Optional.</span>
+            </div>
+            <button type="button" style="margin-left:auto;font:inherit;font-size:14px;font-weight:550;height:40px;padding:0 16px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#EFF4F3">Upload photo</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <label style="display:flex;flex-direction:column;gap:7px"><span style="font-size:13px;font-weight:550">Full name</span><input type="text" value="Ayesha Khan" style="height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;background:#FFFFFF;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" /></label>
+            <label style="display:flex;flex-direction:column;gap:7px"><span style="font-size:13px;font-weight:550">Phone number</span><input type="tel" placeholder="+1 300 0000000" style="height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;background:#FFFFFF;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" /></label>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:7px">
+            <span style="font-size:13px;font-weight:550">City</span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="font-size:13.5px;font-weight:550;padding:9px 14px;border-radius:999px;background:#0E8494;color:#FFFFFF">New York</span>
+              <span style="font-size:13.5px;font-weight:500;padding:9px 14px;border-radius:999px;border:1px solid #E0E8E7;color:#4A6260;background:#FFFFFF">London</span>
+              <span style="font-size:13.5px;font-weight:500;padding:9px 14px;border-radius:999px;border:1px solid #E0E8E7;color:#4A6260;background:#FFFFFF">Berlin</span>
+              <span style="font-size:13.5px;font-weight:500;padding:9px 14px;border-radius:999px;border:1px solid #E0E8E7;color:#4A6260;background:#FFFFFF">Faisalabad</span>
+              <span style="font-size:13.5px;font-weight:500;padding:9px 14px;border-radius:999px;border:1px solid #E0E8E7;color:#4A6260;background:#FFFFFF">Peshawar</span>
+              <span style="font-size:13.5px;font-weight:500;padding:9px 14px;border-radius:999px;border:1px solid #E0E8E7;color:#4A6260;background:#FFFFFF">Other</span>
+            </div>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:7px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13px;font-weight:550">Short bio</span><span style="font-size:12.5px;color:#6A817F">Optional · 160 characters</span></div>
+            <textarea placeholder="Fashion and lifestyle creator based in New York." style="min-height:88px;border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px;font-family:inherit;font-size:14.5px;background:#FFFFFF;outline:none;resize:vertical" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)"></textarea>
+          </label>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:8px">
+            <span style="font-size:13px;color:#6A817F;line-height:1.55;max-width:340px">Social accounts are not needed yet. You'll be asked only when a campaign requires one.</span>
+            <button type="button" style="font:inherit;font-size:15px;font-weight:550;height:48px;padding:0 24px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Finish setup</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:12.5px;font-weight:550;color:#6A817F">Mobile · 390px</span>
+        <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#FFFFFF;box-shadow:0 24px 60px -32px rgba(8,32,31,.14);padding:24px;display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:11.5px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">Step 2 of 2</span><span style="font-size:13.5px;font-weight:550;color:#6A817F">Skip</span></div>
+          <h2 style="margin:0;font-size:23px;font-weight:700;letter-spacing:-0.025em">Complete your profile</h2>
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="width:56px;height:56px;border-radius:50%;background:#0B2523;display:flex;align-items:center;justify-content:center;flex:none"><span style="font-size:19px;font-weight:650;color:#FFFFFF">AK</span></div>
+            <button type="button" style="font:inherit;font-size:14px;font-weight:550;height:44px;padding:0 16px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer">Upload photo</button>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <label style="display:flex;flex-direction:column;gap:7px"><span style="font-size:13px;font-weight:550">Full name</span><input type="text" value="Ayesha Khan" style="height:48px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:15px;background:#FFFFFF;outline:none" /></label>
+            <label style="display:flex;flex-direction:column;gap:7px"><span style="font-size:13px;font-weight:550">Phone number</span><input type="tel" placeholder="+1 300 0000000" style="height:48px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:15px;background:#FFFFFF;outline:none" /></label>
+            <label style="display:flex;flex-direction:column;gap:7px"><span style="font-size:13px;font-weight:550">City</span><input type="text" value="New York" style="height:48px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:15px;background:#FFFFFF;outline:none" /></label>
+            <label style="display:flex;flex-direction:column;gap:7px"><span style="font-size:13px;font-weight:550">Short bio</span><textarea placeholder="Fashion and lifestyle creator based in New York." style="min-height:80px;border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px;font-family:inherit;font-size:15px;background:#FFFFFF;outline:none;resize:vertical"></textarea></label>
+          </div>
+          <button type="button" style="font:inherit;font-size:15.5px;font-weight:550;height:52px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer">Finish setup</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 ROLE SWITCHER -->
+  <section data-screen-label="06 Role switcher" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">06</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Role switcher</span>
+      <span style="font-size:14px;color:#6A817F">In the app header — click to open</span>
+    </div>
+    <div style="width:1120px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#FFFFFF;box-shadow:0 24px 60px -32px rgba(8,32,31,.14);overflow:hidden">
+      <div style="height:64px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 24px;background:#FFFFFF">
+        <div style="display:flex;align-items:center;gap:28px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <img src="assets/ie-mark.png" alt="influencearn" width="28" height="28" style="display:block;flex-shrink:0;border-radius:8px" />
+            <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:15px;font-weight:700;letter-spacing:-0.02em">influence<span style="color:#4E8A1E">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span><span style="font-size:7.8px;font-weight:600;letter-spacing:0.08em;color:#4E8A1E">.com</span><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span></span></span>
+          </div>
+          <div style="display:flex;align-items:center;gap:22px;font-size:14px;color:#4A6260">
+            <span style="color:#08201F;font-weight:550">Campaigns</span>
+            <span>Applicants</span>
+            <span>Payments</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;position:relative">
+          <button type="button" onClick="{{ toggleSwitcher }}" style="font:inherit;display:flex;align-items:center;gap:10px;height:40px;padding:0 12px 0 10px;border-radius:12px;border:1px solid {{ switcherBorder }};background:{{ switcherBg }};cursor:pointer">
+            <span style="width:24px;height:24px;border-radius:7px;background:#0B2523;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:11px;font-weight:700">{{ roleInitial }}</span>
+            <span style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.15">
+              <span style="font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Current role</span>
+              <span style="font-size:13.5px;font-weight:600;color:#08201F">{{ roleName }}</span>
+            </span>
+            <span style="font-size:10px;color:#6A817F;margin-left:2px">▼</span>
+          </button>
+          <span style="width:32px;height:32px;border-radius:50%;background:#EFF4F3;border:1px solid #E0E8E7;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:650;color:#08201F">AK</span>
+          <sc-if value="{{ switcherOpen }}">
+            <div style="position:absolute;top:52px;right:44px;width:288px;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 24px 60px -20px rgba(8,32,31,.28);padding:8px;z-index:5">
+              <span style="display:block;font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#6A817F;padding:10px 12px 8px">Switch role</span>
+              <button type="button" onClick="{{ setAdvertiser }}" style="font:inherit;width:100%;text-align:left;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;border:none;background:{{ advRowBg }};cursor:pointer" style-hover="background:#EFF4F3">
+                <span style="width:32px;height:32px;border-radius:9px;background:#E7F5F7;display:flex;align-items:center;justify-content:center;flex:none"><span style="width:13px;height:13px;border:2.5px solid #0E8494;border-radius:3px;display:block"></span></span>
+                <span style="display:flex;flex-direction:column;gap:2px">
+                  <span style="font-size:14px;font-weight:600;color:#08201F">Switch to Advertiser</span>
+                  <span style="font-size:12.5px;color:#6A817F">Create and manage campaigns</span>
+                </span>
+                <span style="margin-left:auto;font-size:12px;font-weight:700;color:#0E8494">{{ advCheck }}</span>
+              </button>
+              <button type="button" onClick="{{ setCreator }}" style="font:inherit;width:100%;text-align:left;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;border:none;background:{{ crRowBg }};cursor:pointer" style-hover="background:#EFF4F3">
+                <span style="width:32px;height:32px;border-radius:9px;background:#EFF4F3;display:flex;align-items:center;justify-content:center;flex:none"><span style="width:13px;height:13px;border:2.5px solid #4A6260;border-radius:50%;display:block"></span></span>
+                <span style="display:flex;flex-direction:column;gap:2px">
+                  <span style="font-size:14px;font-weight:600;color:#08201F">Switch to Influencer</span>
+                  <span style="font-size:12.5px;color:#6A817F">Find campaigns and submit work</span>
+                </span>
+                <span style="margin-left:auto;font-size:12px;font-weight:700;color:#0E8494">{{ crCheck }}</span>
+              </button>
+              <div style="border-top:1px solid #E0E8E7;margin:8px 4px 0;padding:10px 8px 6px">
+                <span style="font-size:12.5px;color:#6A817F;line-height:1.5">Same account, same login. Your campaigns and applications stay separate.</span>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+      <div style="padding:32px 24px 40px;background:#F6F9F8;display:flex;flex-direction:column;gap:8px;min-height:180px">
+        <span style="font-size:20px;font-weight:700;letter-spacing:-0.025em">{{ contextTitle }}</span>
+        <span style="font-size:14.5px;color:#4A6260">{{ contextBody }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 SOCIAL GATE -->
+  <section data-screen-label="07 Social account gate" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">07</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Social account gate</span>
+      <span style="font-size:14px;color:#6A817F">Shown when an influencer applies without the required platform</span>
+    </div>
+    <div style="display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap">
+      <div style="width:600px;flex:none;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;gap:8px;background:#EFF4F3;border-radius:999px;padding:4px;width:fit-content">
+          <button type="button" onClick="{{ gateInstagram }}" style="font:inherit;font-size:13px;font-weight:550;padding:8px 16px;border-radius:999px;border:none;cursor:pointer;background:{{ igBg }};color:{{ igFg }}">Instagram</button>
+          <button type="button" onClick="{{ gateTiktok }}" style="font:inherit;font-size:13px;font-weight:550;padding:8px 16px;border-radius:999px;border:none;cursor:pointer;background:{{ ttBg }};color:{{ ttFg }}">TikTok</button>
+          <button type="button" onClick="{{ gateFacebook }}" style="font:inherit;font-size:13px;font-weight:550;padding:8px 16px;border-radius:999px;border:none;cursor:pointer;background:{{ fbBg }};color:{{ fbFg }}">Facebook</button>
+        </div>
+        <div style="border:1px solid #E0E8E7;border-radius:20px;background:#FFFFFF;box-shadow:0 24px 60px -20px rgba(8,32,31,.28);padding:32px;display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
+            <div style="width:48px;height:48px;border-radius:14px;background:#FEF3C7;display:flex;align-items:center;justify-content:center;flex:none"><span style="width:16px;height:2.5px;background:#D97706;display:block"></span></div>
+            <span style="font-size:18px;color:#6A817F;line-height:1;cursor:pointer">✕</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <h3 style="margin:0;font-size:22px;font-weight:700;letter-spacing:-0.02em">{{ gateTitle }}</h3>
+            <p style="margin:0;font-size:15px;color:#4A6260;line-height:1.6">{{ gateBody }}</p>
+          </div>
+          <div style="border:1px solid #E0E8E7;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;background:#F6F9F8">
+            <span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#6A817F">This campaign requires</span>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <span style="font-size:13px;font-weight:500;color:#08201F;border:1px solid #E0E8E7;background:#FFFFFF;border-radius:9px;padding:6px 10px">{{ gatePlatformChip }}</span>
+              <span style="font-size:13px;font-weight:500;color:#08201F;border:1px solid #E0E8E7;background:#FFFFFF;border-radius:9px;padding:6px 10px">25k+ followers</span>
+              <span style="font-size:13px;font-weight:500;color:#08201F;border:1px solid #E0E8E7;background:#FFFFFF;border-radius:9px;padding:6px 10px">Fashion category</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px">
+            <button type="button" style="flex:none;font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 18px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">Not now</button>
+            <button type="button" style="flex:1;font:inherit;font-size:14.5px;font-weight:550;height:46px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">{{ gateCta }}</button>
+          </div>
+          <span style="font-size:12.5px;color:#6A817F;line-height:1.55">Connecting an account only confirms the handle for this campaign. You can disconnect it later in settings.</span>
+        </div>
+      </div>
+
+      <div style="width:440px;flex:none;display:flex;flex-direction:column;gap:16px">
+        <span style="font-size:12.5px;font-weight:550;color:#6A817F">Required account already connected</span>
+        <div style="border:1px solid #E0E8E7;border-radius:20px;background:#FFFFFF;box-shadow:0 24px 60px -32px rgba(8,32,31,.14);padding:32px;display:flex;flex-direction:column;gap:20px">
+          <div style="width:48px;height:48px;border-radius:14px;background:#DCFCE7;display:flex;align-items:center;justify-content:center"><span style="font-size:20px;color:#15803D;font-weight:700">✓</span></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <h3 style="margin:0;font-size:20px;font-weight:700;letter-spacing:-0.02em">You can apply to this campaign</h3>
+            <p style="margin:0;font-size:14.5px;color:#4A6260;line-height:1.6">Your Instagram account meets what this campaign asks for.</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;border:1px solid #E0E8E7;border-radius:14px;padding:14px 16px">
+            <span style="width:36px;height:36px;border-radius:10px;background:#EFF4F3;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#08201F;flex:none">IG</span>
+            <span style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-size:14px;font-weight:600">@ayeshakhan</span>
+              <span style="font-size:12.5px;color:#6A817F">Instagram · connected</span>
+            </span>
+            <span style="margin-left:auto;font-size:12px;font-weight:600;color:#15803D;background:#DCFCE7;border-radius:999px;padding:5px 10px">Connected</span>
+          </div>
+          <button type="button" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Continue to application</button>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:12.5px;font-weight:550;color:#6A817F">Mobile sheet · 390px</span>
+        <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:20px 20px 0 0;background:#FFFFFF;box-shadow:0 -8px 40px -20px rgba(8,32,31,.28);padding:24px;display:flex;flex-direction:column;gap:18px">
+          <span style="width:40px;height:4px;border-radius:999px;background:#E0E8E7;align-self:center"></span>
+          <div style="width:44px;height:44px;border-radius:13px;background:#FEF3C7;display:flex;align-items:center;justify-content:center"><span style="width:15px;height:2.5px;background:#D97706;display:block"></span></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <h3 style="margin:0;font-size:20px;font-weight:700;letter-spacing:-0.02em">Instagram account required</h3>
+            <p style="margin:0;font-size:14.5px;color:#4A6260;line-height:1.6">Connect your Instagram account to apply to this campaign.</p>
+          </div>
+          <button type="button" style="font:inherit;font-size:15.5px;font-weight:550;height:52px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer">Connect Instagram</button>
+          <button type="button" style="font:inherit;font-size:15px;font-weight:550;height:48px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer">Not now</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 SOCIAL ACCOUNTS SETTINGS -->
+  <section data-screen-label="08 Social accounts settings" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">08</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Social accounts</span>
+      <span style="font-size:14px;color:#6A817F">Profile settings · connect and disconnect are live</span>
+    </div>
+    <div style="display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap">
+      <div style="width:760px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#FFFFFF;box-shadow:0 24px 60px -32px rgba(8,32,31,.14);overflow:hidden">
+        <div style="padding:28px 32px;border-bottom:1px solid #E0E8E7;display:flex;flex-direction:column;gap:8px">
+          <h2 style="margin:0;font-size:22px;font-weight:700;letter-spacing:-0.025em">Social accounts</h2>
+          <p style="margin:0;font-size:14.5px;color:#4A6260;line-height:1.6">Optional for your account. Required only for campaigns that ask for a specific platform.</p>
+        </div>
+        <div style="padding:24px 32px 32px;display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ platforms }}" as="p" hint-placeholder-count="4">
+            <div style="border:1px solid #E0E8E7;border-radius:16px;padding:18px 20px;display:flex;align-items:center;gap:16px;background:#FFFFFF">
+              <span style="width:44px;height:44px;border-radius:12px;background:#EFF4F3;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#08201F;flex:none">{{ p.code }}</span>
+              <span style="display:flex;flex-direction:column;gap:3px">
+                <span style="font-size:15px;font-weight:600;letter-spacing:-0.01em">{{ p.name }}</span>
+                <span style="font-size:13px;color:#6A817F">{{ p.detail }}</span>
+              </span>
+              <span style="margin-left:auto;display:flex;align-items:center;gap:12px">
+                <span style="font-size:12px;font-weight:600;border-radius:999px;padding:5px 10px;background:{{ p.badgeBg }};color:{{ p.badgeFg }}">{{ p.badge }}</span>
+                <button type="button" onClick="{{ p.onToggle }}" style="font:inherit;font-size:14px;font-weight:550;height:40px;padding:0 16px;border-radius:12px;border:1px solid {{ p.btnBorder }};background:{{ p.btnBg }};color:{{ p.btnFg }};cursor:pointer">{{ p.btnLabel }}</button>
+              </span>
+            </div>
+          </sc-for>
+          <div style="display:flex;gap:10px;align-items:flex-start;background:#EFF4F3;border-radius:12px;padding:14px 16px;margin-top:8px">
+            <span style="width:6px;height:6px;border-radius:50%;background:#0E8494;margin-top:6px;flex:none"></span>
+            <span style="font-size:13.5px;color:#4A6260;line-height:1.55">Disconnecting a platform doesn't affect campaigns you already applied to. You won't be able to apply to new campaigns that require it.</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:12.5px;font-weight:550;color:#6A817F">Mobile · 390px</span>
+        <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#FFFFFF;box-shadow:0 24px 60px -32px rgba(8,32,31,.14);padding:24px;display:flex;flex-direction:column;gap:18px">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <h2 style="margin:0;font-size:21px;font-weight:700;letter-spacing:-0.025em">Social accounts</h2>
+            <p style="margin:0;font-size:14px;color:#4A6260;line-height:1.55">Required only for campaigns that ask for a platform.</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="width:40px;height:40px;border-radius:11px;background:#EFF4F3;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex:none">IG</span>
+                <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14.5px;font-weight:600">Instagram</span><span style="font-size:12.5px;color:#6A817F">@ayeshakhan</span></span>
+                <span style="margin-left:auto;font-size:12px;font-weight:600;color:#15803D;background:#DCFCE7;border-radius:999px;padding:5px 10px">Connected</span>
+              </div>
+              <button type="button" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer">Disconnect</button>
+            </div>
+            <div style="border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="width:40px;height:40px;border-radius:11px;background:#EFF4F3;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex:none">TT</span>
+                <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14.5px;font-weight:600">TikTok</span><span style="font-size:12.5px;color:#6A817F">Not connected</span></span>
+              </div>
+              <button type="button" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer">Connect</button>
+            </div>
+            <div style="border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px">
+              <span style="width:40px;height:40px;border-radius:11px;background:#EFF4F3;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex:none">FB</span>
+              <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14.5px;font-weight:600">Facebook</span><span style="font-size:12.5px;color:#6A817F">Not connected</span></span>
+              <button type="button" style="margin-left:auto;font:inherit;font-size:14px;font-weight:550;height:40px;padding:0 14px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer">Connect</button>
+            </div>
+            <div style="border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px">
+              <span style="width:40px;height:40px;border-radius:11px;background:#EFF4F3;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex:none">YT</span>
+              <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14.5px;font-weight:600">YouTube</span><span style="font-size:12.5px;color:#6A817F">Not connected</span></span>
+              <button type="button" style="margin-left:auto;font:inherit;font-size:14px;font-weight:550;height:40px;padding:0 14px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer">Connect</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1024},&quot;startingRole&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Advertiser&quot;,&quot;Influencer&quot;],&quot;default&quot;:&quot;Advertiser&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Behaviour&quot;}}">
+class Component extends DCLogic {
+  state = {
+    setupRole: 'Advertiser',
+    appRole: null,
+    switcherOpen: false,
+    resetSent: false,
+    gate: 'Instagram',
+    connected: { Instagram: true, TikTok: false, Facebook: false, YouTube: false }
+  };
+
+  get appRole() { return this.state.appRole ?? (this.props.startingRole || 'Advertiser'); }
+
+  toggle(name) {
+    this.setState(s => ({ connected: Object.assign({}, s.connected, { [name]: !s.connected[name] }) }));
+  }
+
+  renderVals() {
+    const sel = this.state.setupRole;
+    const advSel = sel === 'Advertiser';
+    const role = this.appRole;
+    const isAdv = role === 'Advertiser';
+    const g = this.state.gate;
+    const handles = { Instagram: '@ayeshakhan', TikTok: '@ayesha.creates', Facebook: 'Ayesha Khan', YouTube: 'Ayesha Khan Vlogs' };
+    const codes = { Instagram: 'IG', TikTok: 'TT', Facebook: 'FB', YouTube: 'YT' };
+
+    const platforms = ['Instagram', 'TikTok', 'Facebook', 'YouTube'].map(name => {
+      const on = this.state.connected[name];
+      return {
+        name,
+        code: codes[name],
+        detail: on ? handles[name] : 'Not connected',
+        badge: on ? 'Connected' : 'Optional',
+        badgeBg: on ? '#DCFCE7' : '#EFF4F3',
+        badgeFg: on ? '#15803D' : '#4A6260',
+        btnLabel: on ? 'Disconnect' : 'Connect',
+        btnBg: on ? '#FFFFFF' : '#0E8494',
+        btnFg: on ? '#08201F' : '#FFFFFF',
+        btnBorder: on ? '#E0E8E7' : '#0E8494',
+        onToggle: () => this.toggle(name)
+      };
+    });
+
+    return {
+      // 02 role setup
+      pickAdvertiser: () => this.setState({ setupRole: 'Advertiser' }),
+      pickCreator: () => this.setState({ setupRole: 'Creator' }),
+      advBorder: advSel ? '1.5px solid #0E8494' : '1px solid #E0E8E7',
+      crBorder: advSel ? '1px solid #E0E8E7' : '1.5px solid #0E8494',
+      advBg: '#FFFFFF',
+      crBg: '#FFFFFF',
+      advShadow: advSel ? '0 24px 60px -28px rgba(10,95,107,.3)' : '0 1px 2px rgba(8,32,31,.04)',
+      crShadow: advSel ? '0 1px 2px rgba(8,32,31,.04)' : '0 24px 60px -28px rgba(10,95,107,.3)',
+      advDotBg: advSel ? '#0E8494' : '#FFFFFF',
+      crDotBg: advSel ? '#FFFFFF' : '#0E8494',
+      advDotBorder: advSel ? '1.5px solid #0E8494' : '1.5px solid #E0E8E7',
+      crDotBorder: advSel ? '1.5px solid #E0E8E7' : '1.5px solid #0E8494',
+      advTick: advSel ? '✓' : '',
+      crTick: advSel ? '' : '✓',
+
+      // 04 reset
+      resetIdle: !this.state.resetSent,
+      resetSent: this.state.resetSent,
+      sendReset: () => this.setState({ resetSent: true }),
+      resetAgain: () => this.setState({ resetSent: false }),
+
+      // 06 switcher
+      switcherOpen: this.state.switcherOpen,
+      toggleSwitcher: () => this.setState(s => ({ switcherOpen: !s.switcherOpen })),
+      setAdvertiser: () => this.setState({ appRole: 'Advertiser', switcherOpen: false }),
+      setCreator: () => this.setState({ appRole: 'Influencer', switcherOpen: false }),
+      roleName: role,
+      roleInitial: isAdv ? 'A' : 'I',
+      switcherBorder: this.state.switcherOpen ? '#0E8494' : '#E0E8E7',
+      switcherBg: this.state.switcherOpen ? '#F6F9F8' : '#FFFFFF',
+      advRowBg: isAdv ? '#F6F9F8' : 'transparent',
+      crRowBg: isAdv ? 'transparent' : '#F6F9F8',
+      advCheck: isAdv ? '✓' : '',
+      crCheck: isAdv ? '' : '✓',
+      contextTitle: isAdv ? 'Advertiser workspace' : 'Influencer workspace',
+      contextBody: isAdv
+        ? 'Campaigns you have created, applicants waiting for selection, and submitted work to review.'
+        : 'Campaigns you qualify for, tasks in progress, and payments released after approval.',
+
+      // 07 gate
+      gateInstagram: () => this.setState({ gate: 'Instagram' }),
+      gateTiktok: () => this.setState({ gate: 'TikTok' }),
+      gateFacebook: () => this.setState({ gate: 'Facebook' }),
+      igBg: g === 'Instagram' ? '#0B2523' : 'transparent',
+      igFg: g === 'Instagram' ? '#FFFFFF' : '#4A6260',
+      ttBg: g === 'TikTok' ? '#0B2523' : 'transparent',
+      ttFg: g === 'TikTok' ? '#FFFFFF' : '#4A6260',
+      fbBg: g === 'Facebook' ? '#0B2523' : 'transparent',
+      fbFg: g === 'Facebook' ? '#FFFFFF' : '#4A6260',
+      gateTitle: g + ' account required',
+      gateBody: 'Connect your ' + g + ' account to apply to this campaign.',
+      gateCta: 'Connect ' + g,
+      gatePlatformChip: g + ' post',
+
+      platforms
+    };
+  }
+}
+</script>
+</body>
+</html>

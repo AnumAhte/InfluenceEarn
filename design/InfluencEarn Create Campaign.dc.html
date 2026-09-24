@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Plus Jakarta Sans", -apple-system, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; background: #F6F9F8; color: #08201F; }
+  a { color: #0E8494; text-decoration: none; }
+  a:hover { color: #0A5F6B; }
+  ::selection { background: #A9DAE1; }
+  textarea, input, select { font-family: inherit; }
+</style>
+</helmet>
+
+<div style="padding:56px 56px 96px;display:flex;flex-direction:column;gap:64px;background:#F6F9F8">
+
+  <div style="display:flex;flex-direction:column;gap:10px;max-width:820px;flex:none">
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="assets/ie-mark.png" alt="influencearn" width="30" height="30" style="display:block;flex-shrink:0;border-radius:9px" />
+      <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:16px;font-weight:700;letter-spacing:-0.025em">influence<span style="color:#4E8A1E">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span><span style="font-size:8.3px;font-weight:600;letter-spacing:0.08em;color:#4E8A1E">.com</span><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span></span></span>
+    </div>
+    <h1 style="margin:0;font-size:36px;font-weight:700;letter-spacing:-0.03em;line-height:1.15">Create a campaign</h1>
+    <p style="margin:0;font-size:16px;color:#4A6260;line-height:1.6">A four step wizard: details, platforms &amp; tasks, proof &amp; dates, budget &amp; funding. The whole flow is live — type in the fields, toggle platforms, add tasks, and the preview and budget update as you go. Validation fires when you try to continue with something missing.</p>
+  </div>
+
+  <!-- 01 WIZARD -->
+  <section data-screen-label="Create campaign wizard" style="display:flex;flex-direction:column;gap:20px;flex:none">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">01</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Wizard · desktop</span>
+      <span style="font-size:14px;color:#6A817F">{{ stepHint }}</span>
+    </div>
+
+    <div style="width:1440px;flex:none;border:1px solid #E0E8E7;border-radius:20px;background:#F6F9F8;box-shadow:0 32px 80px -40px rgba(8,32,31,.28);overflow:hidden;display:grid;grid-template-columns:248px 1fr">
+
+      <aside style="background:#0B2523;padding:20px 14px;display:flex;flex-direction:column;gap:24px;min-height:1120px">
+        <div style="display:flex;align-items:center;gap:10px;padding:4px 8px 0">
+          <img src="assets/ie-mark.png" alt="influencearn" width="30" height="30" style="display:block;flex-shrink:0;border-radius:9px" />
+          <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:15.5px;font-weight:700;letter-spacing:-0.025em;color:#FFFFFF">influence<span style="color:#8FD14F">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span><span style="font-size:8.1px;font-weight:600;letter-spacing:0.08em;color:#8FD14F">.com</span><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span></span></span>
+        </div>
+        <nav style="display:flex;flex-direction:column;gap:3px">
+          <span style="display:flex;align-items:center;gap:10px;font-size:14px;color:#C2CFCD;border-radius:11px;padding:10px 12px;cursor:pointer" style-hover="background:rgba(255,255,255,.06)"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Dashboard</span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:#FFFFFF;background:rgba(255,255,255,.1);border-radius:11px;padding:10px 12px"><span style="width:16px;height:16px;border:2px solid #82C8D2;border-radius:4px;display:block;flex:none"></span>Campaigns<span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#FFFFFF;background:rgba(255,255,255,.14);border-radius:999px;padding:2px 8px">10</span></span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14px;color:#C2CFCD;border-radius:11px;padding:10px 12px;cursor:pointer" style-hover="background:rgba(255,255,255,.06)"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:50%;display:block;flex:none"></span>Applicants<span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#C2CFCD;background:rgba(255,255,255,.1);border-radius:999px;padding:2px 8px">884</span></span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14px;color:#C2CFCD;border-radius:11px;padding:10px 12px;cursor:pointer" style-hover="background:rgba(255,255,255,.06)"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Tasks &amp; reviews<span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#FFFFFF;background:#D97706;border-radius:999px;padding:2px 8px">14</span></span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14px;color:#C2CFCD;border-radius:11px;padding:10px 12px;cursor:pointer" style-hover="background:rgba(255,255,255,.06)"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Payments</span>
+          <div style="height:1px;background:rgba(255,255,255,.1);margin:12px 8px"></div>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14px;color:#C2CFCD;border-radius:11px;padding:10px 12px;cursor:pointer" style-hover="background:rgba(255,255,255,.06)"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:50%;display:block;flex:none"></span>My profile</span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14px;color:#C2CFCD;border-radius:11px;padding:10px 12px;cursor:pointer" style-hover="background:rgba(255,255,255,.06)"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Settings</span>
+        </nav>
+        <div style="margin-top:auto;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px">
+          <span style="font-size:13px;font-weight:600;color:#FFFFFF">Drafts are saved as you go</span>
+          <span style="font-size:12.5px;color:#93A6A4;line-height:1.55">A campaign stays a draft until the wallet debit completes. Nothing is shown to creators before then.</span>
+        </div>
+      </aside>
+
+      <div style="display:flex;flex-direction:column;background:#F6F9F8">
+
+        <div style="height:68px;background:#FFFFFF;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 28px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="display:flex;align-items:center;gap:10px;height:40px;padding:0 12px 0 10px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;cursor:pointer" style-hover="background:#F6F9F8">
+              <span style="width:24px;height:24px;border-radius:7px;background:#0B2523;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:11px;font-weight:700">A</span>
+              <span style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.15">
+                <span style="font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Current role</span>
+                <span style="font-size:13.5px;font-weight:600;color:#08201F">Advertiser</span>
+              </span>
+              <span style="font-size:10px;color:#6A817F;margin-left:2px">▼</span>
+            </span>
+            <span style="font-size:13px;color:#6A817F"><span style="color:#0E8494;font-weight:550;cursor:pointer">Campaigns</span> / New campaign</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button type="button" onClick="{{ onDiscard }}" style="font:inherit;font-size:13.5px;font-weight:550;height:38px;padding:0 14px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;cursor:pointer" style-hover="background:#F6F9F8">Discard</button>
+            <span style="display:flex;align-items:center;gap:9px;padding:4px 10px 4px 4px;border-radius:12px;border:1px solid #E0E8E7;cursor:pointer" style-hover="background:#F6F9F8">
+              <span style="width:30px;height:30px;border-radius:9px;background:#0B2523;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#FFFFFF">AN</span>
+              <span style="display:flex;flex-direction:column;line-height:1.2"><span style="font-size:13px;font-weight:600">Ana Rivera</span><span style="font-size:11.5px;color:#6A817F">Brand House</span></span>
+              <span style="font-size:10px;color:#6A817F">▼</span>
+            </span>
+          </div>
+        </div>
+
+        <div style="padding:32px;display:flex;flex-direction:column;gap:24px">
+
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">{{ pageTitle }}</h2>
+            <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">{{ pageSub }}</p>
+          </div>
+
+          <!-- STEPPER -->
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:18px 22px;display:flex;align-items:center;gap:0">
+            <sc-for list="{{ stepper }}" as="s" hint-placeholder-count="4">
+              <button type="button" onClick="{{ s.onClick }}" style="font:inherit;flex:1;display:flex;align-items:center;gap:12px;background:transparent;border:none;padding:0;text-align:left;cursor:pointer;min-width:0">
+                <span style="width:34px;height:34px;border-radius:11px;flex:none;display:flex;align-items:center;justify-content:center;font-size:13.5px;font-weight:650;background:{{ s.dotBg }};color:{{ s.dotFg }};border:1px solid {{ s.dotBorder }}">{{ s.dotLabel }}</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#6A817F">Step {{ s.n }}</span>
+                  <span style="font-size:14px;font-weight:{{ s.weight }};color:{{ s.fg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.label }}</span>
+                </span>
+              </button>
+              <sc-if value="{{ s.hasRule }}" hint-placeholder-val="{{ true }}">
+                <span style="width:56px;height:2px;background:{{ s.ruleBg }};border-radius:2px;flex:none;margin:0 8px"></span>
+              </sc-if>
+            </sc-for>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start">
+
+            <!-- FORM COLUMN -->
+            <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+
+              <!-- STEP 1 -->
+              <sc-if value="{{ isStep1 }}" hint-placeholder-val="{{ true }}">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);display:flex;flex-direction:column">
+                  <div style="padding:20px 24px;border-bottom:1px solid #E0E8E7;display:flex;flex-direction:column;gap:4px">
+                    <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Campaign details</span>
+                    <span style="font-size:13.5px;color:#6A817F">What the campaign is, and who it is open to.</span>
+                  </div>
+                  <div style="padding:22px 24px;display:flex;flex-direction:column;gap:20px">
+
+                    <label style="display:flex;flex-direction:column;gap:7px">
+                      <span style="font-size:13px;font-weight:600">Campaign name</span>
+                      <input type="text" value="{{ name }}" onChange="{{ onName }}" placeholder="e.g. Winter Collection Launch" style="height:46px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;background:#FFFFFF;color:#08201F;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" />
+                      <sc-if value="{{ errName }}"><span style="font-size:12.5px;font-weight:550;color:#B91C1C">Enter a campaign name — creators see this first.</span></sc-if>
+                    </label>
+
+                    <label style="display:flex;flex-direction:column;gap:7px">
+                      <span style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><span style="font-size:13px;font-weight:600">Description</span><span style="font-size:12px;color:#6A817F;font-variant-numeric:tabular-nums">{{ descCount }}</span></span>
+                      <textarea value="{{ desc }}" onChange="{{ onDesc }}" rows="4" placeholder="Describe the campaign, the brand, and what you want creators to communicate." style="border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px;font-size:14.5px;line-height:1.6;background:#FFFFFF;color:#08201F;outline:none;resize:vertical" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)"></textarea>
+                      <sc-if value="{{ errDesc }}"><span style="font-size:12.5px;font-weight:550;color:#B91C1C">Add a description of at least 40 characters.</span></sc-if>
+                    </label>
+
+                    <div style="display:flex;flex-direction:column;gap:9px">
+                      <span style="font-size:13px;font-weight:600">Category</span>
+                      <div style="display:flex;flex-wrap:wrap;gap:8px">
+                        <sc-for list="{{ categories }}" as="c" hint-placeholder-count="8">
+                          <button type="button" onClick="{{ c.onClick }}" style="font:inherit;font-size:13.5px;font-weight:{{ c.weight }};height:38px;padding:0 14px;border-radius:999px;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.fg }};cursor:pointer">{{ c.label }}</button>
+                        </sc-for>
+                      </div>
+                      <sc-if value="{{ errCategory }}"><span style="font-size:12.5px;font-weight:550;color:#B91C1C">Pick one category.</span></sc-if>
+                    </div>
+
+                    <div style="display:flex;flex-direction:column;gap:9px">
+                      <span style="font-size:13px;font-weight:600">Campaign type</span>
+                      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+                        <sc-for list="{{ types }}" as="t" hint-placeholder-count="4">
+                          <button type="button" onClick="{{ t.onClick }}" style="font:inherit;text-align:left;display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:14px;border:1px solid {{ t.border }};background:{{ t.bg }};cursor:pointer">
+                            <span style="font-size:14px;font-weight:600;color:{{ t.fg }}">{{ t.label }}</span>
+                            <span style="font-size:12.5px;color:#6A817F;line-height:1.5">{{ t.hint }}</span>
+                          </button>
+                        </sc-for>
+                      </div>
+                      <sc-if value="{{ errType }}"><span style="font-size:12.5px;font-weight:550;color:#B91C1C">Choose a campaign type.</span></sc-if>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                      <label style="display:flex;flex-direction:column;gap:7px">
+                        <span style="font-size:13px;font-weight:600">Minimum followers</span>
+                        <select value="{{ minFollowers }}" onChange="{{ onMinFollowers }}" style="height:46px;border:1px solid #E0E8E7;border-radius:12px;padding:0 12px;font-size:14.5px;background:#FFFFFF;color:#08201F;outline:none;cursor:pointer" style-focus="border-color:#0E8494">
+                          <sc-for list="{{ followerOptions }}" as="o" hint-placeholder-count="5">
+                            <option value="{{ o.value }}">{{ o.label }}</option>
+                          </sc-for>
+                        </select>
+                        <span style="font-size:12.5px;color:#6A817F;line-height:1.5">Creators below this cannot apply.</span>
+                      </label>
+                      <label style="display:flex;flex-direction:column;gap:7px">
+                        <span style="font-size:13px;font-weight:600">Cities (optional)</span>
+                        <input type="text" value="{{ cities }}" onChange="{{ onCities }}" placeholder="New York, London, Berlin" style="height:46px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;background:#FFFFFF;color:#08201F;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" />
+                        <span style="font-size:12.5px;color:#6A817F;line-height:1.5">Leave empty to accept creators anywhere.</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <!-- STEP 2 -->
+              <sc-if value="{{ isStep2 }}">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);display:flex;flex-direction:column">
+                  <div style="padding:20px 24px;border-bottom:1px solid #E0E8E7;display:flex;flex-direction:column;gap:4px">
+                    <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Platforms &amp; tasks</span>
+                    <span style="font-size:13.5px;color:#6A817F">Where the content goes, and exactly what each selected creator has to post.</span>
+                  </div>
+                  <div style="padding:22px 24px;display:flex;flex-direction:column;gap:22px">
+
+                    <div style="display:flex;flex-direction:column;gap:9px">
+                      <span style="font-size:13px;font-weight:600">Platforms</span>
+                      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+                        <sc-for list="{{ platforms }}" as="p" hint-placeholder-count="5">
+                          <button type="button" onClick="{{ p.onClick }}" style="font:inherit;display:flex;align-items:center;gap:11px;padding:13px 14px;border-radius:14px;border:1px solid {{ p.border }};background:{{ p.bg }};cursor:pointer;text-align:left">
+                            <span style="width:32px;height:32px;border-radius:10px;flex:none;background:{{ p.iconBg }};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:{{ p.iconFg }}">{{ p.initial }}</span>
+                            <span style="display:flex;flex-direction:column;gap:1px;min-width:0">
+                              <span style="font-size:13.5px;font-weight:600;color:{{ p.fg }}">{{ p.label }}</span>
+                              <span style="font-size:12px;color:#6A817F">{{ p.reach }}</span>
+                            </span>
+                            <span style="margin-left:auto;font-size:13px;font-weight:700;color:{{ p.checkFg }};flex:none">{{ p.check }}</span>
+                          </button>
+                        </sc-for>
+                      </div>
+                      <sc-if value="{{ errPlatforms }}"><span style="font-size:12.5px;font-weight:550;color:#B91C1C">Select at least one platform.</span></sc-if>
+                    </div>
+
+                    <div style="display:flex;flex-direction:column;gap:12px">
+                      <span style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                        <span style="font-size:13px;font-weight:600">Tasks per creator</span>
+                        <span style="font-size:12.5px;color:#6A817F">{{ taskSummary }}</span>
+                      </span>
+                      <div style="border:1px solid #E0E8E7;border-radius:14px;overflow:hidden">
+                        <div style="display:grid;grid-template-columns:1fr 1fr 96px 44px;gap:12px;padding:11px 14px;background:#F6F9F8;border-bottom:1px solid #E0E8E7">
+                          <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Platform</span>
+                          <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Deliverable</span>
+                          <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Quantity</span>
+                          <span></span>
+                        </div>
+                        <sc-for list="{{ tasks }}" as="t" hint-placeholder-count="2">
+                          <div style="display:grid;grid-template-columns:1fr 1fr 96px 44px;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid #EFF4F3">
+                            <select value="{{ t.platform }}" onChange="{{ t.onPlatform }}" style="height:42px;border:1px solid #E0E8E7;border-radius:11px;padding:0 10px;font-size:14px;background:#FFFFFF;color:#08201F;outline:none;cursor:pointer" style-focus="border-color:#0E8494">
+                              <sc-for list="{{ t.platformOptions }}" as="o" hint-placeholder-count="3">
+                                <option value="{{ o }}">{{ o }}</option>
+                              </sc-for>
+                            </select>
+                            <select value="{{ t.kind }}" onChange="{{ t.onKind }}" style="height:42px;border:1px solid #E0E8E7;border-radius:11px;padding:0 10px;font-size:14px;background:#FFFFFF;color:#08201F;outline:none;cursor:pointer" style-focus="border-color:#0E8494">
+                              <sc-for list="{{ t.kindOptions }}" as="o" hint-placeholder-count="4">
+                                <option value="{{ o }}">{{ o }}</option>
+                              </sc-for>
+                            </select>
+                            <input type="number" value="{{ t.qty }}" onChange="{{ t.onQty }}" min="1" style="height:42px;border:1px solid #E0E8E7;border-radius:11px;padding:0 10px;font-size:14px;background:#FFFFFF;color:#08201F;outline:none;font-variant-numeric:tabular-nums" style-focus="border-color:#0E8494" />
+                            <button type="button" onClick="{{ t.onRemove }}" style="font:inherit;width:36px;height:36px;border-radius:10px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;font-size:15px;cursor:pointer;justify-self:end" style-hover="background:#FEF2F2;border-color:#FCA5A5;color:#B91C1C">×</button>
+                          </div>
+                        </sc-for>
+                        <div style="padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#FFFFFF">
+                          <button type="button" onClick="{{ onAddTask }}" style="font:inherit;font-size:13.5px;font-weight:550;height:38px;padding:0 14px;border-radius:11px;border:1px dashed #82C8D2;background:#E7F5F7;color:#0A5F6B;cursor:pointer" style-hover="background:#D5EEF1">+ Add task</button>
+                          <span style="font-size:12.5px;color:#6A817F">Each selected creator completes every task once.</span>
+                        </div>
+                      </div>
+                      <sc-if value="{{ hasTaskNote }}"><span style="display:flex;gap:9px;font-size:12.5px;color:#78350F;background:#FEF3C7;border-radius:11px;padding:10px 13px;line-height:1.5"><span style="width:5px;height:5px;border-radius:50%;background:#B45309;margin-top:6px;flex:none"></span>{{ taskNote }}</span></sc-if>
+                      <sc-if value="{{ errTasks }}"><span style="font-size:12.5px;font-weight:550;color:#B91C1C">Add at least one task.</span></sc-if>
+                    </div>
+
+                    <label style="display:flex;flex-direction:column;gap:7px">
+                      <span style="font-size:13px;font-weight:600">Instructions for creators</span>
+                      <textarea value="{{ instructions }}" onChange="{{ onInstructions }}" rows="4" placeholder="One instruction per line — hashtags, mentions, tone, things to avoid." style="border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px;font-size:14.5px;line-height:1.6;background:#FFFFFF;color:#08201F;outline:none;resize:vertical" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)"></textarea>
+                      <span style="font-size:12.5px;color:#6A817F;line-height:1.5">Each line becomes a bullet on the campaign page. {{ instructionCount }}</span>
+                    </label>
+                  </div>
+                </div>
+              </sc-if>
+
+              <!-- STEP 3 -->
+              <sc-if value="{{ isStep3 }}">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);display:flex;flex-direction:column">
+                  <div style="padding:20px 24px;border-bottom:1px solid #E0E8E7;display:flex;flex-direction:column;gap:4px">
+                    <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Proof &amp; dates</span>
+                    <span style="font-size:13.5px;color:#6A817F">What creators submit as proof, and the two deadlines that drive the campaign.</span>
+                  </div>
+                  <div style="padding:22px 24px;display:flex;flex-direction:column;gap:22px">
+
+                    <div style="display:flex;flex-direction:column;gap:9px">
+                      <span style="font-size:13px;font-weight:600">Required proof</span>
+                      <div style="display:flex;flex-direction:column;gap:10px">
+                        <sc-for list="{{ proofs }}" as="p" hint-placeholder-count="3">
+                          <button type="button" onClick="{{ p.onClick }}" style="font:inherit;display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:14px;border:1px solid {{ p.border }};background:{{ p.bg }};cursor:pointer;text-align:left">
+                            <span style="width:20px;height:20px;border-radius:6px;flex:none;border:1.5px solid {{ p.boxBorder }};background:{{ p.boxBg }};color:#FFFFFF;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px">{{ p.check }}</span>
+                            <span style="display:flex;flex-direction:column;gap:3px">
+                              <span style="font-size:14px;font-weight:600;color:{{ p.fg }}">{{ p.label }}</span>
+                              <span style="font-size:12.5px;color:#6A817F;line-height:1.5">{{ p.hint }}</span>
+                            </span>
+                          </button>
+                        </sc-for>
+                      </div>
+                      <sc-if value="{{ errProofs }}"><span style="font-size:12.5px;font-weight:550;color:#B91C1C">Pick at least one form of proof.</span></sc-if>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                      <label style="display:flex;flex-direction:column;gap:7px">
+                        <span style="font-size:13px;font-weight:600">Applications close</span>
+                        <input type="date" value="{{ appDeadline }}" onChange="{{ onAppDeadline }}" style="height:46px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;background:#FFFFFF;color:#08201F;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" />
+                        <span style="font-size:12.5px;color:#6A817F;line-height:1.5">After this date the campaign stops accepting applicants.</span>
+                      </label>
+                      <label style="display:flex;flex-direction:column;gap:7px">
+                        <span style="font-size:13px;font-weight:600">Content deadline</span>
+                        <input type="date" value="{{ contentDeadline }}" onChange="{{ onContentDeadline }}" style="height:46px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;background:#FFFFFF;color:#08201F;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" />
+                        <span style="font-size:12.5px;color:#6A817F;line-height:1.5">All tasks must be submitted by this date.</span>
+                      </label>
+                    </div>
+                    <sc-if value="{{ errDates }}"><span style="font-size:12.5px;font-weight:550;color:#B91C1C;margin-top:-12px">{{ dateErrorText }}</span></sc-if>
+
+                    <div style="display:flex;gap:11px;background:#F6F9F8;border-radius:14px;padding:14px 16px">
+                      <span style="width:6px;height:6px;border-radius:50%;background:#0E8494;margin-top:7px;flex:none"></span>
+                      <span style="font-size:13px;color:#4A6260;line-height:1.6">You review every submission yourself. Approving a submission tells the agency to release that creator's payment; rejecting it sends the creator your reason and asks for a new submission.</span>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <!-- STEP 4 -->
+              <sc-if value="{{ isStep4 }}">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);display:flex;flex-direction:column">
+                  <div style="padding:20px 24px;border-bottom:1px solid #E0E8E7;display:flex;flex-direction:column;gap:4px">
+                    <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Budget &amp; funding</span>
+                    <span style="font-size:13.5px;color:#6A817F">The campaign publishes once the amount is debited from your wallet.</span>
+                  </div>
+                  <div style="padding:22px 24px;display:flex;flex-direction:column;gap:22px">
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                      <label style="display:flex;flex-direction:column;gap:7px">
+                        <span style="font-size:13px;font-weight:600">Payment per creator (USD)</span>
+                        <input type="number" value="{{ perCreator }}" onChange="{{ onPerCreator }}" min="0" step="500" style="height:46px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;background:#FFFFFF;color:#08201F;outline:none;font-variant-numeric:tabular-nums" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" />
+                        <span style="font-size:12.5px;color:#6A817F;line-height:1.5">Paid for completing all {{ taskCountText }}.</span>
+                      </label>
+                      <label style="display:flex;flex-direction:column;gap:7px">
+                        <span style="font-size:13px;font-weight:600">Creators needed</span>
+                        <input type="number" value="{{ creatorCount }}" onChange="{{ onCreatorCount }}" min="1" style="height:46px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;background:#FFFFFF;color:#08201F;outline:none;font-variant-numeric:tabular-nums" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" />
+                        <span style="font-size:12.5px;color:#6A817F;line-height:1.5">You select them by hand from the applicants.</span>
+                      </label>
+                    </div>
+                    <sc-if value="{{ errBudget }}"><span style="font-size:12.5px;font-weight:550;color:#B91C1C;margin-top:-12px">Payment per creator and creators needed must both be above zero.</span></sc-if>
+
+                    <div style="border:1px solid #E0E8E7;border-radius:14px;overflow:hidden">
+                      <div style="padding:11px 16px;background:#F6F9F8;border-bottom:1px solid #E0E8E7"><span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Cost breakdown</span></div>
+                      <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+                        <span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><span style="font-size:14px;color:#4A6260">{{ subtotalLabel }}</span><span style="font-size:14.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ subtotalText }}</span></span>
+                        <span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><span style="font-size:14px;color:#4A6260">{{ feeLabel }}</span><span style="font-size:14.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ feeText }}</span></span>
+                        <span style="height:1px;background:#E0E8E7;display:block"></span>
+                        <span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><span style="font-size:15px;font-weight:650">Debited from wallet</span><span style="font-size:22px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums">{{ totalText }}</span></span>
+                      </div>
+                    </div>
+
+                    <div style="display:flex;flex-direction:column;gap:9px">
+                      <span style="font-size:13px;font-weight:600">Funding source</span>
+                      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+                        <sc-for list="{{ methods }}" as="m" hint-placeholder-count="3">
+                          <button type="button" onClick="{{ m.onClick }}" style="font:inherit;display:flex;flex-direction:column;gap:3px;padding:14px 15px;border-radius:14px;border:1px solid {{ m.border }};background:{{ m.bg }};cursor:pointer;text-align:left">
+                            <span style="font-size:14px;font-weight:600;color:{{ m.fg }}">{{ m.label }}</span>
+                            <span style="font-size:12.5px;color:#6A817F">{{ m.hint }}</span>
+                          </button>
+                        </sc-for>
+                      </div>
+                    </div>
+
+                    <div style="display:flex;gap:11px;background:#FEF3C7;border-radius:14px;padding:14px 16px">
+                      <span style="width:6px;height:6px;border-radius:50%;background:#B45309;margin-top:7px;flex:none"></span>
+                      <span style="font-size:13px;color:#78350F;line-height:1.6">Creating the campaign saves it as a draft with the status Payment Pending. It is not visible to creators until the payment is confirmed by the agency.</span>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <!-- CONFIRMATION -->
+              <sc-if value="{{ isDone }}">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:36px;display:flex;flex-direction:column;gap:16px;align-items:flex-start">
+                  <div style="width:52px;height:52px;border-radius:16px;background:#E7F5F7;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#0A5F6B">✓</div>
+                  <span style="font-size:22px;font-weight:700;letter-spacing:-0.025em">{{ doneTitle }}</span>
+                  <span style="font-size:14.5px;color:#4A6260;line-height:1.65;max-width:520px">Saved as a draft with the status <strong style="font-weight:600;color:#08201F">Payment Pending</strong>. Complete the {{ totalText }} payment and the campaign is published to creators in {{ categoryName }}.</span>
+                  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px">
+                    <button type="button" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 20px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Pay {{ totalText }} &amp; publish</button>
+                    <button type="button" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 18px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">View campaign</button>
+                    <button type="button" onClick="{{ onRestart }}" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 18px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;cursor:pointer" style-hover="background:#F6F9F8">Start over</button>
+                  </div>
+                </div>
+              </sc-if>
+
+              <!-- FOOTER NAV -->
+              <sc-if value="{{ showNav }}" hint-placeholder-val="{{ true }}">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+                  <button type="button" onClick="{{ onBack }}" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 18px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:{{ backFg }};cursor:pointer" style-hover="background:#F6F9F8">← Back</button>
+                  <span style="font-size:13px;color:#6A817F">{{ progressText }}</span>
+                  <span style="display:flex;align-items:center;gap:10px">
+                    <button type="button" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 18px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">Save draft</button>
+                    <button type="button" onClick="{{ onNext }}" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 22px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">{{ nextLabel }}</button>
+                  </span>
+                </div>
+              </sc-if>
+            </div>
+
+            <!-- PREVIEW COLUMN -->
+            <div style="display:flex;flex-direction:column;gap:16px;position:sticky;top:24px">
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                <div style="padding:14px 18px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:12px">
+                  <span style="font-size:11.5px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#6A817F">Creator's view</span>
+                  <span style="font-size:11.5px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border-radius:999px;padding:3px 9px">Live preview</span>
+                </div>
+                <div style="padding:18px;display:flex;flex-direction:column;gap:14px">
+                  <div style="display:flex;flex-direction:column;gap:8px">
+                    <span style="display:flex;flex-wrap:wrap;gap:6px">
+                      <span style="font-size:11.5px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border-radius:999px;padding:3px 9px">{{ categoryName }}</span>
+                      <span style="font-size:11.5px;font-weight:600;color:#4A6260;background:#EFF4F3;border-radius:999px;padding:3px 9px">{{ typeName }}</span>
+                    </span>
+                    <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em;line-height:1.3">{{ previewName }}</span>
+                    <span style="font-size:12.5px;font-weight:550;color:#6A817F">Brand House · New York</span>
+                  </div>
+                  <span style="font-size:13.5px;color:#4A6260;line-height:1.6">{{ previewDesc }}</span>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                    <span style="display:flex;flex-direction:column;gap:3px;background:#F6F9F8;border-radius:12px;padding:11px 13px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Payment</span><span style="font-size:15px;font-weight:650;font-variant-numeric:tabular-nums">{{ perCreatorText }}</span></span>
+                    <span style="display:flex;flex-direction:column;gap:3px;background:#F6F9F8;border-radius:12px;padding:11px 13px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Creators</span><span style="font-size:15px;font-weight:650;font-variant-numeric:tabular-nums">{{ creatorCountText }}</span></span>
+                    <span style="display:flex;flex-direction:column;gap:3px;background:#F6F9F8;border-radius:12px;padding:11px 13px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Min followers</span><span style="font-size:15px;font-weight:650;font-variant-numeric:tabular-nums">{{ minFollowersText }}</span></span>
+                    <span style="display:flex;flex-direction:column;gap:3px;background:#F6F9F8;border-radius:12px;padding:11px 13px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Apply by</span><span style="font-size:15px;font-weight:650">{{ appDeadlineText }}</span></span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:7px">
+                    <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Platforms</span>
+                    <span style="font-size:13.5px;color:#08201F">{{ platformNames }}</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:7px">
+                    <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Deliverables</span>
+                    <div style="display:flex;flex-direction:column;gap:6px">
+                      <sc-for list="{{ previewTasks }}" as="pt" hint-placeholder-count="2">
+                        <span style="display:flex;gap:9px;font-size:13.5px;color:#08201F;line-height:1.5"><span style="width:5px;height:5px;border-radius:50%;background:#0E8494;margin-top:7px;flex:none"></span>{{ pt.text }}</span>
+                      </sc-for>
+                    </div>
+                  </div>
+                  <button type="button" style="font:inherit;font-size:14px;font-weight:550;height:44px;border-radius:12px;border:1px solid #E0E8E7;background:#F6F9F8;color:#93A6A4;cursor:not-allowed">Apply to campaign</button>
+                </div>
+              </div>
+
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:16px 18px;display:flex;flex-direction:column;gap:12px">
+                <span style="font-size:11.5px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#6A817F">Running total</span>
+                <span style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><span style="font-size:13.5px;color:#4A6260">{{ subtotalLabel }}</span><span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ subtotalText }}</span></span>
+                <span style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><span style="font-size:13.5px;color:#4A6260">{{ feeLabel }}</span><span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ feeText }}</span></span>
+                <span style="height:1px;background:#E0E8E7;display:block"></span>
+                <span style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><span style="font-size:14px;font-weight:650">Total</span><span style="font-size:18px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums">{{ totalText }}</span></span>
+                <span style="font-size:12.5px;color:#6A817F;line-height:1.55">Debited from your wallet once, when you publish. Creator payments are released per approved submission.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 MOBILE -->
+  <section data-screen-label="Wizard mobile" style="display:flex;flex-direction:column;gap:20px;flex:none">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">02</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Wizard · mobile</span>
+      <span style="font-size:14px;color:#6A817F">Compact stepper, one section per screen, sticky footer, total pinned above the CTA</span>
+    </div>
+
+    <div style="display:flex;gap:24px;flex-wrap:wrap;flex:none">
+
+      <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:24px;background:#FFFFFF;box-shadow:0 24px 60px -32px rgba(8,32,31,.3);overflow:hidden;display:flex;flex-direction:column;min-height:800px">
+        <div style="height:52px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;gap:12px;padding:0 16px">
+          <span style="font-size:16px;color:#4A6260">←</span>
+          <span style="font-size:15px;font-weight:650;letter-spacing:-0.015em">New campaign</span>
+          <span style="margin-left:auto;font-size:12.5px;font-weight:550;color:#0E8494">Save draft</span>
+        </div>
+        <div style="padding:14px 16px;border-bottom:1px solid #E0E8E7;display:flex;flex-direction:column;gap:9px">
+          <span style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13px;font-weight:600">Step 1 of 4 · Details</span><span style="font-size:12.5px;color:#6A817F">25%</span></span>
+          <span style="height:6px;border-radius:999px;background:#EFF4F3;display:block;overflow:hidden"><span style="display:block;height:100%;width:25%;background:#0E8494;border-radius:999px"></span></span>
+        </div>
+        <div style="padding:18px 16px 26px;display:flex;flex-direction:column;gap:18px">
+          <label style="display:flex;flex-direction:column;gap:7px">
+            <span style="font-size:13px;font-weight:600">Campaign name</span>
+            <input type="text" value="Winter Collection Launch" readonly="readonly" style="height:48px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:15px;background:#FFFFFF;color:#08201F;outline:none" />
+          </label>
+          <label style="display:flex;flex-direction:column;gap:7px">
+            <span style="font-size:13px;font-weight:600">Description</span>
+            <textarea rows="4" readonly="readonly" style="border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px;font-size:15px;line-height:1.6;background:#FFFFFF;color:#08201F;outline:none;resize:none">Promote the winter drop across Instagram and TikTok with honest styling content shot in daylight.</textarea>
+          </label>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <span style="font-size:13px;font-weight:600">Category</span>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <span style="font-size:13.5px;font-weight:600;color:#FFFFFF;background:#0E8494;border:1px solid #0E8494;border-radius:999px;padding:10px 15px">Fashion</span>
+              <span style="font-size:13.5px;color:#08201F;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:999px;padding:10px 15px">Beauty</span>
+              <span style="font-size:13.5px;color:#08201F;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:999px;padding:10px 15px">Lifestyle</span>
+              <span style="font-size:13.5px;color:#08201F;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:999px;padding:10px 15px">Food</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <span style="font-size:13px;font-weight:600">Campaign type</span>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <span style="display:flex;flex-direction:column;gap:3px;border:1px solid #0E8494;background:#E7F5F7;border-radius:14px;padding:14px 15px"><span style="font-size:14.5px;font-weight:600;color:#0A5F6B">Product launch</span><span style="font-size:12.5px;color:#4A6260;line-height:1.5">Announce something new to a wide audience.</span></span>
+              <span style="display:flex;flex-direction:column;gap:3px;border:1px solid #E0E8E7;background:#FFFFFF;border-radius:14px;padding:14px 15px"><span style="font-size:14.5px;font-weight:600">Product review</span><span style="font-size:12.5px;color:#4A6260;line-height:1.5">Creators try the product and give a verdict.</span></span>
+            </div>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:7px">
+            <span style="font-size:13px;font-weight:600">Minimum followers</span>
+            <span style="height:48px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font-size:15px">10,000<span style="font-size:11px;color:#6A817F">▼</span></span>
+          </label>
+        </div>
+        <div style="margin-top:auto;border-top:1px solid #E0E8E7;background:#FFFFFF;padding:14px 16px;display:flex;align-items:center;gap:10px">
+          <span style="font-size:15px;font-weight:550;height:50px;padding:0 18px;border-radius:12px;border:1px solid #E0E8E7;display:flex;align-items:center;color:#4A6260">Back</span>
+          <span style="flex:1;font-size:15px;font-weight:550;height:50px;border-radius:12px;background:#0E8494;color:#FFFFFF;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(10,95,107,.28)">Continue</span>
+        </div>
+      </div>
+
+      <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:24px;background:#FFFFFF;box-shadow:0 24px 60px -32px rgba(8,32,31,.3);overflow:hidden;display:flex;flex-direction:column;min-height:800px">
+        <div style="height:52px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;gap:12px;padding:0 16px">
+          <span style="font-size:16px;color:#4A6260">←</span>
+          <span style="font-size:15px;font-weight:650;letter-spacing:-0.015em">New campaign</span>
+          <span style="margin-left:auto;font-size:12.5px;font-weight:550;color:#0E8494">Save draft</span>
+        </div>
+        <div style="padding:14px 16px;border-bottom:1px solid #E0E8E7;display:flex;flex-direction:column;gap:9px">
+          <span style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13px;font-weight:600">Step 4 of 4 · Budget &amp; funding</span><span style="font-size:12.5px;color:#6A817F">100%</span></span>
+          <span style="height:6px;border-radius:999px;background:#EFF4F3;display:block;overflow:hidden"><span style="display:block;height:100%;width:100%;background:#0E8494;border-radius:999px"></span></span>
+        </div>
+        <div style="padding:18px 16px 26px;display:flex;flex-direction:column;gap:18px">
+          <label style="display:flex;flex-direction:column;gap:7px">
+            <span style="font-size:13px;font-weight:600">Payment per creator (USD)</span>
+            <input type="text" value="5,000" readonly="readonly" style="height:48px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:15px;background:#FFFFFF;color:#08201F;outline:none;font-variant-numeric:tabular-nums" />
+          </label>
+          <label style="display:flex;flex-direction:column;gap:7px">
+            <span style="font-size:13px;font-weight:600">Creators needed</span>
+            <input type="text" value="20" readonly="readonly" style="height:48px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:15px;background:#FFFFFF;color:#08201F;outline:none;font-variant-numeric:tabular-nums" />
+          </label>
+          <div style="border:1px solid #E0E8E7;border-radius:14px;overflow:hidden">
+            <div style="padding:11px 14px;background:#F6F9F8;border-bottom:1px solid #E0E8E7"><span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Cost breakdown</span></div>
+            <div style="padding:14px;display:flex;flex-direction:column;gap:11px">
+              <span style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><span style="font-size:14px;color:#4A6260">20 creators × $50</span><span style="font-size:14.5px;font-weight:600;font-variant-numeric:tabular-nums">$1,000</span></span>
+              <span style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><span style="font-size:14px;color:#4A6260">Platform fee (20%)</span><span style="font-size:14.5px;font-weight:600;font-variant-numeric:tabular-nums">$200</span></span>
+              <span style="height:1px;background:#E0E8E7;display:block"></span>
+              <span style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><span style="font-size:15px;font-weight:650">Total</span><span style="font-size:20px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums">$1,200</span></span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <span style="font-size:13px;font-weight:600">Funding source</span>
+            <span style="display:flex;flex-direction:column;gap:3px;border:1px solid #0E8494;background:#E7F5F7;border-radius:14px;padding:14px 15px"><span style="font-size:14.5px;font-weight:600;color:#0A5F6B">Bank transfer</span><span style="font-size:12.5px;color:#4A6260">Confirmed by the agency within a day.</span></span>
+            <span style="display:flex;flex-direction:column;gap:3px;border:1px solid #E0E8E7;background:#FFFFFF;border-radius:14px;padding:14px 15px"><span style="font-size:14.5px;font-weight:600">PayPal / Wise</span><span style="font-size:12.5px;color:#4A6260">Send from your wallet and upload the receipt.</span></span>
+          </div>
+          <div style="display:flex;gap:10px;background:#FEF3C7;border-radius:14px;padding:13px 15px">
+            <span style="width:6px;height:6px;border-radius:50%;background:#B45309;margin-top:7px;flex:none"></span>
+            <span style="font-size:13px;color:#78350F;line-height:1.6">The campaign stays a draft until payment is confirmed.</span>
+          </div>
+        </div>
+        <div style="margin-top:auto;border-top:1px solid #E0E8E7;background:#FFFFFF;padding:12px 16px 14px;display:flex;flex-direction:column;gap:10px">
+          <span style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13px;color:#6A817F">Total payable</span><span style="font-size:16px;font-weight:700;font-variant-numeric:tabular-nums">$1,200</span></span>
+          <span style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:15px;font-weight:550;height:50px;padding:0 18px;border-radius:12px;border:1px solid #E0E8E7;display:flex;align-items:center;color:#4A6260">Back</span>
+            <span style="flex:1;font-size:15px;font-weight:550;height:50px;border-radius:12px;background:#0E8494;color:#FFFFFF;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(10,95,107,.28)">Create campaign</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;platformFeePct&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:20,&quot;min&quot;:0,&quot;max&quot;:40,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Payment&quot;}}">
+class Component extends DCLogic {
+  cats = ["Fashion", "Beauty", "Food", "Tech", "Fitness", "Travel", "Lifestyle", "Gaming"];
+  typeList = [
+    { id: "launch", label: "Product launch", hint: "Announce something new to a wide audience." },
+    { id: "review", label: "Product review", hint: "Creators try the product and give a verdict." },
+    { id: "awareness", label: "Brand awareness", hint: "Keep the brand visible with regular content." },
+    { id: "event", label: "Event promotion", hint: "Drive attendance to a date and place." }
+  ];
+  platformList = [
+    { id: "instagram", label: "Instagram", initial: "IG", reach: "Posts, reels, stories", kinds: ["Post", "Reel", "Story", "Carousel"] },
+    { id: "tiktok", label: "TikTok", initial: "TT", reach: "Short video", kinds: ["Video", "Duet"] },
+    { id: "youtube", label: "YouTube", initial: "YT", reach: "Long & short video", kinds: ["Video", "Short", "Mention"] },
+    { id: "facebook", label: "Facebook", initial: "FB", reach: "Posts, reels", kinds: ["Post", "Reel", "Story"] },
+    { id: "twitter", label: "X", initial: "X", reach: "Threads, posts", kinds: ["Post", "Thread"] }
+  ];
+  proofList = [
+    { id: "link", label: "Live post link", hint: "The public URL of the published content." },
+    { id: "screenshot", label: "Screenshot of the post", hint: "In case the post is later edited or removed." },
+    { id: "analytics", label: "Insights screenshot", hint: "Reach and engagement from the creator's analytics." }
+  ];
+  methodList = [
+    { id: "wallet", label: "Wallet balance", hint: "$2,420.00 available now." },
+    { id: "topup", label: "Top up first", hint: "Charge a card, then publish." },
+    { id: "card", label: "Card at checkout", hint: "Routes through your wallet." }
+  ];
+  followerOptions = [
+    { value: "1000", label: "1,000" },
+    { value: "5000", label: "5,000" },
+    { value: "10000", label: "10,000" },
+    { value: "50000", label: "50,000" },
+    { value: "100000", label: "100,000" }
+  ];
+
+  state = {
+    step: 0,
+    name: "Winter Collection Launch",
+    desc: "Promote the winter drop across Instagram and TikTok with honest styling content shot in daylight. We want real outfits, real weather, no studio sets.",
+    category: "Fashion",
+    type: "launch",
+    minFollowers: "10000",
+    cities: "New York, London, Berlin",
+    platforms: ["instagram", "tiktok"],
+    tasks: [
+      { id: 1, platform: "Instagram", kind: "Reel", qty: 1 },
+      { id: 2, platform: "Instagram", kind: "Story", qty: 2 },
+      { id: 3, platform: "TikTok", kind: "Video", qty: 1 }
+    ],
+    nextTaskId: 4,
+    instructions: "Tag @brandhouse and use #WinterWithBrandHouse\nShow at least two outfits from the drop\nNo filters that change the fabric colour",
+    proofs: ["link", "screenshot"],
+    appDeadline: "2026-09-05",
+    contentDeadline: "2026-09-25",
+    perCreator: 5000,
+    creatorCount: 20,
+    method: "bank",
+    taskNote: "",
+    errors: {}
+  };
+
+  money(n) { return "$" + Math.round((Number(n) || 0) / 100).toLocaleString("en-US"); }
+
+  set(k, v) { this.setState({ [k]: v, errors: {} }); }
+
+  validate(step) {
+    const s = this.state, e = {};
+    if (step === 0) {
+      if (!s.name.trim()) e.name = 1;
+      if (s.desc.trim().length < 40) e.desc = 1;
+      if (!s.category) e.category = 1;
+      if (!s.type) e.type = 1;
+    }
+    if (step === 1) {
+      if (!s.platforms.length) e.platforms = 1;
+      if (!s.tasks.length) e.tasks = 1;
+    }
+    if (step === 2) {
+      if (!s.proofs.length) e.proofs = 1;
+      if (!s.appDeadline || !s.contentDeadline) e.dates = "both";
+      else if (s.contentDeadline <= s.appDeadline) e.dates = "order";
+    }
+    if (step === 3) {
+      if (!(Number(s.perCreator) > 0) || !(Number(s.creatorCount) > 0)) e.budget = 1;
+    }
+    return e;
+  }
+
+  next = () => {
+    const e = this.validate(this.state.step);
+    if (Object.keys(e).length) { this.setState({ errors: e }); return; }
+    this.setState({ step: Math.min(4, this.state.step + 1), errors: {} });
+  };
+  back = () => this.setState({ step: Math.max(0, this.state.step - 1), errors: {} });
+
+  toggleList(key, id) {
+    const cur = this.state[key];
+    const has = cur.indexOf(id) > -1;
+    this.setState({ [key]: has ? cur.filter(x => x !== id) : cur.concat([id]), errors: {} });
+  }
+
+  togglePlatform(id) {
+    const cur = this.state.platforms;
+    const on = cur.indexOf(id) > -1;
+    const nextIds = on ? cur.filter(x => x !== id) : cur.concat([id]);
+    const kept = this.platformList.filter(p => nextIds.indexOf(p.id) > -1).map(p => p.label);
+    const tasks = this.state.tasks.filter(t => kept.indexOf(t.platform) > -1);
+    const dropped = this.state.tasks.length - tasks.length;
+    const label = (this.platformList.filter(p => p.id === id)[0] || {}).label;
+    this.setState({
+      platforms: nextIds,
+      tasks,
+      errors: {},
+      taskNote: dropped ? dropped + (dropped === 1 ? " task was" : " tasks were") + " removed with " + label + "." : ""
+    });
+  }
+
+  activePlatformNames() {
+    const sel = this.state.platforms;
+    return this.platformList.filter(p => sel.indexOf(p.id) > -1).map(p => p.label);
+  }
+
+  kindsFor(platformLabel) {
+    const p = this.platformList.filter(x => x.label === platformLabel)[0];
+    return p ? p.kinds : ["Post"];
+  }
+
+  editTask(id, patch) {
+    this.setState({
+      tasks: this.state.tasks.map(t => t.id === id ? Object.assign({}, t, patch) : t),
+      errors: {}
+    });
+  }
+
+  dateText(v) {
+    if (!v) return "Not set";
+    const parts = v.split("-");
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return Number(parts[2]) + " " + months[Number(parts[1]) - 1] + " " + parts[0];
+  }
+
+  renderVals() {
+    const s = this.state, e = s.errors;
+    const feePct = this.props.platformFeePct ?? 20;
+    const step = s.step;
+    const stepMeta = [
+      { label: "Campaign details", title: "Campaign details", sub: "Name the campaign, describe it, and set who can apply." },
+      { label: "Platforms & tasks", title: "Platforms & tasks", sub: "Pick the platforms and spell out every deliverable." },
+      { label: "Proof & dates", title: "Proof & dates", sub: "Decide what creators submit, and by when." },
+      { label: "Budget & payment", title: "Budget & payment", sub: "Set the payment per creator and pay to publish." },
+      { label: "Done", title: "Campaign created", sub: "One payment away from being live." }
+    ];
+
+    const stepper = stepMeta.slice(0, 4).map((m, i) => {
+      const done = i < step, active = i === step;
+      return {
+        n: i + 1,
+        label: m.label,
+        dotLabel: done ? "✓" : String(i + 1),
+        dotBg: active ? "#0E8494" : done ? "#E7F5F7" : "#FFFFFF",
+        dotFg: active ? "#FFFFFF" : done ? "#0A5F6B" : "#6A817F",
+        dotBorder: active ? "#0E8494" : done ? "#A9DAE1" : "#E0E8E7",
+        fg: active || done ? "#08201F" : "#6A817F",
+        weight: active ? "650" : "550",
+        hasRule: i < 3,
+        ruleBg: i < step ? "#0E8494" : "#E0E8E7",
+        onClick: () => {
+          if (i <= step) { this.setState({ step: i, errors: {} }); return; }
+          const err = this.validate(step);
+          if (Object.keys(err).length) { this.setState({ errors: err }); return; }
+          this.setState({ step: i, errors: {} });
+        }
+      };
+    });
+
+    const per = Number(s.perCreator) || 0;
+    const count = Number(s.creatorCount) || 0;
+    const subtotal = per * count;
+    const fee = Math.round(subtotal * feePct / 100);
+    const platformNames = this.activePlatformNames();
+    const taskTotal = s.tasks.reduce((a, t) => a + (Number(t.qty) || 0), 0);
+    const instructionLines = s.instructions.split("\n").filter(l => l.trim());
+    const typeObj = this.typeList.filter(t => t.id === s.type)[0];
+    const followerObj = this.followerOptions.filter(o => o.value === String(s.minFollowers))[0];
+
+    return {
+      stepHint: step >= 4 ? "Draft created — payment pending" : stepMeta[step].sub,
+      pageTitle: stepMeta[step].title,
+      pageSub: stepMeta[step].sub,
+      stepper,
+      isStep1: step === 0, isStep2: step === 1, isStep3: step === 2, isStep4: step === 3,
+      isDone: step === 4, showNav: step < 4,
+      progressText: step < 4 ? "Step " + (step + 1) + " of 4" : "",
+      nextLabel: step === 3 ? "Create campaign" : "Continue →",
+      backFg: step === 0 ? "#93A6A4" : "#4A6260",
+      onNext: this.next, onBack: this.back,
+      onDiscard: () => this.setState({ step: 0, errors: {} }),
+      onRestart: () => this.setState({ step: 0, errors: {} }),
+      doneTitle: '"' + (s.name || "Untitled campaign") + '" is created',
+
+      name: s.name, onName: ev => this.set("name", ev.target.value),
+      desc: s.desc, onDesc: ev => this.set("desc", ev.target.value),
+      descCount: s.desc.length + " characters",
+      cities: s.cities, onCities: ev => this.set("cities", ev.target.value),
+      minFollowers: String(s.minFollowers),
+      onMinFollowers: ev => this.set("minFollowers", ev.target.value),
+      followerOptions: this.followerOptions,
+      minFollowersText: followerObj ? followerObj.label : "1,000",
+
+      categories: this.cats.map(c => ({
+        label: c,
+        onClick: () => this.set("category", c),
+        bg: s.category === c ? "#0E8494" : "#FFFFFF",
+        fg: s.category === c ? "#FFFFFF" : "#08201F",
+        border: s.category === c ? "#0E8494" : "#E0E8E7",
+        weight: s.category === c ? "600" : "500"
+      })),
+      types: this.typeList.map(t => ({
+        label: t.label, hint: t.hint,
+        onClick: () => this.set("type", t.id),
+        bg: s.type === t.id ? "#E7F5F7" : "#FFFFFF",
+        fg: s.type === t.id ? "#0A5F6B" : "#08201F",
+        border: s.type === t.id ? "#0E8494" : "#E0E8E7"
+      })),
+      platforms: this.platformList.map(p => {
+        const on = s.platforms.indexOf(p.id) > -1;
+        return {
+          label: p.label, initial: p.initial, reach: p.reach,
+          onClick: () => this.togglePlatform(p.id),
+          bg: on ? "#E7F5F7" : "#FFFFFF",
+          fg: on ? "#0A5F6B" : "#08201F",
+          border: on ? "#0E8494" : "#E0E8E7",
+          iconBg: on ? "#0E8494" : "#EFF4F3",
+          iconFg: on ? "#FFFFFF" : "#4A6260",
+          check: on ? "✓" : "",
+          checkFg: "#0E8494"
+        };
+      }),
+      tasks: s.tasks.map(t => ({
+        platform: t.platform, kind: t.kind, qty: t.qty,
+        platformOptions: platformNames.length ? platformNames : this.platformList.map(p => p.label),
+        kindOptions: this.kindsFor(t.platform),
+        onPlatform: ev => this.editTask(t.id, { platform: ev.target.value, kind: this.kindsFor(ev.target.value)[0] }),
+        onKind: ev => this.editTask(t.id, { kind: ev.target.value }),
+        onQty: ev => this.editTask(t.id, { qty: Math.max(1, Number(ev.target.value) || 1) }),
+        onRemove: () => this.setState({ tasks: s.tasks.filter(x => x.id !== t.id), errors: {} })
+      })),
+      onAddTask: () => this.setState({
+        tasks: s.tasks.concat([{
+          id: s.nextTaskId,
+          platform: platformNames[0] || "Instagram",
+          kind: this.kindsFor(platformNames[0] || "Instagram")[0],
+          qty: 1
+        }]),
+        nextTaskId: s.nextTaskId + 1,
+        errors: {}
+      }),
+      taskSummary: s.tasks.length + " task types · " + taskTotal + " deliverables per creator",
+      taskNote: s.taskNote, hasTaskNote: !!s.taskNote,
+      taskCountText: taskTotal + (taskTotal === 1 ? " deliverable" : " deliverables"),
+      instructions: s.instructions,
+      onInstructions: ev => this.set("instructions", ev.target.value),
+      instructionCount: instructionLines.length + " bullets so far.",
+
+      proofs: this.proofList.map(p => {
+        const on = s.proofs.indexOf(p.id) > -1;
+        return {
+          label: p.label, hint: p.hint,
+          onClick: () => this.toggleList("proofs", p.id),
+          bg: on ? "#E7F5F7" : "#FFFFFF",
+          fg: on ? "#0A5F6B" : "#08201F",
+          border: on ? "#0E8494" : "#E0E8E7",
+          boxBg: on ? "#0E8494" : "#FFFFFF",
+          boxBorder: on ? "#0E8494" : "#C2CFCD",
+          check: on ? "✓" : ""
+        };
+      }),
+      appDeadline: s.appDeadline, onAppDeadline: ev => this.set("appDeadline", ev.target.value),
+      contentDeadline: s.contentDeadline, onContentDeadline: ev => this.set("contentDeadline", ev.target.value),
+      appDeadlineText: this.dateText(s.appDeadline),
+      dateErrorText: e.dates === "order" ? "The content deadline has to fall after applications close." : "Set both dates.",
+
+      perCreator: s.perCreator, onPerCreator: ev => this.set("perCreator", ev.target.value),
+      creatorCount: s.creatorCount, onCreatorCount: ev => this.set("creatorCount", ev.target.value),
+      methods: this.methodList.map(m => ({
+        label: m.label, hint: m.hint,
+        onClick: () => this.set("method", m.id),
+        bg: s.method === m.id ? "#E7F5F7" : "#FFFFFF",
+        fg: s.method === m.id ? "#0A5F6B" : "#08201F",
+        border: s.method === m.id ? "#0E8494" : "#E0E8E7"
+      })),
+      subtotalLabel: count + (count === 1 ? " creator × " : " creators × ") + this.money(per),
+      subtotalText: this.money(subtotal),
+      feeLabel: "Platform fee (" + feePct + "%)",
+      feeText: this.money(fee),
+      totalText: this.money(subtotal + fee),
+      perCreatorText: this.money(per),
+      creatorCountText: String(count),
+
+      previewName: s.name || "Untitled campaign",
+      previewDesc: s.desc || "No description yet.",
+      categoryName: s.category || "No category",
+      typeName: typeObj ? typeObj.label : "No type",
+      platformNames: platformNames.length ? platformNames.join(" · ") : "None selected",
+      previewTasks: s.tasks.length
+        ? s.tasks.map(t => ({ text: t.qty + " × " + t.platform + " " + t.kind }))
+        : [{ text: "No deliverables yet." }],
+
+      errName: !!e.name, errDesc: !!e.desc, errCategory: !!e.category, errType: !!e.type,
+      errPlatforms: !!e.platforms, errTasks: !!e.tasks, errProofs: !!e.proofs,
+      errDates: !!e.dates, errBudget: !!e.budget
+    };
+  }
+}
+</script>
+</body>
+</html>

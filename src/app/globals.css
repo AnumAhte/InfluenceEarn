@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+/*
+ * InfluencEarn design tokens.
+ * Extracted from the approved .dc.html designs (see docs/architecture.md → "Design tokens").
+ * Tailwind utilities are generated from these, e.g. bg-primary, text-ink-muted, rounded-card.
+ */
+@theme {
+  --font-sans: var(--font-jakarta), -apple-system, "Helvetica Neue", sans-serif;
+
+  /* Brand teal */
+  --color-primary: #0e8494;
+  --color-primary-hover: #0a5f6b;
+  /*
+   * AA-compliant teal (4.85:1 against white). Used for solid fills behind white text
+   * (primary buttons, badges) and for small teal text. #0E8494 stays the brand/accent
+   * colour for borders, focus rings, icons and decorative marks.
+   */
+  --color-primary-strong: #0c7d8c;
+  --color-primary-50: #f2fafb;
+  --color-primary-100: #e7f5f7;
+  --color-primary-150: #d5eef1;
+  --color-primary-200: #a9dae1;
+  --color-primary-300: #82c8d2;
+
+  /* Ink (text) */
+  --color-ink: #08201f;
+  --color-ink-label: #2e4644;
+  --color-ink-secondary: #4a6260;
+  /* Design value #6A817F darkened slightly to reach WCAG AA on white and #F6F9F8. */
+  --color-ink-muted: #5e7573;
+  --color-ink-subtle: #93a6a4;
+  --color-ink-disabled: #c2cfcd;
+
+  /* Surfaces */
+  --color-canvas: #f6f9f8;
+  --color-surface: #ffffff;
+  --color-surface-muted: #eff4f3;
+  --color-line: #e0e8e7;
+  --color-line-soft: #eff4f3;
+
+  /* Dark surfaces (navigation, hero, footer) */
+  --color-night: #0b2523;
+  --color-night-raised: #123331;
+  --color-night-deep: #061a19;
+
+  /* Brand greens (logo) */
+  --color-brand-green: #4e8a1e;
+  --color-brand-lime: #8fd14f;
+
+  /* Status */
+  --color-success: #16a34a;
+  --color-success-fg: #15803d;
+  --color-success-bg: #dcfce7;
+  --color-warning: #d97706;
+  --color-warning-fg: #b45309;
+  --color-warning-bg: #fef3c7;
+  --color-danger: #dc2626;
+  --color-danger-fg: #b91c1c;
+  --color-danger-bg: #fee2e2;
+  --color-danger-border: #fecaca;
+
+  /* Radii */
+  --radius-chip: 8px;
+  --radius-nav: 11px;
+  --radius-control: 12px;
+  --radius-card: 16px;
+  --radius-panel: 20px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(8, 32, 31, 0.04);
+  --shadow-primary: 0 2px 8px rgba(10, 95, 107, 0.28);
+  --shadow-primary-sm: 0 1px 2px rgba(10, 95, 107, 0.28);
+  --shadow-panel: 0 24px 60px -32px rgba(8, 32, 31, 0.14);
+  --shadow-popover: 0 24px 60px -20px rgba(8, 32, 31, 0.28);
+  --shadow-hero: 0 40px 80px -32px rgba(8, 32, 31, 0.28);
+  --shadow-selected: 0 24px 60px -28px rgba(10, 95, 107, 0.3);
+
+  /* Layout */
+  --container-page: 1240px;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background: var(--color-primary-200);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-ink-subtle);
+  }
+
+  /* Keyboard focus must always be visible. */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+

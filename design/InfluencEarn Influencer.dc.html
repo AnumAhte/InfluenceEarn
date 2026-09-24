@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Plus Jakarta Sans", -apple-system, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; background: #F6F9F8; color: #08201F; }
+  a { color: #0E8494; text-decoration: none; }
+  a:hover { color: #0A5F6B; }
+  ::selection { background: #A9DAE1; }
+  input, textarea, select { font-family: inherit; }
+</style>
+</helmet>
+
+<div style="padding:56px 56px 96px;display:flex;flex-direction:column;gap:64px;background:#F6F9F8">
+
+  <div style="display:flex;flex-direction:column;gap:10px;max-width:860px;flex:none">
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="assets/ie-mark.png" alt="influencearn" width="30" height="30" style="display:block;flex-shrink:0;border-radius:9px" />
+      <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:16px;font-weight:700;letter-spacing:-0.025em">influence<span style="color:#4E8A1E">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span><span style="font-size:8.3px;font-weight:600;letter-spacing:0.08em;color:#4E8A1E">.com</span><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span></span></span>
+      <span style="font-size:11.5px;font-weight:600;color:#0A5F6B;background:#EEF7E3;border-radius:999px;padding:3px 9px">Influencer</span>
+    </div>
+    <h1 style="margin:0;font-size:36px;font-weight:700;letter-spacing:-0.03em;line-height:1.15">The creator experience</h1>
+    <p style="margin:0;font-size:16px;color:#4A6260;line-height:1.6">Discover → check eligibility → apply → complete the task → get approved → get paid. The app below is live: use the sidebar, filter the marketplace, connect or disconnect a social account and watch eligibility change, apply to a campaign, then submit a task completion.</p>
+  </div>
+
+  <section data-screen-label="Influencer app" style="display:flex;flex-direction:column;gap:20px;flex:none">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">01</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Influencer app · desktop</span>
+      <span style="font-size:14px;color:#6A817F">{{ screenHint }}</span>
+    </div>
+
+    <div style="width:1440px;flex:none;position:relative;border:1px solid #E0E8E7;border-radius:20px;background:#F6F9F8;box-shadow:0 32px 80px -40px rgba(8,32,31,.28);overflow:hidden;display:grid;grid-template-columns:248px 1fr">
+
+      <aside style="background:#0B2523;padding:20px 14px;display:flex;flex-direction:column;gap:24px;min-height:1180px">
+        <div style="display:flex;align-items:center;gap:10px;padding:4px 8px 0">
+          <img src="assets/ie-mark.png" alt="influencearn" width="30" height="30" style="display:block;flex-shrink:0;border-radius:9px" />
+          <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:15.5px;font-weight:700;letter-spacing:-0.025em;color:#FFFFFF">influence<span style="color:#8FD14F">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span><span style="font-size:8.1px;font-weight:600;letter-spacing:0.08em;color:#8FD14F">.com</span><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span></span></span>
+        </div>
+        <nav style="display:flex;flex-direction:column;gap:3px">
+          <sc-for list="{{ nav }}" as="n" hint-placeholder-count="9">
+            <button type="button" onClick="{{ n.onClick }}" style="font:inherit;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:{{ n.weight }};color:{{ n.fg }};background:{{ n.bg }};border:none;border-radius:11px;padding:10px 12px;cursor:pointer;text-align:left" style-hover="background:rgba(255,255,255,.08)">
+              <span style="width:16px;height:16px;border:2px solid {{ n.dot }};border-radius:{{ n.radius }};display:block;flex:none"></span>{{ n.label }}
+              <span style="margin-left:auto;font-size:11.5px;font-weight:600;color:{{ n.badgeFg }};background:{{ n.badgeBg }};border-radius:999px;padding:2px 8px">{{ n.badge }}</span>
+            </button>
+            <sc-if value="{{ n.rule }}"><span style="height:1px;background:rgba(255,255,255,.1);margin:12px 8px;display:block"></span></sc-if>
+          </sc-for>
+        </nav>
+        <div style="margin-top:auto;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px">
+          <span style="font-size:13px;font-weight:600;color:#FFFFFF">{{ sidebarNoteTitle }}</span>
+          <span style="font-size:12.5px;color:#93A6A4;line-height:1.55">{{ sidebarNoteBody }}</span>
+          <button type="button" onClick="{{ goSocial }}" style="font:inherit;font-size:12.5px;font-weight:600;color:#A9DAE1;background:transparent;border:none;padding:0;text-align:left;cursor:pointer" style-hover="color:#FFFFFF">Manage social accounts →</button>
+        </div>
+      </aside>
+
+      <div style="display:flex;flex-direction:column;background:#F6F9F8;min-width:0">
+
+        <div style="height:68px;background:#FFFFFF;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 28px;flex:none">
+          <div style="display:flex;align-items:center;gap:10px">
+            <button type="button" onClick="{{ toggleRoleMenu }}" style="font:inherit;display:flex;align-items:center;gap:10px;height:40px;padding:0 12px 0 10px;border-radius:12px;border:1px solid {{ roleBorder }};background:#FFFFFF;cursor:pointer" style-hover="background:#F6F9F8">
+              <span style="width:24px;height:24px;border-radius:7px;background:#0E8494;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:11px;font-weight:700">I</span>
+              <span style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.15">
+                <span style="font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Current role</span>
+                <span style="font-size:13.5px;font-weight:600;color:#08201F">Influencer</span>
+              </span>
+              <span style="font-size:10px;color:#6A817F;margin-left:2px">▼</span>
+            </button>
+            <span style="font-size:13px;color:#6A817F">{{ breadcrumb }}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="position:relative;width:38px;height:38px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;display:flex;align-items:center;justify-content:center;cursor:pointer" style-hover="background:#F6F9F8">
+              <span style="width:14px;height:14px;border:2px solid #4A6260;border-radius:5px 5px 6px 6px;display:block"></span>
+              <span style="position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;background:#DC2626;border:1.5px solid #FFFFFF"></span>
+            </span>
+            <span style="width:38px;height:38px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#4A6260;cursor:pointer" style-hover="background:#F6F9F8">?</span>
+            <span style="width:38px;height:38px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;display:flex;align-items:center;justify-content:center;cursor:pointer" style-hover="background:#F6F9F8"><span style="width:14px;height:14px;border:2px solid #4A6260;border-radius:50%;display:block"></span></span>
+            <button type="button" onClick="{{ goProfile }}" style="font:inherit;display:flex;align-items:center;gap:9px;padding:4px 10px 4px 4px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;cursor:pointer" style-hover="background:#F6F9F8">
+              <span style="width:30px;height:30px;border-radius:9px;background:#0E8494;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#FFFFFF">AN</span>
+              <span style="display:flex;flex-direction:column;line-height:1.2;align-items:flex-start"><span style="font-size:13px;font-weight:600">Ana Rivera</span><span style="font-size:11.5px;color:#6A817F">New York</span></span>
+              <span style="font-size:10px;color:#6A817F">▼</span>
+            </button>
+          </div>
+        </div>
+
+        <sc-if value="{{ roleMenu }}">
+          <div style="position:relative">
+            <div style="position:absolute;top:8px;left:28px;z-index:5;width:262px;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;box-shadow:0 18px 40px -18px rgba(8,32,31,.3);padding:8px;display:flex;flex-direction:column;gap:2px">
+              <span style="display:flex;align-items:center;gap:10px;padding:10px 10px;border-radius:11px;background:#EEF7E3">
+                <span style="width:24px;height:24px;border-radius:7px;background:#0E8494;color:#FFFFFF;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">I</span>
+                <span style="font-size:13.5px;font-weight:600">Influencer</span>
+                <span style="margin-left:auto;font-size:12px;font-weight:700;color:#0A5F6B">✓</span>
+              </span>
+              <span style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:11px;cursor:pointer" style-hover="background:#F6F9F8">
+                <span style="width:24px;height:24px;border-radius:7px;background:#0B2523;color:#FFFFFF;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">A</span>
+                <span style="font-size:13.5px;font-weight:550">Switch to Advertiser</span>
+              </span>
+              <span style="height:1px;background:#E0E8E7;margin:5px 4px;display:block"></span>
+              <span style="font-size:12.5px;color:#6A817F;line-height:1.5;padding:4px 10px 8px">One account, both roles. Your campaigns and applications stay separate.</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <div style="padding:32px;display:flex;flex-direction:column;gap:24px;min-width:0">
+
+          <!-- DASHBOARD -->
+          <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:24px">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Welcome back, Ana</h2>
+                  <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6;max-width:620px">Discover campaigns that match your social profiles and complete paid creator tasks.</p>
+                </div>
+                <button type="button" onClick="{{ goMarketplace }}" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 20px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Find Campaigns</button>
+              </div>
+
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+                <sc-for list="{{ summary }}" as="s" hint-placeholder-count="6">
+                  <button type="button" onClick="{{ s.onClick }}" style="font:inherit;text-align:left;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:18px 20px;display:flex;flex-direction:column;gap:9px;cursor:pointer" style-hover="border-color:#A9DAE1;box-shadow:0 8px 24px -14px rgba(10,95,107,.35)">
+                    <span style="display:flex;align-items:center;gap:9px">
+                      <span style="width:26px;height:26px;border-radius:8px;background:{{ s.iconBg }};display:flex;align-items:center;justify-content:center"><span style="width:9px;height:9px;border:2px solid {{ s.iconFg }};border-radius:{{ s.iconRadius }};display:block"></span></span>
+                      <span style="font-size:12.5px;font-weight:600;letter-spacing:0.03em;text-transform:uppercase;color:#6A817F">{{ s.label }}</span>
+                    </span>
+                    <span style="font-size:28px;font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums">{{ s.value }}</span>
+                    <span style="font-size:12.5px;color:#6A817F;line-height:1.5">{{ s.hint }}</span>
+                  </button>
+                </sc-for>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                  <div style="padding:18px 22px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:16px">
+                    <span style="display:flex;flex-direction:column;gap:3px">
+                      <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Your next deadlines</span>
+                      <span style="font-size:13px;color:#6A817F">Tasks you were selected for, soonest first.</span>
+                    </span>
+                    <button type="button" onClick="{{ goActive }}" style="font:inherit;font-size:13.5px;font-weight:550;height:38px;padding:0 14px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">All active tasks</button>
+                  </div>
+                  <sc-for list="{{ deadlineRows }}" as="r" hint-placeholder-count="3">
+                    <div style="padding:16px 22px;border-bottom:1px solid #EFF4F3;display:flex;align-items:center;gap:16px">
+                      <span style="width:36px;height:36px;border-radius:11px;flex:none;background:#EFF4F3;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#4A6260">{{ r.initial }}</span>
+                      <span style="display:flex;flex-direction:column;gap:3px;min-width:0;flex:1">
+                        <span style="font-size:14.5px;font-weight:600;letter-spacing:-0.01em">{{ r.title }}</span>
+                        <span style="font-size:12.5px;color:#6A817F">{{ r.meta }}</span>
+                      </span>
+                      <span style="font-size:12px;font-weight:600;color:{{ r.statusFg }};background:{{ r.statusBg }};border-radius:999px;padding:4px 10px;flex:none">{{ r.status }}</span>
+                      <span style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex:none;width:120px">
+                        <span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ r.reward }}</span>
+                        <span style="font-size:12px;color:{{ r.dueFg }}">{{ r.due }}</span>
+                      </span>
+                      <button type="button" onClick="{{ r.onClick }}" style="font:inherit;font-size:13px;font-weight:550;height:36px;padding:0 13px;border-radius:10px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer;flex:none" style-hover="background:#F6F9F8">View task</button>
+                    </div>
+                  </sc-for>
+                  <div style="padding:14px 22px;display:flex;align-items:center;gap:10px;background:#FFFFFF">
+                    <span style="font-size:12.5px;color:#6A817F;line-height:1.5">Advertisers review every submission by hand. Payment is released by the agency after approval.</span>
+                  </div>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:20px">
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:20px;display:flex;flex-direction:column;gap:14px">
+                    <span style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+                      <span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em">Social accounts</span>
+                      <button type="button" onClick="{{ goSocial }}" style="font:inherit;font-size:12.5px;font-weight:600;color:#0E8494;background:transparent;border:none;padding:0;cursor:pointer" style-hover="color:#0A5F6B">Manage</button>
+                    </span>
+                    <span style="font-size:13px;color:#4A6260;line-height:1.55">{{ accountsSummary }}</span>
+                    <div style="display:flex;flex-direction:column;gap:8px">
+                      <sc-for list="{{ accountChips }}" as="a" hint-placeholder-count="4">
+                        <span style="display:flex;align-items:center;gap:10px;border:1px solid {{ a.border }};background:{{ a.bg }};border-radius:12px;padding:10px 12px">
+                          <span style="width:28px;height:28px;border-radius:9px;flex:none;background:{{ a.iconBg }};color:{{ a.iconFg }};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ a.initial }}</span>
+                          <span style="display:flex;flex-direction:column;gap:1px;min-width:0">
+                            <span style="font-size:13.5px;font-weight:600">{{ a.label }}</span>
+                            <span style="font-size:12px;color:#6A817F">{{ a.detail }}</span>
+                          </span>
+                          <button type="button" onClick="{{ a.onToggle }}" style="font:inherit;margin-left:auto;font-size:12.5px;font-weight:600;color:{{ a.actionFg }};background:transparent;border:none;padding:0;cursor:pointer">{{ a.action }}</button>
+                        </span>
+                      </sc-for>
+                    </div>
+                    <span style="font-size:12px;color:#6A817F;line-height:1.5">Follower counts come from your own profile. Advertisers check them when reviewing applicants.</span>
+                  </div>
+
+                  <div style="background:#0B2523;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px">
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#93A6A4">How it works</span>
+                    <sc-for list="{{ howItWorks }}" as="h" hint-placeholder-count="6">
+                      <span style="display:flex;align-items:center;gap:10px">
+                        <span style="width:22px;height:22px;border-radius:7px;flex:none;background:rgba(255,255,255,.1);color:#A9DAE1;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ h.n }}</span>
+                        <span style="font-size:13.5px;color:#E0E8E7">{{ h.label }}</span>
+                      </span>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- MARKETPLACE -->
+          <sc-if value="{{ isMarketplace }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Find Campaigns</h2>
+                  <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">Browse campaigns you are eligible to apply for.</p>
+                </div>
+                <span style="font-size:13.5px;color:#6A817F">{{ resultCount }}</span>
+              </div>
+
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:16px 18px;display:flex;flex-direction:column;gap:14px">
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                  <input type="text" value="{{ search }}" onChange="{{ onSearch }}" placeholder="Search campaigns..." style="flex:1;min-width:260px;height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;background:#FFFFFF;color:#08201F;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" />
+                  <select value="{{ sort }}" onChange="{{ onSort }}" style="height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 12px;font-size:14px;background:#FFFFFF;color:#08201F;outline:none;cursor:pointer" style-focus="border-color:#0E8494">
+                    <option value="newest">Sort: Newest</option>
+                    <option value="reward">Sort: Highest Reward</option>
+                    <option value="ending">Sort: Ending Soon</option>
+                  </select>
+                  <button type="button" onClick="{{ onlyEligibleToggle }}" style="font:inherit;font-size:13.5px;font-weight:{{ eligibleWeight }};height:44px;padding:0 14px;border-radius:12px;border:1px solid {{ eligibleBorder }};background:{{ eligibleBg }};color:{{ eligibleFg }};cursor:pointer">Eligible only</button>
+                  <button type="button" onClick="{{ onResetFilters }}" style="font:inherit;font-size:13.5px;font-weight:550;height:44px;padding:0 14px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;cursor:pointer" style-hover="background:#F6F9F8">Reset</button>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px">
+                  <label style="display:flex;flex-direction:column;gap:6px">
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Platform</span>
+                    <select value="{{ fPlatform }}" onChange="{{ onPlatform }}" style="height:42px;border:1px solid #E0E8E7;border-radius:11px;padding:0 10px;font-size:14px;background:#FFFFFF;color:#08201F;outline:none;cursor:pointer" style-focus="border-color:#0E8494">
+                      <sc-for list="{{ platformOptions }}" as="o" hint-placeholder-count="5"><option value="{{ o }}">{{ o }}</option></sc-for>
+                    </select>
+                  </label>
+                  <label style="display:flex;flex-direction:column;gap:6px">
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Category</span>
+                    <select value="{{ fCategory }}" onChange="{{ onCategory }}" style="height:42px;border:1px solid #E0E8E7;border-radius:11px;padding:0 10px;font-size:14px;background:#FFFFFF;color:#08201F;outline:none;cursor:pointer" style-focus="border-color:#0E8494">
+                      <sc-for list="{{ categoryOptions }}" as="o" hint-placeholder-count="7"><option value="{{ o }}">{{ o }}</option></sc-for>
+                    </select>
+                  </label>
+                  <label style="display:flex;flex-direction:column;gap:6px">
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Task type</span>
+                    <select value="{{ fTask }}" onChange="{{ onTaskType }}" style="height:42px;border:1px solid #E0E8E7;border-radius:11px;padding:0 10px;font-size:14px;background:#FFFFFF;color:#08201F;outline:none;cursor:pointer" style-focus="border-color:#0E8494">
+                      <sc-for list="{{ taskTypeOptions }}" as="o" hint-placeholder-count="9"><option value="{{ o }}">{{ o }}</option></sc-for>
+                    </select>
+                  </label>
+                  <label style="display:flex;flex-direction:column;gap:6px">
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Payment range</span>
+                    <select value="{{ fPay }}" onChange="{{ onPay }}" style="height:42px;border:1px solid #E0E8E7;border-radius:11px;padding:0 10px;font-size:14px;background:#FFFFFF;color:#08201F;outline:none;cursor:pointer" style-focus="border-color:#0E8494">
+                      <sc-for list="{{ payOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for>
+                    </select>
+                  </label>
+                  <label style="display:flex;flex-direction:column;gap:6px">
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Minimum followers</span>
+                    <select value="{{ fFollowers }}" onChange="{{ onFollowers }}" style="height:42px;border:1px solid #E0E8E7;border-radius:11px;padding:0 10px;font-size:14px;background:#FFFFFF;color:#08201F;outline:none;cursor:pointer" style-focus="border-color:#0E8494">
+                      <sc-for list="{{ followerFilterOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for>
+                    </select>
+                  </label>
+                </div>
+              </div>
+
+              <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
+                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px">
+                  <sc-for list="{{ cards }}" as="c" hint-placeholder-count="4">
+                    <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:20px;display:flex;flex-direction:column;gap:14px">
+                      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px">
+                        <span style="display:flex;align-items:center;gap:11px;min-width:0">
+                          <span style="width:38px;height:38px;border-radius:11px;flex:none;background:#EFF4F3;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#4A6260">{{ c.brandInitial }}</span>
+                          <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                            <span style="font-size:16px;font-weight:650;letter-spacing:-0.02em;line-height:1.3">{{ c.title }}</span>
+                            <span style="font-size:12.5px;color:#6A817F">{{ c.advertiser }}</span>
+                          </span>
+                        </span>
+                        <span style="font-size:11.5px;font-weight:600;color:{{ c.statusFg }};background:{{ c.statusBg }};border-radius:999px;padding:4px 10px;flex:none;white-space:nowrap">{{ c.statusLabel }}</span>
+                      </div>
+
+                      <div style="display:flex;flex-wrap:wrap;gap:6px">
+                        <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#08201F;background:#EFF4F3;border-radius:999px;padding:5px 10px"><span style="width:16px;height:16px;border-radius:5px;background:#0B2523;color:#FFFFFF;font-size:8.5px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ c.platformInitial }}</span>{{ c.platform }}</span>
+                        <span style="font-size:12px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border-radius:999px;padding:5px 10px">{{ c.taskType }}</span>
+                        <span style="font-size:12px;font-weight:600;color:#0A5F6B;background:#EEF7E3;border-radius:999px;padding:5px 10px">{{ c.category }}</span>
+                        <span style="font-size:12px;font-weight:600;color:#4A6260;background:#EFF4F3;border-radius:999px;padding:5px 10px">{{ c.type }}</span>
+                      </div>
+
+                      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+                        <span style="display:flex;flex-direction:column;gap:2px;background:#F6F9F8;border-radius:12px;padding:10px 12px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Reward</span><span style="font-size:15px;font-weight:650;font-variant-numeric:tabular-nums">{{ c.reward }}</span></span>
+                        <span style="display:flex;flex-direction:column;gap:2px;background:#F6F9F8;border-radius:12px;padding:10px 12px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Min followers</span><span style="font-size:15px;font-weight:650;font-variant-numeric:tabular-nums">{{ c.minFollowers }}</span></span>
+                        <span style="display:flex;flex-direction:column;gap:2px;background:#F6F9F8;border-radius:12px;padding:10px 12px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Creators needed</span><span style="font-size:15px;font-weight:650;font-variant-numeric:tabular-nums">{{ c.creators }}</span></span>
+                        <span style="display:flex;flex-direction:column;gap:2px;background:#F6F9F8;border-radius:12px;padding:10px 12px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Applications close</span><span style="font-size:15px;font-weight:650">{{ c.appDeadline }}</span></span>
+                      </div>
+
+                      <span style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#6A817F"><span style="width:5px;height:5px;border-radius:50%;background:#93A6A4;flex:none"></span>Task deadline {{ c.taskDeadline }}</span>
+
+                      <div style="display:flex;align-items:center;gap:10px;padding-top:2px">
+                        <button type="button" onClick="{{ c.onCta }}" style="font:inherit;font-size:14px;font-weight:550;height:44px;padding:0 18px;border-radius:12px;border:1px solid {{ c.ctaBorder }};background:{{ c.ctaBg }};color:{{ c.ctaFg }};cursor:pointer;box-shadow:{{ c.ctaShadow }}">{{ c.ctaLabel }}</button>
+                        <span style="font-size:12.5px;color:{{ c.reasonFg }};line-height:1.5">{{ c.reason }}</span>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ noResults }}">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:56px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center">
+                  <span style="width:52px;height:52px;border-radius:16px;background:#EFF4F3;display:flex;align-items:center;justify-content:center"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:50%;display:block"></span></span>
+                  <span style="font-size:18px;font-weight:650;letter-spacing:-0.02em">No campaigns match these filters</span>
+                  <span style="font-size:14px;color:#4A6260;line-height:1.6;max-width:420px">Try a different platform or category, or clear the filters to see everything open right now.</span>
+                  <button type="button" onClick="{{ onResetFilters }}" style="font:inherit;font-size:14px;font-weight:550;height:44px;padding:0 18px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;margin-top:4px;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Clear filters</button>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <!-- CAMPAIGN DETAIL -->
+          <sc-if value="{{ isCampaign }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <button type="button" onClick="{{ goMarketplace }}" style="font:inherit;align-self:flex-start;font-size:13.5px;font-weight:550;color:#4A6260;background:transparent;border:none;padding:0;cursor:pointer" style-hover="color:#0E8494">← Back to campaigns</button>
+
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:24px;display:flex;flex-direction:column;gap:18px">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap">
+                  <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+                    <span style="display:flex;flex-wrap:wrap;gap:6px">
+                      <span style="font-size:11.5px;font-weight:600;color:#0A5F6B;background:#EEF7E3;border-radius:999px;padding:4px 10px">{{ detail.category }}</span>
+                      <span style="font-size:11.5px;font-weight:600;color:#08201F;background:#EFF4F3;border-radius:999px;padding:4px 10px">{{ detail.platform }}</span>
+                      <span style="font-size:11.5px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border-radius:999px;padding:4px 10px">{{ detail.taskType }}</span>
+                      <span style="font-size:11.5px;font-weight:600;color:#047857;background:#ECFDF5;border-radius:999px;padding:4px 10px">{{ detail.status }}</span>
+                    </span>
+                    <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em;line-height:1.2">{{ detail.title }}</h2>
+                    <span style="font-size:14px;color:#4A6260">{{ detail.advertiser }} · {{ detail.city }}</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+                    <span style="display:flex;flex-direction:column;align-items:flex-end;gap:1px">
+                      <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Reward per creator</span>
+                      <span style="font-size:26px;font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums">{{ detail.reward }}</span>
+                    </span>
+                    <button type="button" onClick="{{ detail.onApply }}" style="font:inherit;font-size:14.5px;font-weight:550;height:48px;padding:0 22px;border-radius:12px;border:1px solid {{ detail.applyBorder }};background:{{ detail.applyBg }};color:{{ detail.applyFg }};cursor:{{ detail.applyCursor }};box-shadow:{{ detail.applyShadow }}">{{ detail.applyLabel }}</button>
+                    <span style="font-size:12.5px;font-weight:550;color:{{ detail.reasonFg }};text-align:right;max-width:280px;line-height:1.5">{{ detail.reason }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start">
+                <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                    <div style="padding:18px 22px;border-bottom:1px solid #E0E8E7"><span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Campaign overview</span></div>
+                    <div style="padding:20px 22px;display:flex;flex-direction:column;gap:18px">
+                      <p style="margin:0;font-size:14.5px;color:#2E4644;line-height:1.7">{{ detail.description }}</p>
+                      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+                        <sc-for list="{{ detail.overview }}" as="o" hint-placeholder-count="6">
+                          <span style="display:flex;flex-direction:column;gap:3px;background:#F6F9F8;border-radius:12px;padding:12px 14px">
+                            <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">{{ o.label }}</span>
+                            <span style="font-size:15px;font-weight:650;font-variant-numeric:tabular-nums">{{ o.value }}</span>
+                          </span>
+                        </sc-for>
+                      </div>
+                      <div style="display:flex;flex-direction:column;gap:7px">
+                        <span style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13px;font-weight:600">Applications received</span><span style="font-size:13px;color:#6A817F;font-variant-numeric:tabular-nums">{{ detail.applicationsText }}</span></span>
+                        <span style="height:8px;border-radius:999px;background:#EFF4F3;display:block;overflow:hidden"><span style="display:block;height:100%;width:{{ detail.applicationsPct }};background:#0E8494;border-radius:999px"></span></span>
+                        <span style="font-size:12.5px;color:#6A817F;line-height:1.5">The advertiser selects creators by hand after applications close.</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                    <div style="padding:18px 22px;border-bottom:1px solid #E0E8E7;display:flex;flex-direction:column;gap:3px">
+                      <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Task instructions</span>
+                      <span style="font-size:13px;color:#6A817F">What you deliver if you are selected.</span>
+                    </div>
+                    <div style="padding:20px 22px;display:flex;flex-direction:column;gap:18px">
+                      <p style="margin:0;font-size:14.5px;color:#2E4644;line-height:1.7">{{ detail.taskDescription }}</p>
+                      <div style="display:flex;flex-direction:column;gap:10px">
+                        <span style="font-size:12.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Deliverables checklist</span>
+                        <sc-for list="{{ detail.checklist }}" as="d" hint-placeholder-count="3">
+                          <span style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:#08201F;line-height:1.55">
+                            <span style="width:19px;height:19px;border-radius:6px;flex:none;background:#E7F5F7;color:#0A5F6B;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px">✓</span>{{ d.text }}
+                          </span>
+                        </sc-for>
+                      </div>
+                      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                        <span style="display:flex;flex-direction:column;gap:4px;border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Hashtags</span><span style="font-size:14px;font-weight:550;color:#0A5F6B">{{ detail.hashtags }}</span></span>
+                        <span style="display:flex;flex-direction:column;gap:4px;border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Mentions</span><span style="font-size:14px;font-weight:550;color:#0A5F6B">{{ detail.mentions }}</span></span>
+                      </div>
+                      <span style="display:flex;flex-direction:column;gap:4px;border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Caption requirements</span><span style="font-size:14px;color:#2E4644;line-height:1.6">{{ detail.caption }}</span></span>
+                      <sc-if value="{{ detail.hasLink }}">
+                        <span style="display:flex;align-items:center;gap:12px;background:#F6F9F8;border-radius:12px;padding:12px 14px">
+                          <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Post supplied by advertiser</span><span style="font-size:13.5px;color:#0A5F6B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ detail.link }}</span></span>
+                          <span style="margin-left:auto;font-size:12.5px;font-weight:600;color:#0E8494;flex:none;cursor:pointer">Open ↗</span>
+                        </span>
+                      </sc-if>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:20px">
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                    <div style="padding:16px 20px;border-bottom:1px solid #E0E8E7"><span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em">Requirements</span></div>
+                    <div style="padding:16px 20px;display:flex;flex-direction:column;gap:10px">
+                      <sc-for list="{{ detail.requirements }}" as="r" hint-placeholder-count="6">
+                        <span style="display:flex;align-items:center;gap:11px;border:1px solid {{ r.border }};background:{{ r.bg }};border-radius:12px;padding:11px 13px">
+                          <span style="width:20px;height:20px;border-radius:6px;flex:none;background:{{ r.iconBg }};color:{{ r.iconFg }};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ r.icon }}</span>
+                          <span style="display:flex;flex-direction:column;gap:1px;min-width:0">
+                            <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">{{ r.label }}</span>
+                            <span style="font-size:13.5px;font-weight:600;color:{{ r.fg }}">{{ r.value }}</span>
+                          </span>
+                        </span>
+                      </sc-for>
+                      <span style="font-size:12px;color:#6A817F;line-height:1.55">Requirements are set by the advertiser and checked manually when they review applicants.</span>
+                    </div>
+                  </div>
+
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:18px 20px;display:flex;flex-direction:column;gap:12px">
+                    <span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em">Your account for this campaign</span>
+                    <span style="display:flex;align-items:center;gap:11px;border:1px solid {{ detail.acctBorder }};background:{{ detail.acctBg }};border-radius:12px;padding:12px 13px">
+                      <span style="width:30px;height:30px;border-radius:9px;flex:none;background:{{ detail.acctIconBg }};color:{{ detail.acctIconFg }};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ detail.acctInitial }}</span>
+                      <span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span style="font-size:13.5px;font-weight:600">{{ detail.acctLabel }}</span><span style="font-size:12.5px;color:#6A817F">{{ detail.acctDetail }}</span></span>
+                    </span>
+                    <button type="button" onClick="{{ detail.onAcctAction }}" style="font:inherit;font-size:13.5px;font-weight:550;height:42px;border-radius:11px;border:1px solid {{ detail.acctBtnBorder }};background:{{ detail.acctBtnBg }};color:{{ detail.acctBtnFg }};cursor:pointer">{{ detail.acctBtnLabel }}</button>
+                    <span style="font-size:12px;color:#6A817F;line-height:1.55">Connecting an account is only needed for campaigns that require that platform.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- SOCIAL ACCOUNTS -->
+          <sc-if value="{{ isSocial }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Social accounts</h2>
+                <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6;max-width:660px">Optional when you sign up. A campaign that requires a platform can only be applied to once that account is connected.</p>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px">
+                <sc-for list="{{ socialCards }}" as="a" hint-placeholder-count="4">
+                  <div style="background:#FFFFFF;border:1px solid {{ a.border }};border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:20px;display:flex;flex-direction:column;gap:16px">
+                    <div style="display:flex;align-items:center;gap:12px">
+                      <span style="width:42px;height:42px;border-radius:12px;flex:none;background:{{ a.iconBg }};color:{{ a.iconFg }};font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ a.initial }}</span>
+                      <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                        <span style="font-size:16px;font-weight:650;letter-spacing:-0.02em">{{ a.label }}</span>
+                        <span style="font-size:12.5px;color:#6A817F">{{ a.username }}</span>
+                      </span>
+                      <span style="margin-left:auto;font-size:11.5px;font-weight:600;color:{{ a.statusFg }};background:{{ a.statusBg }};border-radius:999px;padding:4px 10px;flex:none">{{ a.status }}</span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                      <span style="display:flex;flex-direction:column;gap:2px;background:#F6F9F8;border-radius:12px;padding:10px 12px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Followers</span><span style="font-size:15px;font-weight:650;font-variant-numeric:tabular-nums">{{ a.followers }}</span></span>
+                      <span style="display:flex;flex-direction:column;gap:2px;background:#F6F9F8;border-radius:12px;padding:10px 12px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Campaigns open to you</span><span style="font-size:15px;font-weight:650;font-variant-numeric:tabular-nums">{{ a.openCount }}</span></span>
+                    </div>
+                    <button type="button" onClick="{{ a.onToggle }}" style="font:inherit;font-size:14px;font-weight:550;height:44px;border-radius:12px;border:1px solid {{ a.btnBorder }};background:{{ a.btnBg }};color:{{ a.btnFg }};cursor:pointer">{{ a.btnLabel }}</button>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:18px 20px;display:flex;gap:11px">
+                <span style="width:6px;height:6px;border-radius:50%;background:#0E8494;margin-top:8px;flex:none"></span>
+                <span style="font-size:13.5px;color:#4A6260;line-height:1.65">Follower numbers are the ones you enter on your profile. InfluencEarn does not verify them automatically — the advertiser reviews your profile and content before selecting you.</span>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- MY APPLICATIONS -->
+          <sc-if value="{{ isApplications }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">My Applications</h2>
+                  <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">Every campaign you applied to, and where each one stands.</p>
+                </div>
+                <span style="font-size:13.5px;color:#6A817F">{{ appCountText }}</span>
+              </div>
+
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ appTabs }}" as="t" hint-placeholder-count="5">
+                  <button type="button" onClick="{{ t.onClick }}" style="font:inherit;font-size:13.5px;font-weight:{{ t.weight }};height:40px;padding:0 15px;border-radius:999px;border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.fg }};cursor:pointer">{{ t.label }}</button>
+                </sc-for>
+              </div>
+
+              <sc-if value="{{ hasAppRows }}" hint-placeholder-val="{{ true }}">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                  <div style="display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr 1.2fr 130px;gap:16px;padding:13px 22px;background:#F6F9F8;border-bottom:1px solid #E0E8E7">
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Campaign</span>
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Platform</span>
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Reward</span>
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Applied</span>
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Status</span>
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F;text-align:right">Action</span>
+                  </div>
+                  <sc-for list="{{ appRows }}" as="a" hint-placeholder-count="6">
+                    <div style="display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr 1.2fr 130px;gap:16px;align-items:center;padding:15px 22px;border-bottom:1px solid #EFF4F3">
+                      <span style="display:flex;flex-direction:column;gap:3px;min-width:0">
+                        <span style="font-size:14.5px;font-weight:600;letter-spacing:-0.01em">{{ a.campaign }}</span>
+                        <span style="font-size:12.5px;color:#6A817F">{{ a.advertiser }} · {{ a.task }}</span>
+                        <span style="font-size:12px;color:#93A6A4;line-height:1.5">{{ a.note }}</span>
+                      </span>
+                      <span style="font-size:13.5px;color:#2E4644">{{ a.platform }}</span>
+                      <span style="font-size:14px;font-weight:600;font-variant-numeric:tabular-nums">{{ a.reward }}</span>
+                      <span style="font-size:13.5px;color:#2E4644">{{ a.applied }}</span>
+                      <span style="justify-self:start;font-size:12px;font-weight:600;color:{{ a.statusFg }};background:{{ a.statusBg }};border-radius:999px;padding:5px 11px">{{ a.status }}</span>
+                      <button type="button" onClick="{{ a.onAction }}" style="font:inherit;justify-self:end;font-size:13px;font-weight:550;height:36px;padding:0 13px;border-radius:10px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">{{ a.action }}</button>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ noAppRows }}">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:56px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center">
+                  <span style="width:52px;height:52px;border-radius:16px;background:#EFF4F3;display:flex;align-items:center;justify-content:center"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:5px;display:block"></span></span>
+                  <span style="font-size:18px;font-weight:650;letter-spacing:-0.02em">{{ appEmptyTitle }}</span>
+                  <span style="font-size:14px;color:#4A6260;line-height:1.6;max-width:440px">Applications you send show up here with their status. Browse the open campaigns and apply with a connected account.</span>
+                  <button type="button" onClick="{{ goMarketplace }}" style="font:inherit;font-size:14px;font-weight:550;height:44px;padding:0 18px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;margin-top:4px;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Find Campaigns</button>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <!-- ACTIVE TASKS -->
+          <sc-if value="{{ isActive }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Active Tasks</h2>
+                  <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">Campaigns you were selected for. Complete the task, then submit your link.</p>
+                </div>
+                <span style="font-size:13.5px;color:#6A817F">{{ activeCount }} in progress</span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px">
+                <sc-for list="{{ activeCards }}" as="t" hint-placeholder-count="4">
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:20px;display:flex;flex-direction:column;gap:14px">
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px">
+                      <span style="display:flex;align-items:center;gap:11px;min-width:0">
+                        <span style="width:38px;height:38px;border-radius:11px;flex:none;background:#EFF4F3;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#4A6260">{{ t.initial }}</span>
+                        <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                          <span style="font-size:16px;font-weight:650;letter-spacing:-0.02em;line-height:1.3">{{ t.campaign }}</span>
+                          <span style="font-size:12.5px;color:#6A817F">{{ t.advertiser }} · {{ t.platform }}</span>
+                        </span>
+                      </span>
+                      <span style="font-size:11.5px;font-weight:600;color:{{ t.statusFg }};background:{{ t.statusBg }};border-radius:999px;padding:4px 10px;flex:none;text-align:center">{{ t.status }}</span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+                      <span style="display:flex;flex-direction:column;gap:2px;background:#F6F9F8;border-radius:12px;padding:10px 12px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Task</span><span style="font-size:14.5px;font-weight:650">{{ t.task }}</span></span>
+                      <span style="display:flex;flex-direction:column;gap:2px;background:#F6F9F8;border-radius:12px;padding:10px 12px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Reward</span><span style="font-size:14.5px;font-weight:650;font-variant-numeric:tabular-nums">{{ t.reward }}</span></span>
+                      <span style="display:flex;flex-direction:column;gap:2px;background:#F6F9F8;border-radius:12px;padding:10px 12px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Deadline</span><span style="font-size:14.5px;font-weight:650">{{ t.deadline }}</span></span>
+                      <span style="display:flex;flex-direction:column;gap:2px;background:#F6F9F8;border-radius:12px;padding:10px 12px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Timing</span><span style="font-size:14.5px;font-weight:650;color:{{ t.dueFg }}">{{ t.due }}</span></span>
+                    </div>
+                    <button type="button" onClick="{{ t.onClick }}" style="font:inherit;font-size:14px;font-weight:550;height:44px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">{{ t.cta }}</button>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- TASK DETAIL -->
+          <sc-if value="{{ isTask }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <button type="button" onClick="{{ goActive }}" style="font:inherit;align-self:flex-start;font-size:13.5px;font-weight:550;color:#4A6260;background:transparent;border:none;padding:0;cursor:pointer" style-hover="color:#0E8494">← Back to active tasks</button>
+
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:24px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap">
+                <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+                  <span style="display:flex;flex-wrap:wrap;gap:6px">
+                    <span style="font-size:11.5px;font-weight:600;color:#08201F;background:#EFF4F3;border-radius:999px;padding:4px 10px">{{ task.platform }}</span>
+                    <span style="font-size:11.5px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border-radius:999px;padding:4px 10px">{{ task.taskType }}</span>
+                    <span style="font-size:11.5px;font-weight:600;color:{{ task.statusFg }};background:{{ task.statusBg }};border-radius:999px;padding:4px 10px">{{ task.status }}</span>
+                  </span>
+                  <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em;line-height:1.2">{{ task.campaign }}</h2>
+                  <span style="font-size:14px;color:#4A6260">{{ task.advertiser }} · {{ task.task }} · deadline {{ task.deadline }}</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+                  <span style="display:flex;flex-direction:column;align-items:flex-end;gap:1px">
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Your reward</span>
+                    <span style="font-size:26px;font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums">{{ task.reward }}</span>
+                  </span>
+                  <button type="button" onClick="{{ task.onCta }}" style="font:inherit;font-size:14.5px;font-weight:550;height:48px;padding:0 22px;border-radius:12px;border:1px solid {{ task.ctaBorder }};background:{{ task.ctaBg }};color:{{ task.ctaFg }};cursor:{{ task.ctaCursor }};box-shadow:{{ task.ctaShadow }}">{{ task.ctaLabel }}</button>
+                  <span style="font-size:12.5px;color:#6A817F">{{ task.due }}</span>
+                </div>
+              </div>
+
+              <sc-if value="{{ task.isRejected }}">
+                <div style="background:#FEF2F2;border:1px solid #FCA5A5;border-radius:16px;padding:18px 20px;display:flex;gap:12px">
+                  <span style="width:22px;height:22px;border-radius:7px;flex:none;background:#FEE2E2;color:#B91C1C;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">!</span>
+                  <span style="display:flex;flex-direction:column;gap:4px">
+                    <span style="font-size:14.5px;font-weight:650;color:#991B1B">Completion Rejected</span>
+                    <span style="font-size:13.5px;color:#7F1D1D;line-height:1.6">{{ task.rejection }}</span>
+                    <span style="font-size:12.5px;color:#B91C1C">This campaign allows one resubmission before the deadline.</span>
+                  </span>
+                </div>
+              </sc-if>
+
+              <div style="display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start">
+                <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                    <div style="padding:18px 22px;border-bottom:1px solid #E0E8E7"><span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Task instructions</span></div>
+                    <div style="padding:20px 22px;display:flex;flex-direction:column;gap:18px">
+                      <p style="margin:0;font-size:14.5px;color:#2E4644;line-height:1.7">{{ task.instructions }}</p>
+                      <div style="display:flex;flex-direction:column;gap:10px">
+                        <span style="font-size:12.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Required deliverables</span>
+                        <sc-for list="{{ task.checklist }}" as="d" hint-placeholder-count="3">
+                          <span style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:#08201F;line-height:1.55"><span style="width:19px;height:19px;border-radius:6px;flex:none;background:#E7F5F7;color:#0A5F6B;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px">✓</span>{{ d.text }}</span>
+                        </sc-for>
+                      </div>
+                      <span style="display:flex;flex-direction:column;gap:4px;background:#F6F9F8;border-radius:12px;padding:13px 15px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Advertiser instructions</span><span style="font-size:13.5px;color:#2E4644;line-height:1.6">{{ task.note }}</span></span>
+                    </div>
+                  </div>
+
+                  <sc-if value="{{ completeOpen }}">
+                    <div style="background:#FFFFFF;border:1px solid #0E8494;border-radius:16px;box-shadow:0 8px 28px -18px rgba(10,95,107,.4);overflow:hidden">
+                      <div style="padding:18px 22px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:16px">
+                        <span style="display:flex;flex-direction:column;gap:3px">
+                          <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Complete task</span>
+                          <span style="font-size:13px;color:#6A817F">Submit what the advertiser needs to check your work.</span>
+                        </span>
+                        <button type="button" onClick="{{ closeComplete }}" style="font:inherit;width:34px;height:34px;border-radius:10px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;font-size:15px;cursor:pointer;flex:none" style-hover="background:#F6F9F8">×</button>
+                      </div>
+                      <div style="padding:20px 22px;display:flex;flex-direction:column;gap:18px">
+                        <sc-for list="{{ completeFields }}" as="f" hint-placeholder-count="1">
+                          <label style="display:flex;flex-direction:column;gap:7px">
+                            <span style="font-size:13px;font-weight:600">{{ f.label }}</span>
+                            <sc-if value="{{ f.isText }}" hint-placeholder-val="{{ true }}">
+                              <input type="text" value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.placeholder }}" style="height:46px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;background:#FFFFFF;color:#08201F;outline:none" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)" />
+                            </sc-if>
+                            <sc-if value="{{ f.isArea }}">
+                              <textarea value="{{ f.value }}" onChange="{{ f.onChange }}" rows="3" placeholder="{{ f.placeholder }}" style="border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px;font-size:14.5px;line-height:1.6;background:#FFFFFF;color:#08201F;outline:none;resize:vertical" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)"></textarea>
+                            </sc-if>
+                          </label>
+                        </sc-for>
+                        <sc-if value="{{ noProofNeeded }}">
+                          <span style="display:flex;gap:11px;background:#F6F9F8;border-radius:12px;padding:13px 15px"><span style="width:6px;height:6px;border-radius:50%;background:#0E8494;margin-top:7px;flex:none"></span><span style="font-size:13.5px;color:#4A6260;line-height:1.6">This task needs no proof link. Submit the completion and the advertiser will check the follow on their side.</span></span>
+                        </sc-if>
+                        <button type="button" onClick="{{ onScreenshot }}" style="font:inherit;display:flex;align-items:center;gap:11px;border:1px dashed {{ screenshotBorder }};background:{{ screenshotBg }};border-radius:12px;padding:14px 15px;cursor:pointer;text-align:left">
+                          <span style="width:26px;height:26px;border-radius:8px;flex:none;background:#E7F5F7;color:#0A5F6B;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">+</span>
+                          <span style="display:flex;flex-direction:column;gap:2px">
+                            <span style="font-size:13.5px;font-weight:600;color:#08201F">{{ screenshotLabel }}</span>
+                            <span style="font-size:12.5px;color:#6A817F">Useful if the post is edited later. Never required.</span>
+                          </span>
+                        </button>
+                        <label style="display:flex;flex-direction:column;gap:7px">
+                          <span style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13px;font-weight:600">Note for the advertiser</span><span style="font-size:12px;color:#6A817F">Optional</span></span>
+                          <textarea value="{{ proofNote }}" onChange="{{ onProofNote }}" rows="3" placeholder="Anything they should know about the post." style="border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px;font-size:14.5px;line-height:1.6;background:#FFFFFF;color:#08201F;outline:none;resize:vertical" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)"></textarea>
+                        </label>
+                        <sc-if value="{{ hasProofError }}"><span style="font-size:12.5px;font-weight:550;color:#B91C1C">{{ proofError }}</span></sc-if>
+                      </div>
+                      <div style="padding:16px 22px;border-top:1px solid #E0E8E7;display:flex;align-items:center;justify-content:flex-end;gap:10px">
+                        <button type="button" onClick="{{ closeComplete }}" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 18px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;cursor:pointer" style-hover="background:#F6F9F8">Cancel</button>
+                        <button type="button" onClick="{{ submitComplete }}" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 20px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Submit Completion</button>
+                      </div>
+                    </div>
+                  </sc-if>
+                </div>
+
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                  <div style="padding:16px 20px;border-bottom:1px solid #E0E8E7"><span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em">Status</span></div>
+                  <div style="padding:18px 20px;display:flex;flex-direction:column;gap:0">
+                    <sc-for list="{{ timeline }}" as="s" hint-placeholder-count="7">
+                      <div style="display:flex;gap:12px">
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:none">
+                          <span style="width:28px;height:28px;border-radius:9px;flex:none;background:{{ s.dotBg }};color:{{ s.dotFg }};border:1px solid {{ s.dotBorder }};font-size:12px;font-weight:650;display:flex;align-items:center;justify-content:center">{{ s.n }}</span>
+                          <sc-if value="{{ s.hasLine }}" hint-placeholder-val="{{ true }}"><span style="width:2px;height:22px;background:{{ s.lineBg }};display:block;border-radius:2px"></span></sc-if>
+                        </div>
+                        <span style="display:flex;flex-direction:column;gap:2px;padding-bottom:8px;min-width:0">
+                          <span style="font-size:13.5px;font-weight:{{ s.weight }};color:{{ s.fg }}">{{ s.label }}</span>
+                          <span style="font-size:12.5px;color:#6A817F;line-height:1.5">{{ s.meta }}</span>
+                        </span>
+                      </div>
+                    </sc-for>
+                    <span style="font-size:12px;color:#6A817F;line-height:1.55;margin-top:6px">The advertiser approves the work, then the agency releases your payment.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- COMPLETED TASKS -->
+          <sc-if value="{{ isCompleted }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Completed Tasks</h2>
+                  <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">Approved submissions, with the payment status for each one.</p>
+                </div>
+                <span style="font-size:13.5px;color:#6A817F">{{ completedCount }}</span>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                <div style="display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr 1.3fr 1fr;gap:16px;padding:13px 22px;background:#F6F9F8;border-bottom:1px solid #E0E8E7">
+                  <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Campaign</span>
+                  <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Platform</span>
+                  <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Creator reward</span>
+                  <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Approved</span>
+                  <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Payment</span>
+                  <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Paid date</span>
+                </div>
+                <sc-for list="{{ completedRows }}" as="c" hint-placeholder-count="6">
+                  <div style="display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr 1.3fr 1fr;gap:16px;align-items:center;padding:15px 22px;border-bottom:1px solid #EFF4F3">
+                    <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                      <span style="font-size:14.5px;font-weight:600;letter-spacing:-0.01em">{{ c.campaign }}</span>
+                      <span style="font-size:12.5px;color:#6A817F">{{ c.advertiser }} · {{ c.task }}</span>
+                    </span>
+                    <span style="font-size:13.5px;color:#2E4644">{{ c.platform }}</span>
+                    <span style="font-size:14px;font-weight:600;font-variant-numeric:tabular-nums">{{ c.reward }}</span>
+                    <span style="font-size:13.5px;color:#2E4644">{{ c.approved }}</span>
+                    <span style="justify-self:start;font-size:12px;font-weight:600;color:{{ c.paymentFg }};background:{{ c.paymentBg }};border-radius:999px;padding:5px 11px">{{ c.payment }}</span>
+                    <span style="font-size:13.5px;color:#2E4644">{{ c.paidOn }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- EARNINGS -->
+          <sc-if value="{{ isEarnings }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Wallet</h2>
+                <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">Your balance in USD. Approved job payments land here, and you withdraw to a bank or PayPal whenever you want.</p>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+                <sc-for list="{{ earningsCards }}" as="e" hint-placeholder-count="4">
+                  <div style="background:{{ e.bg }};border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:20px;display:flex;flex-direction:column;gap:8px">
+                    <span style="font-size:12px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:{{ e.sub }}">{{ e.label }}</span>
+                    <span style="font-size:28px;font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums;color:{{ e.fg }}">{{ e.value }}</span>
+                    <span style="font-size:12.5px;color:{{ e.sub }};line-height:1.5">{{ e.hint }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                <div style="padding:18px 22px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:16px">
+                  <span style="display:flex;flex-direction:column;gap:3px">
+                    <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Payment history</span>
+                    <span style="font-size:13px;color:#6A817F">One row per approved campaign reward.</span>
+                  </span>
+                  <span style="font-size:12.5px;color:#6A817F">Payments are released manually by the agency after approval.</span>
+                </div>
+                <div style="display:grid;grid-template-columns:2.4fr 1fr 1fr 1.3fr 1fr;gap:16px;padding:13px 22px;background:#F6F9F8;border-bottom:1px solid #E0E8E7">
+                  <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Campaign</span>
+                  <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Platform</span>
+                  <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Amount</span>
+                  <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Status</span>
+                  <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Date</span>
+                </div>
+                <sc-for list="{{ payments }}" as="p" hint-placeholder-count="6">
+                  <div style="display:grid;grid-template-columns:2.4fr 1fr 1fr 1.3fr 1fr;gap:16px;align-items:center;padding:15px 22px;border-bottom:1px solid #EFF4F3">
+                    <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                      <span style="font-size:14.5px;font-weight:600;letter-spacing:-0.01em">{{ p.campaign }}</span>
+                      <span style="font-size:12.5px;color:#6A817F">{{ p.advertiser }}</span>
+                    </span>
+                    <span style="font-size:13.5px;color:#2E4644">{{ p.platform }}</span>
+                    <span style="font-size:14px;font-weight:600;font-variant-numeric:tabular-nums">{{ p.amount }}</span>
+                    <span style="justify-self:start;font-size:12px;font-weight:600;color:{{ p.statusFg }};background:{{ p.statusBg }};border-radius:999px;padding:5px 11px">{{ p.status }}</span>
+                    <span style="font-size:13.5px;color:#2E4644">{{ p.date }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- PROFILE -->
+          <sc-if value="{{ isProfile }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Profile</h2>
+                <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">This is what an advertiser reads when deciding whether to select you.</p>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start">
+                <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:24px;display:flex;gap:20px">
+                    <span style="width:88px;height:88px;border-radius:20px;flex:none;background:#EEF7E3;color:#0A5F6B;font-size:26px;font-weight:700;display:flex;align-items:center;justify-content:center">AN</span>
+                    <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+                      <span style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+                        <span style="font-size:22px;font-weight:700;letter-spacing:-0.025em">{{ profile.name }}</span>
+                        <span style="font-size:13.5px;color:#6A817F">{{ profile.handle }} · {{ profile.city }}</span>
+                      </span>
+                      <p style="margin:0;font-size:14.5px;color:#2E4644;line-height:1.7">{{ profile.bio }}</p>
+                      <span style="display:flex;flex-wrap:wrap;gap:6px">
+                        <sc-for list="{{ profile.categories }}" as="c" hint-placeholder-count="3">
+                          <span style="font-size:12px;font-weight:600;color:#0A5F6B;background:#EEF7E3;border-radius:999px;padding:5px 11px">{{ c }}</span>
+                        </sc-for>
+                      </span>
+                      <button type="button" style="font:inherit;align-self:flex-start;font-size:13.5px;font-weight:550;height:40px;padding:0 15px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer;margin-top:2px" style-hover="background:#F6F9F8">Edit profile</button>
+                    </div>
+                  </div>
+
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                    <div style="padding:18px 22px;border-bottom:1px solid #E0E8E7"><span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Previous campaigns</span></div>
+                    <sc-for list="{{ profile.history }}" as="h" hint-placeholder-count="5">
+                      <div style="padding:14px 22px;border-bottom:1px solid #EFF4F3;display:flex;align-items:center;gap:16px">
+                        <span style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0">
+                          <span style="font-size:14.5px;font-weight:600">{{ h.campaign }}</span>
+                          <span style="font-size:12.5px;color:#6A817F">{{ h.advertiser }} · {{ h.task }}</span>
+                        </span>
+                        <span style="font-size:12px;font-weight:600;color:#047857;background:#ECFDF5;border-radius:999px;padding:5px 11px;flex:none">Approved {{ h.approved }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:20px">
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:20px;display:flex;flex-direction:column;gap:12px">
+                    <span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em">Linked social accounts</span>
+                    <sc-for list="{{ profile.socials }}" as="a" hint-placeholder-count="4">
+                      <span style="display:flex;align-items:center;gap:11px;border:1px solid #E0E8E7;border-radius:12px;padding:11px 13px">
+                        <span style="width:28px;height:28px;border-radius:9px;flex:none;background:{{ a.iconBg }};color:{{ a.iconFg }};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ a.initial }}</span>
+                        <span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span style="font-size:13.5px;font-weight:600;color:{{ a.fg }}">{{ a.label }}</span><span style="font-size:12px;color:#6A817F">{{ a.detail }}</span></span>
+                        <span style="margin-left:auto;font-size:12.5px;font-weight:600;color:#2E4644;flex:none;font-variant-numeric:tabular-nums">{{ a.followers }}</span>
+                      </span>
+                    </sc-for>
+                    <span style="font-size:12px;color:#6A817F;line-height:1.55">Follower counts are self-reported. Advertisers open your profile to check them.</span>
+                  </div>
+
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:20px;display:flex;flex-direction:column;gap:12px">
+                    <span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em">Portfolio links</span>
+                    <sc-for list="{{ profile.portfolio }}" as="p" hint-placeholder-count="3">
+                      <span style="display:flex;flex-direction:column;gap:2px;border:1px solid #E0E8E7;border-radius:12px;padding:11px 13px;cursor:pointer" style-hover="border-color:#A9DAE1;background:#F6F9F8">
+                        <span style="font-size:13.5px;font-weight:600">{{ p.label }}</span>
+                        <span style="font-size:12.5px;color:#0E8494;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ p.url }}</span>
+                      </span>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- SETTINGS -->
+          <sc-if value="{{ isSettings }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Settings</h2>
+                <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">Account details, withdrawal destination and what you get notified about.</p>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:20px;display:flex;flex-direction:column;gap:14px">
+                  <span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em">Account</span>
+                  <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:600">Full name</span><input type="text" value="Ana Rivera" readonly="readonly" style="height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;background:#FFFFFF;color:#08201F;outline:none" /></label>
+                  <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:600">Email</span><input type="text" value="ana.rivera@email.com" readonly="readonly" style="height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;background:#FFFFFF;color:#08201F;outline:none" /></label>
+                  <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:600">Phone</span><input type="text" value="+1 300 1234567" readonly="readonly" style="height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;font-size:14.5px;background:#FFFFFF;color:#08201F;outline:none" /></label>
+                </div>
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:20px;display:flex;flex-direction:column;gap:14px">
+                  <span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em">Withdrawal destination</span>
+                  <span style="display:flex;flex-direction:column;gap:3px;border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Method</span><span style="font-size:14px;font-weight:600">Bank transfer · Chase ••••4821</span></span>
+                  <span style="display:flex;flex-direction:column;gap:3px;border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Account title</span><span style="font-size:14px;font-weight:600">Ana Rivera</span></span>
+                  <span style="font-size:12.5px;color:#6A817F;line-height:1.55">Wallet withdrawals are sent to this destination. Keep it up to date or transfers will be delayed.</span>
+                  <button type="button" style="font:inherit;align-self:flex-start;font-size:13.5px;font-weight:550;height:40px;padding:0 15px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">Update payout details</button>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+
+      <!-- APPLY MODAL -->
+      <sc-if value="{{ applyOpen }}">
+        <div style="position:absolute;inset:0;z-index:20;background:rgba(8,32,31,.5);display:flex;align-items:center;justify-content:center;padding:40px">
+          <div style="width:560px;max-width:100%;background:#FFFFFF;border-radius:20px;box-shadow:0 40px 80px -30px rgba(8,32,31,.5);overflow:hidden;display:flex;flex-direction:column">
+            <div style="padding:20px 24px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:16px">
+              <span style="display:flex;flex-direction:column;gap:3px">
+                <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">{{ modalTitle }}</span>
+                <span style="font-size:13px;color:#6A817F">{{ modalSub }}</span>
+              </span>
+              <button type="button" onClick="{{ closeApply }}" style="font:inherit;width:34px;height:34px;border-radius:10px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;font-size:15px;cursor:pointer;flex:none" style-hover="background:#F6F9F8">×</button>
+            </div>
+
+            <sc-if value="{{ applyForm }}">
+              <div style="padding:22px 24px;display:flex;flex-direction:column;gap:18px">
+                <div style="border:1px solid #E0E8E7;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px">
+                  <span style="font-size:15px;font-weight:650;letter-spacing:-0.02em">{{ detail.title }}</span>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                    <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Reward</span><span style="font-size:14.5px;font-weight:650;font-variant-numeric:tabular-nums">{{ detail.reward }}</span></span>
+                    <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Task</span><span style="font-size:14.5px;font-weight:600">{{ detail.taskType }}</span></span>
+                    <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Task deadline</span><span style="font-size:14.5px;font-weight:600">{{ detail.taskDeadline }}</span></span>
+                    <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Advertiser</span><span style="font-size:14.5px;font-weight:600">{{ detail.advertiser }}</span></span>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <span style="font-size:13px;font-weight:600">Applying with</span>
+                  <span style="display:flex;align-items:center;gap:11px;border:1px solid #0E8494;background:#E7F5F7;border-radius:12px;padding:12px 13px">
+                    <span style="width:30px;height:30px;border-radius:9px;flex:none;background:#0E8494;color:#FFFFFF;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ detail.acctInitial }}</span>
+                    <span style="display:flex;flex-direction:column;gap:1px"><span style="font-size:13.5px;font-weight:600;color:#0A5F6B">{{ detail.acctLabel }}</span><span style="font-size:12.5px;color:#4A6260">{{ detail.acctDetail }}</span></span>
+                    <span style="margin-left:auto;font-size:12px;font-weight:700;color:#0A5F6B">✓</span>
+                  </span>
+                </div>
+                <label style="display:flex;flex-direction:column;gap:7px">
+                  <span style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13px;font-weight:600">Message to the advertiser</span><span style="font-size:12px;color:#6A817F">Optional</span></span>
+                  <textarea value="{{ applyMessage }}" onChange="{{ onApplyMessage }}" rows="4" placeholder="Tell them why you fit this campaign, or link a past post." style="border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px;font-size:14.5px;line-height:1.6;background:#FFFFFF;color:#08201F;outline:none;resize:vertical" style-focus="border-color:#0E8494;box-shadow:0 0 0 3px rgba(10,95,107,.12)"></textarea>
+                </label>
+                <span style="display:flex;gap:11px;background:#F6F9F8;border-radius:12px;padding:13px 15px"><span style="width:6px;height:6px;border-radius:50%;background:#0E8494;margin-top:7px;flex:none"></span><span style="font-size:13px;color:#4A6260;line-height:1.6">Your application goes to the advertiser for manual review. If they select you, the task appears under Active Tasks.</span></span>
+              </div>
+              <div style="padding:16px 24px;border-top:1px solid #E0E8E7;display:flex;align-items:center;justify-content:flex-end;gap:10px">
+                <button type="button" onClick="{{ closeApply }}" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 18px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;cursor:pointer" style-hover="background:#F6F9F8">Cancel</button>
+                <button type="button" onClick="{{ submitApply }}" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 20px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Submit Application</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ applyDone }}">
+              <div style="padding:32px 24px;display:flex;flex-direction:column;gap:14px;align-items:flex-start">
+                <span style="width:48px;height:48px;border-radius:15px;background:#ECFDF5;color:#047857;font-size:19px;font-weight:700;display:flex;align-items:center;justify-content:center">✓</span>
+                <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Application submitted successfully.</span>
+                <span style="font-size:14.5px;color:#4A6260;line-height:1.65">Your application to <strong style="font-weight:600;color:#08201F">{{ detail.title }}</strong> is now <strong style="font-weight:600;color:#B45309">Pending</strong>. {{ detail.advertiser }} reviews applicants by hand and selects creators after applications close on {{ detail.appDeadline }}.</span>
+                <div style="display:flex;gap:10px;margin-top:4px">
+                  <button type="button" onClick="{{ goApplications }}" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 20px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">View my applications</button>
+                  <button type="button" onClick="{{ browseMore }}" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 18px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">Browse more campaigns</button>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+
+  <!-- 02 EMPTY STATES -->
+  <section data-screen-label="Creator empty states" style="display:flex;flex-direction:column;gap:20px;flex:none">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">02</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Empty states</span>
+      <span style="font-size:14px;color:#6A817F">Every one carries the next useful action</span>
+    </div>
+    <div style="width:1440px;flex:none;display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+
+      <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:32px 28px;display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center;min-height:280px;justify-content:center">
+        <span style="width:52px;height:52px;border-radius:16px;background:#EFF4F3;display:flex;align-items:center;justify-content:center"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:50%;display:block"></span></span>
+        <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">No campaigns found</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6;max-width:300px">Nothing matches these filters right now. Widen the platform or category, or clear the filters to see everything open.</span>
+        <button type="button" style="font:inherit;font-size:13.5px;font-weight:550;height:42px;padding:0 17px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;margin-top:4px;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Clear filters</button>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:32px 28px;display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center;min-height:280px;justify-content:center">
+        <span style="width:52px;height:52px;border-radius:16px;background:#EFF4F3;display:flex;align-items:center;justify-content:center"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:5px;display:block"></span></span>
+        <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">No applications yet</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6;max-width:300px">Applications you send show up here with their status. Start with a campaign that matches a connected account.</span>
+        <button type="button" style="font:inherit;font-size:13.5px;font-weight:550;height:42px;padding:0 17px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;margin-top:4px;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Find Campaigns</button>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:32px 28px;display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center;min-height:280px;justify-content:center">
+        <span style="width:52px;height:52px;border-radius:16px;background:#E7F5F7;display:flex;align-items:center;justify-content:center"><span style="width:18px;height:18px;border:2px solid #0E8494;border-radius:5px;display:block"></span></span>
+        <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">No active tasks</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6;max-width:300px">When an advertiser selects you, the task and its deadline land here. Three of your applications are still being reviewed.</span>
+        <button type="button" style="font:inherit;font-size:13.5px;font-weight:550;height:42px;padding:0 17px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer;margin-top:4px" style-hover="background:#F6F9F8">View my applications</button>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:32px 28px;display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center;min-height:280px;justify-content:center">
+        <span style="width:52px;height:52px;border-radius:16px;background:#EFF4F3;display:flex;align-items:center;justify-content:center"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:5px;display:block"></span></span>
+        <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">No completed tasks</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6;max-width:300px">Approved submissions collect here with their payment status. Finish an active task to see your first one.</span>
+        <button type="button" style="font:inherit;font-size:13.5px;font-weight:550;height:42px;padding:0 17px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer;margin-top:4px" style-hover="background:#F6F9F8">Go to active tasks</button>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:32px 28px;display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center;min-height:280px;justify-content:center">
+        <span style="width:52px;height:52px;border-radius:16px;background:#ECFDF5;display:flex;align-items:center;justify-content:center"><span style="width:18px;height:18px;border:2px solid #047857;border-radius:5px;display:block"></span></span>
+        <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">Nothing in your wallet yet</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6;max-width:300px">Your first payment lands in your wallet once an advertiser approves a submission.</span>
+        <button type="button" style="font:inherit;font-size:13.5px;font-weight:550;height:42px;padding:0 17px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;margin-top:4px;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Find Campaigns</button>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #FDE68A;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:32px 28px;display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center;min-height:280px;justify-content:center">
+        <span style="width:52px;height:52px;border-radius:16px;background:#FEF3C7;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;color:#B45309">!</span>
+        <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">No social accounts connected</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6;max-width:300px">You can browse everything, but a campaign that requires a platform needs that account connected before you apply.</span>
+        <button type="button" style="font:inherit;font-size:13.5px;font-weight:550;height:42px;padding:0 17px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;margin-top:4px;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Connect an account</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 MOBILE -->
+  <section data-screen-label="Creator mobile" style="display:flex;flex-direction:column;gap:20px;flex:none">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">03</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Mobile</span>
+      <span style="font-size:14px;color:#6A817F">Bottom navigation, stacked cards, compact filters, sticky Apply</span>
+    </div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;flex:none">
+
+      <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:24px;background:#F6F9F8;box-shadow:0 24px 60px -32px rgba(8,32,31,.3);overflow:hidden;display:flex;flex-direction:column;min-height:820px">
+        <div style="height:56px;background:#FFFFFF;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;gap:10px;padding:0 16px;flex:none">
+          <span style="width:26px;height:26px;border-radius:8px;background:#0E8494;display:flex;align-items:center;justify-content:center"><span style="width:9px;height:9px;border-radius:3px;border:2px solid #FFFFFF;display:block"></span></span>
+          <span style="font-size:15px;font-weight:700;letter-spacing:-0.025em">Find Campaigns</span>
+          <span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#0A5F6B;background:#EEF7E3;border-radius:999px;padding:4px 9px">Influencer</span>
+        </div>
+        <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border-bottom:1px solid #E0E8E7;flex:none">
+          <span style="height:44px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;display:flex;align-items:center;font-size:14.5px;color:#93A6A4">Search campaigns...</span>
+          <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px">
+            <span style="flex:none;font-size:13px;font-weight:600;color:#FFFFFF;background:#0B2523;border-radius:999px;padding:9px 13px;white-space:nowrap">Eligible only</span>
+            <span style="flex:none;font-size:13px;color:#08201F;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:999px;padding:9px 13px;white-space:nowrap">Platform</span>
+            <span style="flex:none;font-size:13px;color:#08201F;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:999px;padding:9px 13px;white-space:nowrap">Category</span>
+            <span style="flex:none;font-size:13px;color:#08201F;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:999px;padding:9px 13px;white-space:nowrap">Reward</span>
+          </div>
+        </div>
+        <div style="padding:14px 16px 20px;display:flex;flex-direction:column;gap:12px">
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:flex-start;gap:11px">
+              <span style="width:36px;height:36px;border-radius:11px;flex:none;background:#EFF4F3;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#4A6260">ZA</span>
+              <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em;line-height:1.3">Summer Collection Promotion</span><span style="font-size:12.5px;color:#6A817F">Zeenat Apparel</span></span>
+            </div>
+            <span style="display:flex;flex-wrap:wrap;gap:6px">
+              <span style="font-size:12px;font-weight:600;color:#08201F;background:#EFF4F3;border-radius:999px;padding:5px 10px">Instagram</span>
+              <span style="font-size:12px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border-radius:999px;padding:5px 10px">Comment</span>
+              <span style="font-size:12px;font-weight:600;color:#0A5F6B;background:#EEF7E3;border-radius:999px;padding:5px 10px">Fashion</span>
+            </span>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <span style="display:flex;flex-direction:column;gap:1px;background:#F6F9F8;border-radius:11px;padding:9px 11px"><span style="font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Reward</span><span style="font-size:14.5px;font-weight:650;font-variant-numeric:tabular-nums">$10</span></span>
+              <span style="display:flex;flex-direction:column;gap:1px;background:#F6F9F8;border-radius:11px;padding:9px 11px"><span style="font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Min followers</span><span style="font-size:14.5px;font-weight:650;font-variant-numeric:tabular-nums">10K+</span></span>
+              <span style="display:flex;flex-direction:column;gap:1px;background:#F6F9F8;border-radius:11px;padding:9px 11px"><span style="font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Creators</span><span style="font-size:14.5px;font-weight:650;font-variant-numeric:tabular-nums">100</span></span>
+              <span style="display:flex;flex-direction:column;gap:1px;background:#F6F9F8;border-radius:11px;padding:9px 11px"><span style="font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Closes</span><span style="font-size:14.5px;font-weight:650">Aug 25</span></span>
+            </div>
+            <span style="display:flex;align-items:center;gap:8px"><span style="font-size:11.5px;font-weight:600;color:#047857;background:#ECFDF5;border-radius:999px;padding:5px 10px">Eligible to Apply</span><span style="font-size:12px;color:#6A817F">Instagram connected</span></span>
+            <span style="font-size:15px;font-weight:550;height:48px;border-radius:12px;background:#0E8494;color:#FFFFFF;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(10,95,107,.28)">View Campaign</span>
+          </div>
+
+          <div style="background:#FFFFFF;border:1px solid #FDE68A;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:flex-start;gap:11px">
+              <span style="width:36px;height:36px;border-radius:11px;flex:none;background:#EFF4F3;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#4A6260">NT</span>
+              <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em;line-height:1.3">Gaming Headset Unboxing</span><span style="font-size:12.5px;color:#6A817F">Nexa Tech</span></span>
+            </div>
+            <span style="display:flex;flex-wrap:wrap;gap:6px">
+              <span style="font-size:12px;font-weight:600;color:#08201F;background:#EFF4F3;border-radius:999px;padding:5px 10px">YouTube</span>
+              <span style="font-size:12px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border-radius:999px;padding:5px 10px">Post</span>
+              <span style="font-size:12px;font-weight:600;color:#0A5F6B;background:#EEF7E3;border-radius:999px;padding:5px 10px">Gaming</span>
+            </span>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <span style="display:flex;flex-direction:column;gap:1px;background:#F6F9F8;border-radius:11px;padding:9px 11px"><span style="font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Reward</span><span style="font-size:14.5px;font-weight:650;font-variant-numeric:tabular-nums">$120</span></span>
+              <span style="display:flex;flex-direction:column;gap:1px;background:#F6F9F8;border-radius:11px;padding:9px 11px"><span style="font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Min followers</span><span style="font-size:14.5px;font-weight:650;font-variant-numeric:tabular-nums">50K+</span></span>
+            </div>
+            <span style="display:flex;align-items:center;gap:8px"><span style="font-size:11.5px;font-weight:600;color:#B45309;background:#FEF3C7;border-radius:999px;padding:5px 10px">YouTube required</span></span>
+            <span style="font-size:12.5px;color:#B45309;line-height:1.5">YouTube account required to apply.</span>
+            <span style="font-size:15px;font-weight:550;height:48px;border-radius:12px;border:1px solid #E0E8E7;color:#08201F;display:flex;align-items:center;justify-content:center">Connect YouTube</span>
+          </div>
+        </div>
+        <div style="margin-top:auto;background:#FFFFFF;border-top:1px solid #E0E8E7;padding:9px 8px 12px;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;flex:none">
+          <span style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:5px;display:block"></span><span style="font-size:10.5px;color:#6A817F">Home</span></span>
+          <span style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0"><span style="width:18px;height:18px;border:2px solid #0E8494;border-radius:50%;display:block"></span><span style="font-size:10.5px;font-weight:600;color:#0E8494">Find</span></span>
+          <span style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:5px;display:block"></span><span style="font-size:10.5px;color:#6A817F">Tasks</span></span>
+          <span style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:5px;display:block"></span><span style="font-size:10.5px;color:#6A817F">Earnings</span></span>
+          <span style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:50%;display:block"></span><span style="font-size:10.5px;color:#6A817F">Profile</span></span>
+        </div>
+      </div>
+
+      <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:24px;background:#F6F9F8;box-shadow:0 24px 60px -32px rgba(8,32,31,.3);overflow:hidden;display:flex;flex-direction:column;min-height:820px">
+        <div style="height:56px;background:#FFFFFF;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;gap:12px;padding:0 16px;flex:none">
+          <span style="font-size:16px;color:#4A6260">←</span>
+          <span style="font-size:15px;font-weight:650;letter-spacing:-0.015em">Campaign</span>
+          <span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#047857;background:#ECFDF5;border-radius:999px;padding:4px 9px">Eligible</span>
+        </div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:14px">
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px">
+            <span style="display:flex;flex-wrap:wrap;gap:6px">
+              <span style="font-size:11.5px;font-weight:600;color:#0A5F6B;background:#EEF7E3;border-radius:999px;padding:4px 10px">Fashion</span>
+              <span style="font-size:11.5px;font-weight:600;color:#08201F;background:#EFF4F3;border-radius:999px;padding:4px 10px">Instagram</span>
+              <span style="font-size:11.5px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border-radius:999px;padding:4px 10px">Comment</span>
+            </span>
+            <span style="font-size:20px;font-weight:700;letter-spacing:-0.025em;line-height:1.25">Summer Collection Promotion</span>
+            <span style="font-size:13px;color:#6A817F">Zeenat Apparel · New York</span>
+            <span style="display:flex;align-items:baseline;gap:8px"><span style="font-size:24px;font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums">$10</span><span style="font-size:12.5px;color:#6A817F">per creator</span></span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px">
+            <span style="font-size:14.5px;font-weight:650;letter-spacing:-0.02em">Requirements</span>
+            <span style="display:flex;align-items:center;gap:10px;border:1px solid #E0E8E7;border-radius:12px;padding:10px 12px"><span style="width:20px;height:20px;border-radius:6px;background:#ECFDF5;color:#047857;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">✓</span><span style="font-size:13.5px;font-weight:600">Instagram · @ana.styles</span></span>
+            <span style="display:flex;align-items:center;gap:10px;border:1px solid #E0E8E7;border-radius:12px;padding:10px 12px"><span style="width:20px;height:20px;border-radius:6px;background:#ECFDF5;color:#047857;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">✓</span><span style="font-size:13.5px;font-weight:600">10K+ followers · you have 24.8K</span></span>
+            <span style="font-size:12px;color:#6A817F;line-height:1.5">Follower numbers are self-reported and checked by the advertiser.</span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px">
+            <span style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:14.5px;font-weight:650;letter-spacing:-0.02em">Task instructions</span><span style="font-size:12.5px;font-weight:600;color:#0E8494">Expand</span></span>
+            <span style="display:flex;align-items:flex-start;gap:9px;font-size:13.5px;line-height:1.55"><span style="width:18px;height:18px;border-radius:6px;background:#E7F5F7;color:#0A5F6B;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px">✓</span>Comment on the launch post</span>
+            <span style="display:flex;align-items:flex-start;gap:9px;font-size:13.5px;line-height:1.55"><span style="width:18px;height:18px;border-radius:6px;background:#E7F5F7;color:#0A5F6B;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px">✓</span>Mention @zeenatapparel</span>
+            <span style="display:flex;align-items:flex-start;gap:9px;font-size:13.5px;line-height:1.55"><span style="width:18px;height:18px;border-radius:6px;background:#E7F5F7;color:#0A5F6B;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px">✓</span>Use #SummerGlow</span>
+          </div>
+        </div>
+        <div style="margin-top:auto;background:#FFFFFF;border-top:1px solid #E0E8E7;padding:12px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:none">
+          <span style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;color:#6A817F">Applications close Aug 25</span><span style="font-size:12.5px;color:#6A817F">64 of 100 applied</span></span>
+          <span style="font-size:15.5px;font-weight:600;height:52px;border-radius:14px;background:#0E8494;color:#FFFFFF;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(10,95,107,.32)">Apply Now</span>
+        </div>
+      </div>
+
+      <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:24px;background:#F6F9F8;box-shadow:0 24px 60px -32px rgba(8,32,31,.3);overflow:hidden;display:flex;flex-direction:column;min-height:820px">
+        <div style="height:56px;background:#FFFFFF;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;gap:12px;padding:0 16px;flex:none">
+          <span style="font-size:16px;color:#4A6260">←</span>
+          <span style="font-size:15px;font-weight:650;letter-spacing:-0.015em">Complete task</span>
+          <span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border-radius:999px;padding:4px 9px">In progress</span>
+        </div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:14px">
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:16px;font-weight:650;letter-spacing:-0.02em;line-height:1.3">Winter Collection Launch</span>
+            <span style="font-size:13px;color:#6A817F">Brand House · Instagram · 1 reel + 2 stories</span>
+            <span style="display:flex;align-items:baseline;gap:10px"><span style="font-size:20px;font-weight:700;font-variant-numeric:tabular-nums">$50</span><span style="font-size:12.5px;font-weight:600;color:#B45309">Due in 3 days</span></span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #0E8494;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:14px">
+            <span style="font-size:14.5px;font-weight:650;letter-spacing:-0.02em">Submit your work</span>
+            <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12.5px;font-weight:600">Paste Reel URL</span><span style="height:48px;border:1px solid #E0E8E7;border-radius:12px;padding:0 14px;display:flex;align-items:center;font-size:14.5px;color:#93A6A4">instagram.com/reel/…</span></label>
+            <span style="display:flex;align-items:center;gap:10px;border:1px dashed #E0E8E7;border-radius:12px;padding:12px 14px"><span style="width:24px;height:24px;border-radius:8px;background:#E7F5F7;color:#0A5F6B;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">+</span><span style="display:flex;flex-direction:column;gap:1px"><span style="font-size:13px;font-weight:600">Attach a screenshot (optional)</span><span style="font-size:12px;color:#6A817F">Never required</span></span></span>
+            <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12.5px;font-weight:600">Note for the advertiser (optional)</span><span style="height:72px;border:1px solid #E0E8E7;border-radius:12px;padding:11px 14px;font-size:14.5px;color:#93A6A4;line-height:1.5">Anything they should know…</span></label>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px">
+            <span style="font-size:14.5px;font-weight:650;letter-spacing:-0.02em">Status</span>
+            <span style="display:flex;align-items:center;gap:10px"><span style="width:24px;height:24px;border-radius:8px;background:#E7F5F7;color:#0A5F6B;font-size:11px;font-weight:650;display:flex;align-items:center;justify-content:center;flex:none">1</span><span style="font-size:13.5px;color:#2E4644">Selected</span></span>
+            <span style="display:flex;align-items:center;gap:10px"><span style="width:24px;height:24px;border-radius:8px;background:#0E8494;color:#FFFFFF;font-size:11px;font-weight:650;display:flex;align-items:center;justify-content:center;flex:none">2</span><span style="font-size:13.5px;font-weight:650">Task In Progress</span></span>
+            <span style="display:flex;align-items:center;gap:10px"><span style="width:24px;height:24px;border-radius:8px;background:#FFFFFF;border:1px solid #E0E8E7;color:#93A6A4;font-size:11px;font-weight:650;display:flex;align-items:center;justify-content:center;flex:none">3</span><span style="font-size:13.5px;color:#93A6A4">Task Completed</span></span>
+            <span style="display:flex;align-items:center;gap:10px"><span style="width:24px;height:24px;border-radius:8px;background:#FFFFFF;border:1px solid #E0E8E7;color:#93A6A4;font-size:11px;font-weight:650;display:flex;align-items:center;justify-content:center;flex:none">4</span><span style="font-size:13.5px;color:#93A6A4">Waiting for Advertiser Review</span></span>
+          </div>
+        </div>
+        <div style="margin-top:auto;background:#FFFFFF;border-top:1px solid #E0E8E7;padding:12px 16px 16px;flex:none">
+          <span style="font-size:15.5px;font-weight:600;height:52px;border-radius:14px;background:#0E8494;color:#FFFFFF;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(10,95,107,.32)">Submit Completion</span>
+        </div>
+      </div>
+
+      <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:24px;background:#F6F9F8;box-shadow:0 24px 60px -32px rgba(8,32,31,.3);overflow:hidden;display:flex;flex-direction:column;min-height:820px">
+        <div style="height:56px;background:#FFFFFF;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;gap:12px;padding:0 16px;flex:none">
+          <span style="font-size:15px;font-weight:650;letter-spacing:-0.015em">Earnings</span>
+          <span style="margin-left:auto;font-size:12.5px;font-weight:550;color:#0E8494">Withdrawal destination</span>
+        </div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div style="background:#0B2523;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#93A6A4">Total earned</span>
+            <span style="font-size:30px;font-weight:700;letter-spacing:-0.03em;color:#FFFFFF;font-variant-numeric:tabular-nums">$338</span>
+            <span style="font-size:12.5px;color:#93A6A4">Approved across 10 campaigns</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <span style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:3px"><span style="font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Pending</span><span style="font-size:18px;font-weight:700;font-variant-numeric:tabular-nums">$95</span></span>
+            <span style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:3px"><span style="font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Available</span><span style="font-size:18px;font-weight:700;font-variant-numeric:tabular-nums">$55</span></span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;overflow:hidden">
+            <div style="padding:13px 16px;border-bottom:1px solid #E0E8E7"><span style="font-size:14px;font-weight:650;letter-spacing:-0.02em">Payment history</span></div>
+            <div style="padding:13px 16px;border-bottom:1px solid #EFF4F3;display:flex;align-items:center;gap:12px">
+              <span style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0"><span style="font-size:13.5px;font-weight:600">Coffee Launch Comments</span><span style="font-size:12px;color:#6A817F">Café Aroma · Aug 09</span></span>
+              <span style="display:flex;flex-direction:column;align-items:flex-end;gap:3px"><span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">$10</span><span style="font-size:11px;font-weight:600;color:#047857;background:#ECFDF5;border-radius:999px;padding:3px 8px">Paid</span></span>
+            </div>
+            <div style="padding:13px 16px;border-bottom:1px solid #EFF4F3;display:flex;align-items:center;gap:12px">
+              <span style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0"><span style="font-size:13.5px;font-weight:600">Sneaker Drop Teaser</span><span style="font-size:12px;color:#6A817F">Stride Athletics · approved Aug 12</span></span>
+              <span style="display:flex;flex-direction:column;align-items:flex-end;gap:3px"><span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">$60</span><span style="font-size:11px;font-weight:600;color:#B45309;background:#FEF3C7;border-radius:999px;padding:3px 8px">Payment Pending</span></span>
+            </div>
+            <div style="padding:13px 16px;display:flex;align-items:center;gap:12px">
+              <span style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0"><span style="font-size:13.5px;font-weight:600">Summer Linen Edit</span><span style="font-size:12px;color:#6A817F">Zeenat Apparel · Aug 02</span></span>
+              <span style="display:flex;flex-direction:column;align-items:flex-end;gap:3px"><span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">$45</span><span style="font-size:11px;font-weight:600;color:#047857;background:#ECFDF5;border-radius:999px;padding:3px 8px">Paid</span></span>
+            </div>
+          </div>
+          <span style="font-size:12px;color:#6A817F;line-height:1.55;padding:0 2px">The agency releases each payment manually after the advertiser approves your submission.</span>
+        </div>
+        <div style="margin-top:auto;background:#FFFFFF;border-top:1px solid #E0E8E7;padding:9px 8px 12px;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;flex:none">
+          <span style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:5px;display:block"></span><span style="font-size:10.5px;color:#6A817F">Home</span></span>
+          <span style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:50%;display:block"></span><span style="font-size:10.5px;color:#6A817F">Find</span></span>
+          <span style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:5px;display:block"></span><span style="font-size:10.5px;color:#6A817F">Tasks</span></span>
+          <span style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0"><span style="width:18px;height:18px;border:2px solid #0E8494;border-radius:5px;display:block"></span><span style="font-size:10.5px;font-weight:600;color:#0E8494">Earnings</span></span>
+          <span style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:50%;display:block"></span><span style="font-size:10.5px;color:#6A817F">Profile</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1560}}">
+class Component extends DCLogic {
+  state = {
+    screen: "dashboard",
+    roleMenu: false,
+    campaignId: "c1",
+    accounts: {
+      instagram: { label: "Instagram", initial: "IG", connected: true, username: "@ana.styles", followers: 24800 },
+      tiktok: { label: "TikTok", initial: "TT", connected: true, username: "@anarivera", followers: 11200 },
+      facebook: { label: "Facebook", initial: "FB", connected: false, username: "Not connected", followers: 0 },
+      youtube: { label: "YouTube", initial: "YT", connected: false, username: "Not connected", followers: 0 }
+    },
+    search: "",
+    sort: "newest",
+    fPlatform: "All platforms",
+    fCategory: "All categories",
+    fTask: "All task types",
+    fPay: "Any payment",
+    fFollowers: "Any follower level",
+    onlyEligible: false,
+    applyOpen: false,
+    applyDone: false,
+    applyMessage: "",
+    applied: ["c4"],
+    appTab: "All",
+    taskId: "t1",
+    taskStatus: { t1: "in_progress", t2: "submitted", t3: "in_progress", t4: "submitted", t5: "rejected" },
+    completeOpen: false,
+    proof: { url: "", comment: "", note: "", screenshot: false, confirmed: false },
+    proofError: ""
+  };
+
+  campaigns = [
+    { id: "c1", title: "Summer Collection Promotion", advertiser: "Zeenat Apparel", city: "New York", brandInitial: "ZA", platform: "Instagram", platformKey: "instagram", category: "Fashion", taskType: "Comment", type: "Product launch", reward: 1000, minFollowers: 10000, creators: 100, applications: 64, appDeadline: "Aug 25", taskDeadline: "Sep 02", added: 6,
+      description: "We are pushing the summer drop with a wave of authentic comments and saves on our launch post. You do not need to shoot anything — read the post, then leave a genuine comment about the piece you would wear.",
+      taskDescription: "Open the campaign post, leave one original comment of at least eight words about a specific product in the photo, and mention the brand handle in that comment.",
+      checklist: ["Comment on the launch post", "Mention @zeenatapparel", "Use #SummerGlow"],
+      hashtags: "#SummerGlow", mentions: "@zeenatapparel", caption: "No caption needed. The comment text must be your own words, no copy-paste.",
+      link: "instagram.com/p/zeenat-summer-launch" },
+    { id: "c2", title: "Winter Collection Launch", advertiser: "Brand House", city: "London", brandInitial: "BH", platform: "Instagram", platformKey: "instagram", category: "Fashion", taskType: "Reel", type: "Product launch", reward: 5000, minFollowers: 10000, creators: 20, applications: 41, appDeadline: "Sep 05", taskDeadline: "Sep 25", added: 2,
+      description: "Promote the winter drop with honest styling content shot in daylight. We want real outfits, real weather, no studio sets.",
+      taskDescription: "Film one reel of 20 to 40 seconds styling at least two pieces from the winter drop, plus two stories pointing to the reel.",
+      checklist: ["Post one reel styling two pieces", "Add two stories linking the reel", "Tag the brand in both"],
+      hashtags: "#WinterWithBrandHouse", mentions: "@brandhouse", caption: "Mention that the pieces are from the new winter drop and name the city you shot in.",
+      link: "" },
+    { id: "c3", title: "Glow Serum Review Wave", advertiser: "Lumin Beauty", city: "New York", brandInitial: "LB", platform: "TikTok", platformKey: "tiktok", category: "Beauty", taskType: "UGC", type: "Product review", reward: 3500, minFollowers: 5000, creators: 40, applications: 88, appDeadline: "Aug 22", taskDeadline: "Sep 10", added: 9,
+      description: "An honest four-week review of the glow serum. We send the product, you show your real routine and your real verdict, good or bad.",
+      taskDescription: "Record one TikTok video of 30 to 60 seconds showing the serum in your routine and giving your verdict after using it for at least a week.",
+      checklist: ["Post one video with the serum in use", "State your honest verdict on camera", "Use #LuminGlowTest"],
+      hashtags: "#LuminGlowTest", mentions: "@luminbeauty", caption: "Say clearly that the product was gifted for the campaign.",
+      link: "" },
+    { id: "c4", title: "Spring Menu Teaser", advertiser: "Casa Verde", city: "New York", brandInitial: "KK", platform: "Instagram", platformKey: "instagram", category: "Food", taskType: "Story", type: "Event promotion", reward: 1500, minFollowers: 5000, creators: 60, applications: 52, appDeadline: "Aug 28", taskDeadline: "Sep 08", added: 4,
+      description: "Tease the spring menu with three story frames from the table, shot at your own table.",
+      taskDescription: "Post three story frames of the menu items with the location sticker for the restaurant.",
+      checklist: ["Three story frames from the table", "Add the location sticker", "Tag @casaverde"],
+      hashtags: "#AtCasaVerde", mentions: "@casaverde", caption: "Name at least one dish you actually ate.",
+      link: "" },
+    { id: "c5", title: "Gaming Headset Unboxing", advertiser: "Nexa Tech", city: "Berlin", brandInitial: "NT", platform: "YouTube", platformKey: "youtube", category: "Gaming", taskType: "Post", type: "Product launch", reward: 12000, minFollowers: 50000, creators: 8, applications: 19, appDeadline: "Sep 12", taskDeadline: "Oct 05", added: 1,
+      description: "A long-form unboxing and first-impressions video for the new wireless headset, aimed at competitive players.",
+      taskDescription: "Publish one video of at least six minutes covering the unboxing, mic test and one match of gameplay using the headset.",
+      checklist: ["Publish a six minute video", "Include a mic test", "Link the product in the description"],
+      hashtags: "#NexaPulse", mentions: "@nexatech", caption: "Disclose the partnership in the first line of the description.",
+      link: "" },
+    { id: "c6", title: "Fitness Challenge Kickoff", advertiser: "PowerFuel", city: "London", brandInitial: "PF", platform: "Facebook", platformKey: "facebook", category: "Lifestyle", taskType: "Share", type: "Brand awareness", reward: 800, minFollowers: 1000, creators: 150, applications: 97, appDeadline: "Aug 30", taskDeadline: "Sep 15", added: 7,
+      description: "Spread the 21-day challenge announcement to your community and invite them to join the group.",
+      taskDescription: "Share the challenge announcement post to your own feed with a short line about why you are joining.",
+      checklist: ["Share the announcement post", "Add one line of your own", "Tag @powerfuel"],
+      hashtags: "#PowerFuel21", mentions: "@powerfuel", caption: "One or two sentences in your own words.",
+      link: "facebook.com/powerfuel/posts/challenge-kickoff" }
+  ];
+
+  tasks = [
+    { id: "t1", campaign: "Winter Collection Launch", advertiser: "Brand House", initial: "BH", platform: "Instagram", taskType: "Reel", task: "1 reel + 2 stories", reward: 5000, deadline: "Sep 25", due: "Due in 3 days", urgent: true,
+      instructions: "Film one reel of 20 to 40 seconds styling at least two pieces from the winter drop, then add two stories pointing to the reel.",
+      checklist: ["Post one reel styling two pieces", "Add two stories linking the reel", "Tag @brandhouse in both"],
+      note: "Shoot in daylight. No studio backdrops, no colour filters on the fabric." },
+    { id: "t2", campaign: "Glow Serum Review Wave", advertiser: "Lumin Beauty", initial: "LB", platform: "TikTok", taskType: "UGC", task: "1 UGC video", reward: 3500, deadline: "Sep 10", due: "Submitted Aug 17", urgent: false,
+      instructions: "One TikTok video of 30 to 60 seconds showing the serum in your routine with your honest verdict after a week of use.",
+      checklist: ["Post one video with the serum in use", "State your verdict on camera", "Use #LuminGlowTest"],
+      note: "Say clearly that the product was gifted for this campaign." },
+    { id: "t3", campaign: "Spring Menu Teaser", advertiser: "Casa Verde", initial: "KK", platform: "Instagram", taskType: "Story", task: "3 story frames", reward: 1500, deadline: "Sep 08", due: "Due in 9 days", urgent: false,
+      instructions: "Post three story frames of the spring menu with the restaurant location sticker.",
+      checklist: ["Three story frames from the table", "Add the location sticker", "Tag @casaverde"],
+      note: "Name at least one dish you actually ate." },
+    { id: "t4", campaign: "Fitness Challenge Kickoff", advertiser: "PowerFuel", initial: "PF", platform: "Facebook", taskType: "Share", task: "Share announcement", reward: 800, deadline: "Sep 15", due: "Submitted Aug 18", urgent: false,
+      instructions: "Share the challenge announcement to your own feed with one line about why you are joining.",
+      checklist: ["Share the announcement post", "Add one line of your own", "Tag @powerfuel"],
+      note: "One or two sentences in your own words is enough." },
+    { id: "t5", campaign: "Latte Art Comment Wave", advertiser: "Café Aroma", initial: "CA", platform: "Instagram", taskType: "Comment", task: "Comment on post", reward: 2000, deadline: "Aug 29", due: "Resubmit by Aug 29", urgent: true,
+      instructions: "Leave one original comment of at least eight words on the latte art post, mentioning the café handle.",
+      checklist: ["Comment on the campaign post", "Mention @cafearoma", "Use #AromaPour"],
+      note: "The comment has to be in your own words.",
+      rejection: "The comment was two words and did not mention the handle. Please post a fuller comment and mention @cafearoma." }
+  ];
+
+  completed = [
+    { campaign: "Denim Fit Check", advertiser: "Zeenat Apparel", platform: "Instagram", task: "1 reel", reward: 7000, approved: "Apr 22", payment: "Paid", paidOn: "Apr 28" },
+    { campaign: "Winter Skincare Set", advertiser: "Lumin Beauty", platform: "TikTok", task: "1 video", reward: 5500, approved: "May 30", payment: "Paid", paidOn: "Jun 05" },
+    { campaign: "Weeknight Recipe Reel", advertiser: "Casa Verde", platform: "Instagram", task: "1 reel", reward: 2500, approved: "Jun 20", payment: "Paid", paidOn: "Jun 26" },
+    { campaign: "Chef's Table Stories", advertiser: "Casa Verde", platform: "Instagram", task: "3 stories", reward: 1800, approved: "Mar 02", payment: "Paid", paidOn: "Mar 08" },
+    { campaign: "Tech Gadget Comments", advertiser: "Nexa Tech", platform: "Instagram", task: "Comment", reward: 1200, approved: "Mar 15", payment: "Paid", paidOn: "Mar 20" },
+    { campaign: "Gym Wear Share", advertiser: "PowerFuel", platform: "Facebook", task: "Share", reward: 800, approved: "Jun 12", payment: "Paid", paidOn: "Jun 18" },
+    { campaign: "Summer Linen Edit", advertiser: "Zeenat Apparel", platform: "Instagram", task: "1 reel", reward: 4500, approved: "Jul 28", payment: "Paid", paidOn: "Aug 02" },
+    { campaign: "Coffee Launch Comments", advertiser: "Café Aroma", platform: "Instagram", task: "Comment", reward: 1000, approved: "Aug 04", payment: "Paid", paidOn: "Aug 09" },
+    { campaign: "Sneaker Drop Teaser", advertiser: "Stride Athletics", platform: "TikTok", task: "1 video", reward: 6000, approved: "Aug 12", payment: "Payment Pending", paidOn: "—" },
+    { campaign: "Skincare Routine UGC", advertiser: "Lumin Beauty", platform: "TikTok", task: "1 UGC video", reward: 3500, approved: "Aug 15", payment: "Payment Pending", paidOn: "—" }
+  ];
+
+  applicationsBase = [
+    { campaign: "Winter Collection Launch", advertiser: "Brand House", platform: "Instagram", task: "Reel", reward: 5000, applied: "Aug 12", status: "Selected" },
+    { campaign: "Glow Serum Review Wave", advertiser: "Lumin Beauty", platform: "TikTok", task: "UGC", reward: 3500, applied: "Aug 10", status: "Selected" },
+    { campaign: "Fitness Challenge Kickoff", advertiser: "PowerFuel", platform: "Facebook", task: "Share", reward: 800, applied: "Aug 09", status: "Selected" },
+    { campaign: "Spring Menu Teaser", advertiser: "Casa Verde", platform: "Instagram", task: "Story", reward: 1500, applied: "Aug 14", status: "Pending" },
+    { campaign: "Latte Art Comment Wave", advertiser: "Café Aroma", platform: "Instagram", task: "Comment", reward: 2000, applied: "Aug 08", status: "Rejected" },
+    { campaign: "Gaming Headset Unboxing", advertiser: "Nexa Tech", platform: "YouTube", task: "Post", reward: 12000, applied: "Aug 05", status: "Not Selected" },
+    { campaign: "Sneaker Drop Teaser", advertiser: "Stride Athletics", platform: "TikTok", task: "Video", reward: 6000, applied: "Jul 30", status: "Completed" },
+    { campaign: "Summer Linen Edit", advertiser: "Zeenat Apparel", platform: "Instagram", task: "Reel", reward: 4500, applied: "Jul 18", status: "Completed" }
+  ];
+
+  timelineSteps = ["Selected", "Task In Progress", "Task Completed", "Waiting for Advertiser Review", "Approved", "Payment Pending", "Paid"];
+
+  statusStyle(v) {
+    const map = {
+      "Pending": { bg: "#FEF3C7", fg: "#B45309" },
+      "Selected": { bg: "#E7F5F7", fg: "#0A5F6B" },
+      "Rejected": { bg: "#FEF2F2", fg: "#B91C1C" },
+      "Not Selected": { bg: "#EFF4F3", fg: "#4A6260" },
+      "Completed": { bg: "#ECFDF5", fg: "#047857" },
+      "Paid": { bg: "#ECFDF5", fg: "#047857" },
+      "Approved": { bg: "#ECFDF5", fg: "#047857" },
+      "Payment Pending": { bg: "#FEF3C7", fg: "#B45309" },
+      "In progress": { bg: "#E7F5F7", fg: "#0A5F6B" },
+      "Waiting for Advertiser Review": { bg: "#FEF3C7", fg: "#B45309" },
+      "Completion Rejected": { bg: "#FEF2F2", fg: "#B91C1C" }
+    };
+    return map[v] || { bg: "#EFF4F3", fg: "#4A6260" };
+  }
+
+  taskStatusLabel(id) {
+    const st = this.state.taskStatus[id];
+    if (st === "submitted") return "Waiting for Advertiser Review";
+    if (st === "rejected") return "Completion Rejected";
+    return "In progress";
+  }
+
+  proofFields(t) {
+    const k = t.taskType;
+    if (k === "Comment") return [{ key: "url", label: "Paste Post URL", placeholder: "instagram.com/p/…", type: "text" }, { key: "comment", label: "Enter Comment Text", placeholder: "The comment you left, word for word", type: "area" }];
+    if (k === "Share") return [{ key: "url", label: "Paste Shared Post URL if available", placeholder: "facebook.com/your-share/…", type: "text", optional: true }];
+    if (k === "Follow") return [];
+    if (k === "Reel") return [{ key: "url", label: "Paste Reel URL", placeholder: "instagram.com/reel/…", type: "text" }];
+    if (k === "Story") return [{ key: "url", label: "Paste Story link if available", placeholder: "instagram.com/stories/…", type: "text", optional: true }];
+    if (k === "UGC") return [{ key: "url", label: "Paste Video URL", placeholder: "tiktok.com/@you/video/…", type: "text" }];
+    return [{ key: "url", label: "Paste Post URL", placeholder: "instagram.com/p/…", type: "text" }];
+  }
+
+  money(n) { return "$" + Math.round((Number(n) || 0) / 100).toLocaleString("en-US"); }
+  short(n) { return n >= 1000 ? (n % 1000 === 0 ? n / 1000 + "K" : (n / 1000).toFixed(1) + "K") : String(n); }
+
+  go = (screen) => this.setState({ screen, roleMenu: false, applyOpen: false, applyDone: false });
+
+  eligibility(c) {
+    const acct = this.state.accounts[c.platformKey];
+    if (!acct.connected) return { ok: false, kind: "account", reason: c.platform + " account required" };
+    if (acct.followers < c.minFollowers) return { ok: false, kind: "followers", reason: "This campaign requires " + this.short(c.minFollowers) + "+ followers" };
+    if (this.state.applied.indexOf(c.id) > -1) return { ok: false, kind: "applied", reason: "You applied on " + (c.id === "c4" ? "Aug 14" : "Aug 15") };
+    return { ok: true, kind: "eligible", reason: "" };
+  }
+
+  connect(key) {
+    const a = this.state.accounts;
+    const cur = a[key];
+    const defaults = { instagram: { username: "@ana.styles", followers: 24800 }, tiktok: { username: "@anarivera", followers: 11200 }, facebook: { username: "Ana Rivera", followers: 6400 }, youtube: { username: "Ana Meridian Studio", followers: 3100 } };
+    const next = cur.connected
+      ? Object.assign({}, cur, { connected: false, username: "Not connected", followers: 0 })
+      : Object.assign({}, cur, { connected: true, username: defaults[key].username, followers: defaults[key].followers });
+    this.setState({ accounts: Object.assign({}, a, { [key]: next }) });
+  }
+
+  filtered() {
+    const s = this.state;
+    let list = this.campaigns.slice();
+    const q = s.search.trim().toLowerCase();
+    if (q) list = list.filter(c => (c.title + " " + c.advertiser + " " + c.category).toLowerCase().indexOf(q) > -1);
+    if (s.fPlatform !== "All platforms") list = list.filter(c => c.platform === s.fPlatform);
+    if (s.fCategory !== "All categories") list = list.filter(c => c.category === s.fCategory);
+    if (s.fTask !== "All task types") list = list.filter(c => c.taskType === s.fTask);
+    if (s.fPay === "Under $20") list = list.filter(c => c.reward < 2000);
+    if (s.fPay === "$20 – $60") list = list.filter(c => c.reward >= 2000 && c.reward <= 6000);
+    if (s.fPay === "Above $60") list = list.filter(c => c.reward > 6000);
+    if (s.fFollowers === "Up to 5K") list = list.filter(c => c.minFollowers <= 5000);
+    if (s.fFollowers === "Up to 10K") list = list.filter(c => c.minFollowers <= 10000);
+    if (s.fFollowers === "Up to 50K") list = list.filter(c => c.minFollowers <= 50000);
+    if (s.onlyEligible) list = list.filter(c => this.eligibility(c).ok);
+    if (s.sort === "reward") list.sort((a, b) => b.reward - a.reward);
+    if (s.sort === "ending") list.sort((a, b) => a.appDeadline.localeCompare(b.appDeadline));
+    if (s.sort === "newest") list.sort((a, b) => a.added - b.added);
+    return list;
+  }
+
+  renderVals() {
+    const s = this.state;
+    const acc = s.accounts;
+    const connectedKeys = Object.keys(acc).filter(k => acc[k].connected);
+    const eligibleCount = this.campaigns.filter(c => this.eligibility(c).ok).length;
+    const list = this.filtered();
+    const campaign = this.campaigns.filter(c => c.id === s.campaignId)[0] || this.campaigns[0];
+    const el = this.eligibility(campaign);
+    const acctForCampaign = acc[campaign.platformKey];
+
+    const extraApps = s.applied.filter(id => id !== "c4").map(id => {
+      const c = this.campaigns.filter(x => x.id === id)[0];
+      return { campaign: c.title, advertiser: c.advertiser, platform: c.platform, task: c.taskType, reward: c.reward, applied: "Today", status: "Pending" };
+    });
+    const allApps = extraApps.concat(this.applicationsBase);
+    const inTab = (a, tab) => tab === "All" ? true : tab === "Rejected" ? (a.status === "Rejected" || a.status === "Not Selected") : a.status === tab;
+    const appTabs = ["All", "Pending", "Selected", "Rejected", "Completed"].map(label => ({
+      label, count: allApps.filter(a => inTab(a, label)).length
+    }));
+    const appRows = allApps.filter(a => inTab(a, s.appTab));
+
+    const task = this.tasks.filter(t => t.id === s.taskId)[0] || this.tasks[0];
+    const taskState = s.taskStatus[task.id];
+    const taskLabel = this.taskStatusLabel(task.id);
+    const taskSt = this.statusStyle(taskLabel);
+    const timelineIndex = taskState === "submitted" ? 3 : taskState === "rejected" ? 3 : 1;
+    const timelineMeta = taskState === "submitted" ? "Submitted " + task.due.replace("Submitted ", "") + " · the advertiser checks it by hand"
+      : taskState === "rejected" ? "Your submission was rejected — resubmit before " + task.deadline
+      : "Post your content, then submit the link before " + task.deadline;
+    const fields = this.proofFields(task);
+
+    const totalApproved = this.completed.reduce((a, c) => a + c.reward, 0);
+    const pendingTotal = this.completed.filter(c => c.payment === "Payment Pending").reduce((a, c) => a + c.reward, 0);
+    const availableTotal = this.completed.filter(c => c.payment === "Paid" && c.paidOn.indexOf("Aug") === 0).reduce((a, c) => a + c.reward, 0);
+    const pendingReviews = this.tasks.filter(t => s.taskStatus[t.id] === "submitted").length;
+
+    const navDef = [
+      { id: "dashboard", label: "Dashboard", radius: "4px", badge: "" },
+      { id: "marketplace", label: "Find Campaigns", radius: "50%", badge: String(eligibleCount) },
+      { id: "applications", label: "My Applications", radius: "4px", badge: String(allApps.length) },
+      { id: "active", label: "Active Tasks", radius: "4px", badge: String(this.tasks.length) },
+      { id: "completed", label: "Completed Tasks", radius: "4px", badge: "" },
+      { id: "earnings", label: "Wallet", radius: "4px", badge: "", rule: true },
+      { id: "social", label: "Social Accounts", radius: "50%", badge: String(connectedKeys.length) + "/4" },
+      { id: "profile", label: "Profile", radius: "50%", badge: "" },
+      { id: "settings", label: "Settings", radius: "4px", badge: "" }
+    ];
+    const titles = {
+      dashboard: "Dashboard", marketplace: "Find Campaigns", campaign: "Find Campaigns / " + campaign.title,
+      applications: "My Applications", active: "Active Tasks", task: "Active Tasks / " + (this.tasks.filter(t => t.id === s.taskId)[0] || this.tasks[0]).campaign, completed: "Completed Tasks",
+      earnings: "Wallet", social: "Social Accounts", profile: "Profile", settings: "Settings"
+    };
+
+    return {
+      nav: navDef.map(n => {
+        const active = n.id === s.screen || (s.screen === "campaign" && n.id === "marketplace");
+        return {
+          label: n.label, radius: n.radius, rule: !!n.rule, badge: n.badge,
+          onClick: () => this.go(n.id),
+          bg: active ? "rgba(255,255,255,.1)" : "transparent",
+          fg: active ? "#FFFFFF" : "#C2CFCD",
+          weight: active ? "600" : "500",
+          dot: active ? "#82C8D2" : "#6A817F",
+          badgeBg: n.badge ? "rgba(255,255,255,.12)" : "transparent",
+          badgeFg: "#E0E8E7"
+        };
+      }),
+      screenHint: {
+        dashboard: "Six summary cards, next deadlines, connected accounts",
+        marketplace: "Filters, eligibility per card, sort",
+        campaign: "Requirements, task instructions, apply gate",
+        social: "Connect or disconnect and watch eligibility change",
+        applications: "Five statuses, one row per application",
+        active: "Selected campaigns waiting on your submission",
+        task: "Instructions, submission form and status timeline",
+        completed: "Approval and payment status per campaign",
+        earnings: "Your USD balance, job payments in, withdrawals out",
+        profile: "What advertisers see when reviewing you",
+        settings: "Account, notifications and withdrawal details"
+      }[s.screen] || "Creator workspace",
+      breadcrumb: titles[s.screen] || "Dashboard",
+      roleMenu: s.roleMenu,
+      roleBorder: s.roleMenu ? "#0E8494" : "#E0E8E7",
+      toggleRoleMenu: () => this.setState({ roleMenu: !s.roleMenu }),
+      isDashboard: s.screen === "dashboard",
+      isMarketplace: s.screen === "marketplace",
+      isCampaign: s.screen === "campaign",
+      isSocial: s.screen === "social",
+      goMarketplace: () => this.go("marketplace"),
+      goApplications: () => this.go("applications"),
+      goActive: () => this.go("active"),
+      goSocial: () => this.go("social"),
+      goProfile: () => this.go("profile"),
+      sidebarNoteTitle: "Getting paid",
+      sidebarNoteBody: "The advertiser approves your submission, then the agency releases your payment.",
+
+      summary: [
+        { label: "Available campaigns", value: String(eligibleCount), hint: "Open now and matching your connected accounts", iconBg: "#E7F5F7", iconFg: "#0E8494", iconRadius: "50%", onClick: () => this.go("marketplace") },
+        { label: "Applied campaigns", value: String(allApps.length), hint: appTabs[1].count + " pending · " + (allApps.length - appTabs[1].count) + " decided", iconBg: "#EEF7E3", iconFg: "#0E8494", iconRadius: "3px", onClick: () => this.go("applications") },
+        { label: "Active tasks", value: String(this.tasks.length), hint: "Selected and waiting on your submission", iconBg: "#E7F5F7", iconFg: "#0E8494", iconRadius: "3px", onClick: () => this.go("active") },
+        { label: "Pending reviews", value: String(pendingReviews), hint: "Submitted, waiting for the advertiser", iconBg: "#FEF3C7", iconFg: "#B45309", iconRadius: "3px", onClick: () => this.go("active") },
+        { label: "Wallet balance", value: this.money(totalApproved), hint: "Approved across " + this.completed.length + " completed campaigns", iconBg: "#ECFDF5", iconFg: "#047857", iconRadius: "3px", onClick: () => this.go("earnings") },
+        { label: "Pending payments", value: this.money(pendingTotal), hint: "Approved, waiting on release into your wallet", iconBg: "#FEF3C7", iconFg: "#B45309", iconRadius: "50%", onClick: () => this.go("earnings") }
+      ],
+      deadlineRows: this.tasks.slice(0, 3).map(t => {
+        const label = this.taskStatusLabel(t.id);
+        const st = this.statusStyle(label);
+        return {
+          initial: t.initial, title: t.campaign + " · " + t.task, meta: t.advertiser + " · " + t.platform,
+          status: label === "Waiting for Advertiser Review" ? "In review" : label,
+          statusBg: st.bg, statusFg: st.fg,
+          reward: this.money(t.reward), due: t.due, dueFg: t.urgent ? "#B45309" : "#6A817F",
+          onClick: () => this.setState({ screen: "task", taskId: t.id, completeOpen: false, roleMenu: false })
+        };
+      }),
+      howItWorks: [
+        { n: "1", label: "Find a campaign you are eligible for" },
+        { n: "2", label: "Apply with the matching account" },
+        { n: "3", label: "Advertiser selects creators by hand" },
+        { n: "4", label: "Complete the task and submit your link" },
+        { n: "5", label: "Advertiser approves your submission" },
+        { n: "6", label: "Agency releases your payment" }
+      ],
+      accountsSummary: connectedKeys.length + " of 4 platforms connected. " + eligibleCount + " open campaigns match them.",
+      accountChips: Object.keys(acc).map(k => {
+        const a = acc[k];
+        return {
+          label: a.label, initial: a.initial,
+          detail: a.connected ? a.username + " · " + this.short(a.followers) + " followers" : "Not connected",
+          bg: a.connected ? "#FFFFFF" : "#F6F9F8",
+          border: a.connected ? "#E0E8E7" : "#E0E8E7",
+          iconBg: a.connected ? "#0B2523" : "#EFF4F3",
+          iconFg: a.connected ? "#FFFFFF" : "#6A817F",
+          action: a.connected ? "Disconnect" : "Connect",
+          actionFg: a.connected ? "#6A817F" : "#0E8494",
+          onToggle: () => this.connect(k)
+        };
+      }),
+
+      search: s.search, onSearch: ev => this.setState({ search: ev.target.value }),
+      sort: s.sort, onSort: ev => this.setState({ sort: ev.target.value }),
+      fPlatform: s.fPlatform, onPlatform: ev => this.setState({ fPlatform: ev.target.value }),
+      fCategory: s.fCategory, onCategory: ev => this.setState({ fCategory: ev.target.value }),
+      fTask: s.fTask, onTaskType: ev => this.setState({ fTask: ev.target.value }),
+      fPay: s.fPay, onPay: ev => this.setState({ fPay: ev.target.value }),
+      fFollowers: s.fFollowers, onFollowers: ev => this.setState({ fFollowers: ev.target.value }),
+      platformOptions: ["All platforms", "Instagram", "TikTok", "Facebook", "YouTube"],
+      categoryOptions: ["All categories", "Beauty", "Fashion", "Food", "Tech", "Gaming", "Lifestyle"],
+      taskTypeOptions: ["All task types", "Post", "Reel", "Story", "Comment", "Like", "Share", "Follow", "UGC"],
+      payOptions: ["Any payment", "Under $20", "$20 – $60", "Above $60"],
+      followerFilterOptions: ["Any follower level", "Up to 5K", "Up to 10K", "Up to 50K"],
+      onlyEligibleToggle: () => this.setState({ onlyEligible: !s.onlyEligible }),
+      eligibleBg: s.onlyEligible ? "#0E8494" : "#FFFFFF",
+      eligibleFg: s.onlyEligible ? "#FFFFFF" : "#08201F",
+      eligibleBorder: s.onlyEligible ? "#0E8494" : "#E0E8E7",
+      eligibleWeight: s.onlyEligible ? "600" : "500",
+      onResetFilters: () => this.setState({ search: "", fPlatform: "All platforms", fCategory: "All categories", fTask: "All task types", fPay: "Any payment", fFollowers: "Any follower level", onlyEligible: false }),
+      resultCount: list.length + (list.length === 1 ? " campaign" : " campaigns") + " · " + eligibleCount + " you can apply to",
+      hasResults: list.length > 0,
+      noResults: list.length === 0,
+
+      cards: list.map(c => {
+        const e = this.eligibility(c);
+        const statusMap = {
+          eligible: { label: "Eligible to Apply", bg: "#ECFDF5", fg: "#047857" },
+          account: { label: c.platform + " required", bg: "#FEF3C7", fg: "#B45309" },
+          followers: { label: "Follower requirement", bg: "#FEF3C7", fg: "#B45309" },
+          applied: { label: "Applied", bg: "#E7F5F7", fg: "#0A5F6B" }
+        }[e.kind];
+        return {
+          title: c.title, advertiser: c.advertiser, brandInitial: c.brandInitial,
+          platform: c.platform, platformInitial: acc[c.platformKey].initial,
+          category: c.category, taskType: c.taskType, type: c.type,
+          reward: this.money(c.reward), minFollowers: this.short(c.minFollowers) + "+",
+          creators: String(c.creators), appDeadline: c.appDeadline, taskDeadline: c.taskDeadline,
+          statusLabel: statusMap.label, statusBg: statusMap.bg, statusFg: statusMap.fg,
+          reason: e.kind === "eligible" ? "Your " + c.platform + " account meets the requirement." : e.reason,
+          reasonFg: e.kind === "eligible" ? "#6A817F" : "#B45309",
+          ctaLabel: e.kind === "account" ? "Connect " + c.platform : e.kind === "applied" ? "View application" : "View Campaign",
+          ctaBg: e.kind === "eligible" ? "#0E8494" : "#FFFFFF",
+          ctaFg: e.kind === "eligible" ? "#FFFFFF" : "#08201F",
+          ctaBorder: e.kind === "eligible" ? "#0E8494" : "#E0E8E7",
+          ctaShadow: e.kind === "eligible" ? "0 2px 8px rgba(10,95,107,.28)" : "none",
+          onCta: () => {
+            if (e.kind === "account") { this.go("social"); return; }
+            if (e.kind === "applied") { this.go("applications"); return; }
+            this.setState({ screen: "campaign", campaignId: c.id, roleMenu: false });
+          }
+        };
+      }),
+
+      detail: {
+        title: campaign.title, advertiser: campaign.advertiser, city: campaign.city,
+        category: campaign.category, platform: campaign.platform, taskType: campaign.taskType,
+        status: "Open for applications", reward: this.money(campaign.reward),
+        description: campaign.description, taskDescription: campaign.taskDescription,
+        checklist: campaign.checklist.map(t => ({ text: t })),
+        hashtags: campaign.hashtags, mentions: campaign.mentions, caption: campaign.caption,
+        hasLink: !!campaign.link, link: campaign.link,
+        appDeadline: campaign.appDeadline, taskDeadline: campaign.taskDeadline,
+        applicationsText: campaign.applications + " of " + campaign.creators + " creators needed",
+        applicationsPct: Math.min(100, Math.round(campaign.applications / campaign.creators * 100)) + "%",
+        overview: [
+          { label: "Advertiser", value: campaign.advertiser },
+          { label: "Campaign type", value: campaign.type },
+          { label: "Creators required", value: String(campaign.creators) },
+          { label: "Applications", value: String(campaign.applications) },
+          { label: "Applications close", value: campaign.appDeadline },
+          { label: "Task deadline", value: campaign.taskDeadline }
+        ],
+        requirements: [
+          { label: "Required platform", value: campaign.platform, icon: acctForCampaign.connected ? "✓" : "!", ok: acctForCampaign.connected },
+          { label: "Minimum followers", value: this.short(campaign.minFollowers) + "+", icon: acctForCampaign.connected && acctForCampaign.followers >= campaign.minFollowers ? "✓" : "!", ok: acctForCampaign.connected && acctForCampaign.followers >= campaign.minFollowers },
+          { label: "Creator category", value: campaign.category, icon: "✓", ok: true },
+          { label: "Gender", value: "Any", icon: "✓", ok: true },
+          { label: "Age", value: "18 and above", icon: "✓", ok: true },
+          { label: "Other", value: campaign.city + " preferred", icon: "✓", ok: true }
+        ].map(r => ({
+          label: r.label, value: r.value, icon: r.icon,
+          bg: r.ok ? "#FFFFFF" : "#FFFBEB",
+          border: r.ok ? "#E0E8E7" : "#FDE68A",
+          iconBg: r.ok ? "#ECFDF5" : "#FEF3C7",
+          iconFg: r.ok ? "#047857" : "#B45309",
+          fg: r.ok ? "#08201F" : "#92400E"
+        })),
+        applyLabel: el.kind === "applied" ? "Application Pending" : el.ok ? "Apply Now" : "Not Eligible",
+        applyBg: el.ok ? "#0E8494" : "#EFF4F3",
+        applyFg: el.ok ? "#FFFFFF" : "#6A817F",
+        applyBorder: el.ok ? "#0E8494" : "#E0E8E7",
+        applyShadow: el.ok ? "0 2px 8px rgba(10,95,107,.28)" : "none",
+        applyCursor: el.ok ? "pointer" : "not-allowed",
+        onApply: () => { if (el.ok) this.setState({ applyOpen: true, applyDone: false, applyMessage: "" }); },
+        reason: el.ok ? "You meet every requirement for this campaign." : el.reason,
+        reasonFg: el.ok ? "#6A817F" : "#B45309",
+        acctLabel: acctForCampaign.label + (acctForCampaign.connected ? "" : " — not connected"),
+        acctInitial: acctForCampaign.initial,
+        acctDetail: acctForCampaign.connected ? acctForCampaign.username + " · " + this.short(acctForCampaign.followers) + " followers" : "Required for this campaign",
+        acctBg: acctForCampaign.connected ? "#FFFFFF" : "#FFFBEB",
+        acctBorder: acctForCampaign.connected ? "#E0E8E7" : "#FDE68A",
+        acctIconBg: acctForCampaign.connected ? "#0B2523" : "#FEF3C7",
+        acctIconFg: acctForCampaign.connected ? "#FFFFFF" : "#B45309",
+        acctBtnLabel: acctForCampaign.connected ? "Disconnect " + acctForCampaign.label : "Connect " + acctForCampaign.label,
+        acctBtnBg: acctForCampaign.connected ? "#FFFFFF" : "#0E8494",
+        acctBtnFg: acctForCampaign.connected ? "#4A6260" : "#FFFFFF",
+        acctBtnBorder: acctForCampaign.connected ? "#E0E8E7" : "#0E8494",
+        onAcctAction: () => this.connect(campaign.platformKey)
+      },
+
+      socialCards: Object.keys(acc).map(k => {
+        const a = acc[k];
+        const open = this.campaigns.filter(c => c.platformKey === k && (a.connected ? a.followers >= c.minFollowers : true)).length;
+        return {
+          label: a.label, initial: a.initial,
+          username: a.connected ? a.username : "No account connected",
+          status: a.connected ? "Connected" : "Not connected",
+          statusBg: a.connected ? "#ECFDF5" : "#EFF4F3",
+          statusFg: a.connected ? "#047857" : "#6A817F",
+          followers: a.connected ? this.short(a.followers) : "—",
+          openCount: a.connected ? String(open) : "—",
+          border: a.connected ? "#E0E8E7" : "#E0E8E7",
+          iconBg: a.connected ? "#0B2523" : "#EFF4F3",
+          iconFg: a.connected ? "#FFFFFF" : "#6A817F",
+          btnLabel: a.connected ? "Disconnect" : "Connect " + a.label,
+          btnBg: a.connected ? "#FFFFFF" : "#0E8494",
+          btnFg: a.connected ? "#4A6260" : "#FFFFFF",
+          btnBorder: a.connected ? "#E0E8E7" : "#0E8494",
+          onToggle: () => this.connect(k)
+        };
+      }),
+
+      applyOpen: s.applyOpen,
+      applyForm: s.applyOpen && !s.applyDone,
+      applyDone: s.applyOpen && s.applyDone,
+      modalTitle: s.applyDone ? "Application sent" : "Apply to campaign",
+      modalSub: s.applyDone ? "Status: Pending" : "Review the task, then send your application.",
+      applyMessage: s.applyMessage,
+      onApplyMessage: ev => this.setState({ applyMessage: ev.target.value }),
+      closeApply: () => this.setState({ applyOpen: false, applyDone: false }),
+      submitApply: () => this.setState({ applyDone: true, applied: s.applied.concat([campaign.id]) }),
+      browseMore: () => this.go("marketplace"),
+
+      isApplications: s.screen === "applications",
+      isActive: s.screen === "active",
+      isTask: s.screen === "task",
+      isCompleted: s.screen === "completed",
+      isEarnings: s.screen === "earnings",
+      isProfile: s.screen === "profile",
+      isSettings: s.screen === "settings",
+
+      appTabs: appTabs.map(t => ({
+        label: t.label + " " + t.count,
+        onClick: () => this.setState({ appTab: t.label }),
+        bg: s.appTab === t.label ? "#0B2523" : "#FFFFFF",
+        fg: s.appTab === t.label ? "#FFFFFF" : "#4A6260",
+        border: s.appTab === t.label ? "#0B2523" : "#E0E8E7",
+        weight: s.appTab === t.label ? "600" : "500"
+      })),
+      appRows: appRows.map(a => {
+        const st = this.statusStyle(a.status);
+        return {
+          campaign: a.campaign, advertiser: a.advertiser, platform: a.platform, task: a.task,
+          reward: this.money(a.reward), applied: a.applied, status: a.status,
+          statusBg: st.bg, statusFg: st.fg,
+          action: a.status === "Selected" ? "View task" : a.status === "Pending" ? "View campaign" : a.status === "Completed" ? "View payment" : "View campaign",
+          onAction: () => {
+            if (a.status === "Selected") { this.setState({ screen: "active", roleMenu: false }); return; }
+            if (a.status === "Completed") { this.setState({ screen: "earnings", roleMenu: false }); return; }
+            this.setState({ screen: "marketplace", roleMenu: false });
+          },
+          note: a.status === "Rejected" ? "The advertiser did not take this application forward." : a.status === "Not Selected" ? "Applications closed with other creators chosen." : ""
+        };
+      }),
+      hasAppRows: appRows.length > 0,
+      noAppRows: appRows.length === 0,
+      appEmptyTitle: s.appTab === "All" ? "No applications yet" : "Nothing under " + s.appTab,
+      appCountText: appRows.length + (appRows.length === 1 ? " application" : " applications"),
+
+      activeCards: this.tasks.map(t => {
+        const label = this.taskStatusLabel(t.id);
+        const st = this.statusStyle(label);
+        return {
+          campaign: t.campaign, advertiser: t.advertiser, initial: t.initial, platform: t.platform,
+          task: t.task, taskType: t.taskType, reward: this.money(t.reward), deadline: t.deadline,
+          due: t.due, dueFg: t.urgent ? "#B45309" : "#6A817F",
+          status: label, statusBg: st.bg, statusFg: st.fg,
+          cta: label === "Completion Rejected" ? "Fix and resubmit" : label === "Waiting for Advertiser Review" ? "View submission" : "View Task",
+          onClick: () => this.setState({ screen: "task", taskId: t.id, completeOpen: false, roleMenu: false, proofError: "" })
+        };
+      }),
+      activeCount: String(this.tasks.length),
+      hasActive: this.tasks.length > 0,
+
+      task: {
+        campaign: task.campaign, advertiser: task.advertiser, platform: task.platform,
+        taskType: task.taskType, task: task.task, reward: this.money(task.reward),
+        deadline: task.deadline, due: task.due,
+        instructions: task.instructions, note: task.note,
+        checklist: task.checklist.map(c => ({ text: c })),
+        status: taskLabel, statusBg: taskSt.bg, statusFg: taskSt.fg,
+        isRejected: taskState === "rejected",
+        rejection: task.rejection || "",
+        ctaLabel: taskState === "submitted" ? "Waiting for Advertiser Review" : taskState === "rejected" ? "Resubmit completion" : "Complete Task",
+        ctaBg: taskState === "submitted" ? "#EFF4F3" : "#0E8494",
+        ctaFg: taskState === "submitted" ? "#6A817F" : "#FFFFFF",
+        ctaBorder: taskState === "submitted" ? "#E0E8E7" : "#0E8494",
+        ctaShadow: taskState === "submitted" ? "none" : "0 2px 8px rgba(10,95,107,.28)",
+        ctaCursor: taskState === "submitted" ? "default" : "pointer",
+        onCta: () => { if (taskState !== "submitted") this.setState({ completeOpen: true, proofError: "" }); }
+      },
+      timeline: this.timelineSteps.map((label, i) => {
+        const done = i < timelineIndex, current = i === timelineIndex;
+        return {
+          label, n: String(i + 1),
+          dotBg: current ? "#0E8494" : done ? "#E7F5F7" : "#FFFFFF",
+          dotFg: current ? "#FFFFFF" : done ? "#0A5F6B" : "#93A6A4",
+          dotBorder: current ? "#0E8494" : done ? "#A9DAE1" : "#E0E8E7",
+          fg: current ? "#08201F" : done ? "#2E4644" : "#93A6A4",
+          weight: current ? "650" : "500",
+          meta: current ? timelineMeta : "",
+          lineBg: i < timelineIndex ? "#A9DAE1" : "#E0E8E7",
+          hasLine: i < this.timelineSteps.length - 1
+        };
+      }),
+      completeOpen: s.completeOpen,
+      completeFields: fields.map(f => ({
+        label: f.label + (f.optional ? " (optional)" : ""),
+        placeholder: f.placeholder,
+        value: s.proof[f.key] || "",
+        isArea: f.type === "area",
+        isText: f.type !== "area",
+        onChange: ev => this.setState({ proof: Object.assign({}, s.proof, { [f.key]: ev.target.value }), proofError: "" })
+      })),
+      noProofNeeded: fields.length === 0,
+      proofNote: s.proof.note,
+      onProofNote: ev => this.setState({ proof: Object.assign({}, s.proof, { note: ev.target.value }) }),
+      screenshotOn: s.proof.screenshot,
+      screenshotLabel: s.proof.screenshot ? "Screenshot attached · screenshot-01.png" : "Attach a screenshot (optional)",
+      screenshotBg: s.proof.screenshot ? "#E7F5F7" : "#FFFFFF",
+      screenshotBorder: s.proof.screenshot ? "#0E8494" : "#E0E8E7",
+      onScreenshot: () => this.setState({ proof: Object.assign({}, s.proof, { screenshot: !s.proof.screenshot }) }),
+      proofError: s.proofError, hasProofError: !!s.proofError,
+      closeComplete: () => this.setState({ completeOpen: false, proofError: "" }),
+      submitComplete: () => {
+        const need = fields.filter(f => !f.optional).map(f => f.key);
+        const missing = need.filter(k => !String(s.proof[k] || "").trim());
+        if (missing.length) { this.setState({ proofError: "Fill in " + fields.filter(f => missing.indexOf(f.key) > -1).map(f => f.label).join(" and ") + " before submitting." }); return; }
+        this.setState({ completeOpen: false, proofError: "", taskStatus: Object.assign({}, s.taskStatus, { [task.id]: "submitted" }) });
+      },
+
+      completedRows: this.completed.map(c => {
+        const st = this.statusStyle(c.payment);
+        return {
+          campaign: c.campaign, advertiser: c.advertiser, platform: c.platform, task: c.task,
+          reward: this.money(c.reward), approved: c.approved,
+          payment: c.payment, paymentBg: st.bg, paymentFg: st.fg, paidOn: c.paidOn
+        };
+      }),
+      completedCount: this.completed.length + " completed campaigns",
+
+      earningsCards: [
+        { label: "Wallet balance", value: this.money(totalApproved), hint: "Held in USD across " + this.completed.length + " completed campaigns", bg: "#0B2523", fg: "#FFFFFF", sub: "#93A6A4" },
+        { label: "In review", value: this.money(pendingTotal), hint: "Approved work, not yet released into your wallet", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F" },
+        { label: "Ready to withdraw", value: this.money(availableTotal), hint: "Sitting in your wallet, available right now", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F" },
+        { label: "Completed campaigns", value: String(this.completed.length), hint: "Submissions approved by advertisers", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F" }
+      ],
+      payments: this.completed.map(c => {
+        const st = this.statusStyle(c.payment);
+        return {
+          campaign: c.campaign, advertiser: c.advertiser, platform: c.platform,
+          amount: this.money(c.reward), status: c.payment, statusBg: st.bg, statusFg: st.fg,
+          date: c.payment === "Paid" ? c.paidOn : "Approved " + c.approved
+        };
+      }),
+
+      profile: {
+        name: "Ana Rivera", handle: "@ana.styles", city: "New York, United States",
+        bio: "Fashion and beauty creator posting styling edits, honest product reviews and everyday looks. I work with local brands on reels, stories and UGC.",
+        categories: ["Fashion", "Beauty", "Lifestyle"],
+        socials: Object.keys(acc).map(k => ({
+          label: acc[k].label, initial: acc[k].initial,
+          detail: acc[k].connected ? acc[k].username : "Not connected",
+          followers: acc[k].connected ? this.short(acc[k].followers) + " followers" : "—",
+          fg: acc[k].connected ? "#08201F" : "#93A6A4",
+          iconBg: acc[k].connected ? "#0B2523" : "#EFF4F3",
+          iconFg: acc[k].connected ? "#FFFFFF" : "#6A817F"
+        })),
+        portfolio: [
+          { label: "Styling reel · Summer Linen Edit", url: "instagram.com/reel/summer-linen-edit" },
+          { label: "Serum review · Lumin Beauty", url: "tiktok.com/@anarivera/video/glow-test" },
+          { label: "Media kit (PDF)", url: "anarivera.com/mediakit" }
+        ],
+        history: this.completed.slice(0, 5).map(c => ({ campaign: c.campaign, advertiser: c.advertiser, task: c.task, approved: c.approved }))
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

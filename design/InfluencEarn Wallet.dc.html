@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Plus Jakarta Sans", -apple-system, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; background: #F6F9F8; color: #08201F; }
+  a { color: #0E8494; text-decoration: none; }
+  a:hover { color: #0A5F6B; }
+</style>
+</helmet>
+
+<div style="display:flex;flex-direction:column;gap:56px;padding:44px 40px 96px;align-items:flex-start">
+
+  <div style="display:flex;flex-direction:column;gap:10px;max-width:920px;flex:none">
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="assets/ie-mark.png" alt="influencearn" width="30" height="30" style="display:block;flex-shrink:0;border-radius:9px" />
+      <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:16px;font-weight:700;letter-spacing:-0.025em">influence<span style="color:#4E8A1E">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span><span style="font-size:8.3px;font-weight:600;letter-spacing:0.08em;color:#4E8A1E">.com</span><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span></span></span>
+      <span style="font-size:11.5px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border-radius:999px;padding:3px 9px">Wallet</span>
+    </div>
+    <h1 style="margin:0;font-size:31px;font-weight:700;letter-spacing:-0.032em;line-height:1.14">One wallet per account. Every dollar in and out passes through it.</h1>
+    <p style="margin:0;font-size:16px;color:#4A6260;line-height:1.62;max-width:760px;text-wrap:pretty">Advertisers load the wallet with a credit or debit card and campaigns draw down from that balance. Creators are paid into the same wallet and withdraw from it. All balances are held and settled in USD, anywhere in the world.</p>
+  </div>
+
+  <section data-screen-label="Wallet desktop" style="display:flex;flex-direction:column;gap:20px;flex:none">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">01</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Wallet · desktop</span>
+      <span style="font-size:14px;color:#6A817F">{{ screenHint }}</span>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="font-size:12px;font-weight:600;color:#6A817F;letter-spacing:0.04em;text-transform:uppercase">Account type</span>
+      <div style="display:flex;background:#EFF4F3;border:1px solid #E0E8E7;border-radius:11px;padding:3px;gap:3px">
+        <button type="button" onClick="{{ setAdvertiser }}" style="font:inherit;font-size:13px;font-weight:600;height:32px;padding:0 15px;border-radius:9px;border:none;cursor:pointer;background:{{ advBg }};color:{{ advColor }}">Advertiser</button>
+        <button type="button" onClick="{{ setCreator }}" style="font:inherit;font-size:13px;font-weight:600;height:32px;padding:0 15px;border-radius:9px;border:none;cursor:pointer;background:{{ creBg }};color:{{ creColor }}">Creator</button>
+      </div>
+      <span style="width:1px;height:24px;background:#E0E8E7;display:block"></span>
+      <button type="button" onClick="{{ toggleLow }}" style="font:inherit;font-size:13px;font-weight:600;height:32px;padding:0 14px;border-radius:9px;white-space:nowrap;border:1px solid {{ lowBorder }};background:{{ lowBg }};color:{{ lowColor }};cursor:pointer">{{ lowLabel }}</button>
+      <button type="button" onClick="{{ toggleOutcome }}" style="font:inherit;font-size:13px;font-weight:600;height:32px;padding:0 14px;border-radius:9px;white-space:nowrap;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;cursor:pointer">Card result: {{ outcomeLabel }}</button>
+    </div>
+
+    <div style="width:1420px;border:1px solid #E0E8E7;border-radius:20px;background:#FFFFFF;box-shadow:0 20px 50px -30px rgba(8,32,31,.22);overflow:hidden;display:grid;grid-template-columns:240px 1fr">
+
+      <aside style="background:#0B2523;padding:20px 14px;display:flex;flex-direction:column;gap:24px;min-height:940px">
+        <div style="display:flex;align-items:center;gap:10px;padding:4px 8px 0">
+          <img src="assets/ie-mark.png" alt="influencearn" width="30" height="30" style="display:block;flex-shrink:0;border-radius:9px" />
+          <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:15.5px;font-weight:700;letter-spacing:-0.025em;color:#FFFFFF">influence<span style="color:#8FD14F">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span><span style="font-size:8.1px;font-weight:600;letter-spacing:0.08em;color:#8FD14F">.com</span><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span></span></span>
+        </div>
+
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:5px">
+          <span style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#8FD14F">Wallet balance</span>
+          <span style="font-size:24px;font-weight:700;color:#FFFFFF;letter-spacing:-0.03em;font-variant-numeric:tabular-nums">{{ balance }}</span>
+          <span style="font-size:11.5px;color:#93A6A4">USD · {{ availLabel }} {{ available }}</span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <span style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#6A817F;padding:0 10px 6px">Money</span>
+          <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
+            <button type="button" onClick="{{ n.go }}" style="text-align:left;font:inherit;font-size:13.5px;height:38px;padding:0 11px;border-radius:10px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:{{ n.weight }};background:{{ n.bg }};color:{{ n.color }}">
+              <span>{{ n.label }}</span>
+              <span style="font-size:11px;font-weight:600;color:{{ n.badgeColor }}">{{ n.badge }}</span>
+            </button>
+          </sc-for>
+        </div>
+
+        <div style="margin-top:auto;border-top:1px solid rgba(255,255,255,.08);padding:14px 10px 4px;display:flex;flex-direction:column;gap:7px">
+          <span style="font-size:11.5px;font-weight:600;color:#FDE68A">Gateway not connected</span>
+          <span style="font-size:11.5px;color:#93A6A4;line-height:1.55">Card fields, fees and settlement timing are placeholders until a processor is selected.</span>
+        </div>
+      </aside>
+
+      <div style="display:flex;flex-direction:column;min-width:0">
+        <div style="height:62px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;padding:0 30px;flex:none;background:#FFFFFF">
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em">{{ screenTitle }}</span>
+            <span style="font-size:12px;color:#6A817F">{{ screenCrumb }}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="font-size:12px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border:1px solid #A9DAE1;border-radius:999px;padding:5px 11px">USD only</span>
+            <div style="display:flex;align-items:center;gap:9px">
+              <div style="width:30px;height:30px;border-radius:50%;background:#E0E8E7;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#2E4644">{{ initials }}</div>
+              <div style="display:flex;flex-direction:column;line-height:1.25">
+                <span style="font-size:12.5px;font-weight:600">{{ accountName }}</span>
+                <span style="font-size:11px;color:#6A817F">{{ accountMeta }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:28px 30px 34px;background:#F6F9F8;flex:1">
+
+          <sc-if value="{{ isOverview }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:20px;max-width:1080px">
+              <div style="display:grid;grid-template-columns:1.35fr 1fr;gap:18px">
+
+                <div style="border-radius:18px;padding:26px;background:linear-gradient(135deg,#08201F 0%,#0A5F6B 58%,#12786B 100%);display:flex;flex-direction:column;gap:22px;position:relative;overflow:hidden">
+                  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
+                    <div style="display:flex;flex-direction:column;gap:7px">
+                      <span style="font-size:11.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#8FD14F">{{ walletLabel }}</span>
+                      <span style="font-size:44px;font-weight:700;color:#FFFFFF;letter-spacing:-0.035em;line-height:1;font-variant-numeric:tabular-nums">{{ balance }}</span>
+                      <span style="font-size:13px;color:#A9DAE1">Held in USD · {{ accountName }}</span>
+                    </div>
+                    <img src="assets/ie-mark.png" alt="influencearn" width="44" height="44" style="display:block;flex-shrink:0;border-radius:13px" />
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                    <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:4px">
+                      <span style="font-size:11px;color:#A9DAE1">{{ availLabel }}</span>
+                      <span style="font-size:19px;font-weight:700;color:#FFFFFF;font-variant-numeric:tabular-nums;letter-spacing:-0.02em">{{ available }}</span>
+                    </div>
+                    <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:4px">
+                      <span style="font-size:11px;color:#A9DAE1">{{ heldLabel }}</span>
+                      <span style="font-size:19px;font-weight:700;color:#FFFFFF;font-variant-numeric:tabular-nums;letter-spacing:-0.02em">{{ held }}</span>
+                    </div>
+                  </div>
+                  <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    <button type="button" onClick="{{ goAdd }}" style="font:inherit;font-size:14px;font-weight:600;height:44px;padding:0 20px;border-radius:12px;border:none;background:#FFFFFF;color:#08201F;cursor:pointer">Add funds</button>
+                    <button type="button" onClick="{{ goWithdraw }}" style="font:inherit;font-size:14px;font-weight:600;height:44px;padding:0 20px;border-radius:12px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);color:#FFFFFF;cursor:pointer">Withdraw</button>
+                    <button type="button" onClick="{{ goActivity }}" style="font:inherit;font-size:14px;font-weight:600;height:44px;padding:0 20px;border-radius:12px;border:1px solid rgba(255,255,255,.28);background:transparent;color:#FFFFFF;cursor:pointer">Activity</button>
+                  </div>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:14px">
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px">
+                    <span style="font-size:13.5px;font-weight:650;letter-spacing:-0.01em">{{ statsTitle }}</span>
+                    <sc-for list="{{ stats }}" as="s" hint-placeholder-count="3">
+                      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:11px;border-bottom:1px solid #EFF4F3">
+                        <span style="font-size:13px;color:#4A6260">{{ s.label }}</span>
+                        <span style="font-size:15px;font-weight:650;font-variant-numeric:tabular-nums;letter-spacing:-0.015em">{{ s.value }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                      <span style="font-size:13.5px;font-weight:650;letter-spacing:-0.01em">{{ methodsTitle }}</span>
+                      <button type="button" onClick="{{ goMethods }}" style="font:inherit;font-size:12.5px;font-weight:600;color:#0E8494;background:none;border:none;padding:0;cursor:pointer">Manage</button>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:11px;border:1px solid #E0E8E7;border-radius:12px;padding:12px 13px">
+                      <div style="width:38px;height:26px;border-radius:5px;background:#08201F;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:700;color:#FFFFFF;letter-spacing:0.04em">CARD</span></div>
+                      <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                        <span style="font-size:13px;font-weight:600">{{ defaultMethod }}</span>
+                        <span style="font-size:11.5px;color:#6A817F">{{ defaultMethodMeta }}</span>
+                      </div>
+                      <span style="margin-left:auto;font-size:11px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border-radius:999px;padding:3px 8px;flex-shrink:0">Default</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;overflow:hidden">
+                <div style="padding:17px 20px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:12px">
+                  <span style="font-size:14px;font-weight:650;letter-spacing:-0.01em">Recent wallet activity</span>
+                  <button type="button" onClick="{{ goActivity }}" style="font:inherit;font-size:12.5px;font-weight:600;color:#0E8494;background:none;border:none;padding:0;cursor:pointer">See all</button>
+                </div>
+                <sc-for list="{{ recent }}" as="r" hint-placeholder-count="4">
+                  <div style="padding:15px 20px;border-bottom:1px solid #EFF4F3;display:grid;grid-template-columns:38px 1fr 130px 116px;gap:14px;align-items:center">
+                    <div style="width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;background:{{ r.iconBg }};color:{{ r.iconColor }}">{{ r.icon }}</div>
+                    <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+                      <span style="font-size:13.5px;font-weight:600;letter-spacing:-0.005em">{{ r.title }}</span>
+                      <span style="font-size:11.5px;color:#6A817F">{{ r.meta }}</span>
+                    </div>
+                    <span style="font-size:14.5px;font-weight:650;text-align:right;font-variant-numeric:tabular-nums;letter-spacing:-0.015em;white-space:nowrap;color:{{ r.amountColor }}">{{ r.amount }}</span>
+                    <span style="justify-self:end;font-size:11px;font-weight:600;border-radius:999px;padding:4px 10px;white-space:nowrap;background:{{ r.chipBg }};color:{{ r.chipColor }}">{{ r.chip }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isAdd }}">
+            <div style="display:grid;grid-template-columns:1fr 340px;gap:20px;max-width:1080px;align-items:start">
+              <div style="display:flex;flex-direction:column;gap:16px">
+
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:16px">
+                  <div style="display:flex;flex-direction:column;gap:4px">
+                    <span style="font-size:15px;font-weight:650;letter-spacing:-0.015em">How much do you want to add?</span>
+                    <span style="font-size:13px;color:#6A817F">Charged to your card in USD. Funds land in the wallet immediately after authorisation.</span>
+                  </div>
+                  <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    <sc-for list="{{ presets }}" as="p" hint-placeholder-count="4">
+                      <button type="button" onClick="{{ p.go }}" style="font:inherit;font-size:15px;font-weight:650;height:52px;min-width:104px;padding:0 18px;border-radius:13px;cursor:pointer;font-variant-numeric:tabular-nums;border:1.5px solid {{ p.border }};background:{{ p.bg }};color:{{ p.color }}">{{ p.label }}</button>
+                    </sc-for>
+                  </div>
+                  <label style="display:flex;flex-direction:column;gap:7px;max-width:300px">
+                    <span style="font-size:12.5px;font-weight:600;color:#2E4644">Or enter an amount</span>
+                    <div style="display:flex;align-items:center;height:48px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;overflow:hidden">
+                      <span style="padding:0 14px;font-size:14px;font-weight:600;color:#4A6260;border-right:1px solid #E0E8E7;height:100%;display:flex;align-items:center;background:#F6F9F8">USD</span>
+                      <input type="text" value="{{ amountRaw }}" onChange="{{ onAmount }}" style="font:inherit;font-size:16px;font-weight:600;flex:1;height:100%;padding:0 14px;border:none;outline:none;color:#08201F;font-variant-numeric:tabular-nums" />
+                    </div>
+                  </label>
+                </div>
+
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;overflow:hidden">
+                  <div style="padding:17px 20px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:12px">
+                    <span style="font-size:14px;font-weight:650;letter-spacing:-0.01em">Pay with</span>
+                    <span style="font-size:11.5px;color:#6A817F">Credit or debit card</span>
+                  </div>
+                  <div style="padding:20px;display:flex;flex-direction:column;gap:16px">
+                    <div style="display:flex;flex-direction:column;gap:10px">
+                      <sc-for list="{{ cards }}" as="c" hint-placeholder-count="2">
+                        <button type="button" onClick="{{ c.go }}" style="text-align:left;font:inherit;display:flex;align-items:center;gap:12px;border-radius:13px;padding:14px;cursor:pointer;border:1.5px solid {{ c.border }};background:{{ c.bg }}">
+                          <span style="width:18px;height:18px;border-radius:50%;flex-shrink:0;border:{{ c.dotBorder }};background:{{ c.dotBg }};display:flex;align-items:center;justify-content:center">
+                            <span style="width:7px;height:7px;border-radius:50%;background:{{ c.dotInner }};display:block"></span>
+                          </span>
+                          <div style="width:40px;height:27px;border-radius:5px;background:#08201F;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:700;color:#FFFFFF;letter-spacing:0.04em">CARD</span></div>
+                          <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                            <span style="font-size:13.5px;font-weight:600">{{ c.label }}</span>
+                            <span style="font-size:11.5px;color:#6A817F">{{ c.meta }}</span>
+                          </div>
+                        </button>
+                      </sc-for>
+                    </div>
+
+                    <sc-if value="{{ isNewCard }}" hint-placeholder-val="{{ true }}">
+                      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;padding-top:4px">
+                        <label style="display:flex;flex-direction:column;gap:7px;grid-column:1 / -1">
+                          <span style="font-size:12.5px;font-weight:600;color:#2E4644">Card number</span>
+                          <input type="text" placeholder="0000 0000 0000 0000" style="font:inherit;font-size:14.5px;height:48px;padding:0 14px;border-radius:12px;border:1px solid #E0E8E7;outline:none;background:#FFFFFF;color:#08201F;font-variant-numeric:tabular-nums" />
+                        </label>
+                        <label style="display:flex;flex-direction:column;gap:7px">
+                          <span style="font-size:12.5px;font-weight:600;color:#2E4644">Expiry</span>
+                          <input type="text" placeholder="MM / YY" style="font:inherit;font-size:14.5px;height:48px;padding:0 14px;border-radius:12px;border:1px solid #E0E8E7;outline:none;background:#FFFFFF;color:#08201F" />
+                        </label>
+                        <label style="display:flex;flex-direction:column;gap:7px">
+                          <span style="font-size:12.5px;font-weight:600;color:#2E4644">Security code</span>
+                          <input type="text" placeholder="CVC" style="font:inherit;font-size:14.5px;height:48px;padding:0 14px;border-radius:12px;border:1px solid #E0E8E7;outline:none;background:#FFFFFF;color:#08201F" />
+                        </label>
+                        <label style="display:flex;flex-direction:column;gap:7px">
+                          <span style="font-size:12.5px;font-weight:600;color:#2E4644">Name on card</span>
+                          <input type="text" placeholder="Full name" style="font:inherit;font-size:14.5px;height:48px;padding:0 14px;border-radius:12px;border:1px solid #E0E8E7;outline:none;background:#FFFFFF;color:#08201F" />
+                        </label>
+                        <label style="display:flex;flex-direction:column;gap:7px">
+                          <span style="font-size:12.5px;font-weight:600;color:#2E4644">Billing country</span>
+                          <select style="font:inherit;font-size:14.5px;height:48px;padding:0 12px;border-radius:12px;border:1px solid #E0E8E7;outline:none;background:#FFFFFF;color:#08201F">
+                            <option>United States</option>
+                            <option>United Kingdom</option>
+                            <option>United Arab Emirates</option>
+                            <option>Germany</option>
+                            <option>Pakistan</option>
+                            <option>India</option>
+                            <option>Nigeria</option>
+                            <option>Brazil</option>
+                          </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:10px;grid-column:1 / -1;cursor:pointer">
+                          <span style="width:19px;height:19px;border-radius:5px;border:1.5px solid #A9DAE1;background:#E7F5F7;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:11px;font-weight:700;color:#0A5F6B">✓</span></span>
+                          <span style="font-size:13px;color:#4A6260">Save this card for future top-ups</span>
+                        </label>
+                      </div>
+                    </sc-if>
+                  </div>
+                </div>
+              </div>
+
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:15px;position:sticky;top:20px">
+                <span style="font-size:14px;font-weight:650;letter-spacing:-0.01em">Top-up summary</span>
+                <div style="display:flex;flex-direction:column;gap:11px">
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                    <span style="font-size:13px;color:#4A6260">Amount to wallet</span>
+                    <span style="font-size:14px;font-weight:650;font-variant-numeric:tabular-nums">{{ amountLabel }}</span>
+                  </div>
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                    <span style="font-size:13px;color:#4A6260">Card processing fee</span>
+                    <span style="font-size:12.5px;font-weight:600;color:#B45309">{{ feeNote }}</span>
+                  </div>
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-top:12px;border-top:1px solid #E0E8E7">
+                    <span style="font-size:13.5px;font-weight:650">Card is charged</span>
+                    <span style="font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-0.025em">{{ amountLabel }}</span>
+                  </div>
+                </div>
+                <div style="background:#F6F9F8;border-radius:12px;padding:13px;display:flex;flex-direction:column;gap:5px">
+                  <span style="font-size:12px;font-weight:600;color:#2E4644">Balance after top-up</span>
+                  <span style="font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;color:#0A5F6B">{{ balanceAfter }}</span>
+                </div>
+                <button type="button" onClick="{{ startProcessing }}" style="font:inherit;font-size:15px;font-weight:650;height:50px;border-radius:13px;border:none;background:#0E8494;color:#FFFFFF;cursor:pointer;width:100%" style-hover="background:#0A5F6B">Add {{ amountLabel }} to wallet</button>
+                <span style="font-size:11.5px;color:#6A817F;line-height:1.55;text-wrap:pretty">Wallet balances are held in USD. Your card issuer may apply its own conversion rate.</span>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isProcessing }}">
+            <div style="min-height:640px;display:flex;align-items:center;justify-content:center">
+              <div style="width:440px;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:18px;padding:40px 34px;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center">
+                <div style="width:56px;height:56px;border-radius:50%;border:4px solid #E7F5F7;border-top-color:#0E8494"></div>
+                <div style="display:flex;flex-direction:column;gap:7px">
+                  <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Authorising {{ amountLabel }}</span>
+                  <span style="font-size:13.5px;color:#4A6260;line-height:1.6">Do not close this window. Your wallet updates as soon as the card is authorised.</span>
+                </div>
+                <div style="width:100%;display:flex;flex-direction:column;gap:9px;padding-top:6px">
+                  <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:10px;text-align:left">
+                      <span style="width:18px;height:18px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;background:{{ s.bg }};color:{{ s.color }}">{{ s.mark }}</span>
+                      <span style="font-size:13px;color:{{ s.textColor }}">{{ s.label }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isDone }}">
+            <div style="min-height:640px;display:flex;align-items:flex-start;justify-content:center;padding-top:20px">
+              <div style="width:520px;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:18px;overflow:hidden">
+                <div style="padding:34px 34px 26px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;background:{{ doneHeaderBg }}">
+                  <div style="width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;background:{{ doneIconBg }};color:{{ doneIconColor }}">{{ doneIcon }}</div>
+                  <div style="display:flex;flex-direction:column;gap:8px">
+                    <span style="font-size:22px;font-weight:700;letter-spacing:-0.025em">{{ doneTitle }}</span>
+                    <span style="font-size:14px;color:#4A6260;line-height:1.6;max-width:380px">{{ doneBody }}</span>
+                  </div>
+                </div>
+                <div style="padding:22px 34px;border-top:1px solid #E0E8E7;display:flex;flex-direction:column;gap:13px">
+                  <sc-for list="{{ doneRows }}" as="d" hint-placeholder-count="4">
+                    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px">
+                      <span style="font-size:13px;color:#6A817F">{{ d.label }}</span>
+                      <span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums;text-align:right">{{ d.value }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="padding:20px 34px 26px;border-top:1px solid #E0E8E7;display:flex;gap:11px">
+                  <button type="button" onClick="{{ doneAction }}" style="flex:1;font:inherit;font-size:14.5px;font-weight:650;height:48px;border-radius:12px;border:none;background:#0E8494;color:#FFFFFF;cursor:pointer">{{ doneActionLabel }}</button>
+                  <button type="button" onClick="{{ goOverview }}" style="flex:1;font:inherit;font-size:14.5px;font-weight:600;height:48px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#2E4644;cursor:pointer">Back to wallet</button>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isFund }}">
+            <div style="display:grid;grid-template-columns:1fr 340px;gap:20px;max-width:1080px;align-items:start">
+              <div style="display:flex;flex-direction:column;gap:16px">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;overflow:hidden">
+                  <div style="padding:18px 20px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:12px">
+                    <span style="font-size:14px;font-weight:650;letter-spacing:-0.01em">Campaign being funded</span>
+                    <span style="font-size:11.5px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border-radius:999px;padding:4px 10px">Draft · CMP-4821</span>
+                  </div>
+                  <div style="padding:20px;display:flex;flex-direction:column;gap:16px">
+                    <div style="display:flex;flex-direction:column;gap:5px">
+                      <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">Winter skincare launch</span>
+                      <span style="font-size:13px;color:#6A817F">3 creators · Instagram Reels + Stories · goes live 4 Sep</span>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:11px">
+                      <sc-for list="{{ lineItems }}" as="l" hint-placeholder-count="3">
+                        <div style="display:grid;grid-template-columns:1fr 110px;gap:14px;align-items:center;padding-bottom:11px;border-bottom:1px solid #EFF4F3">
+                          <div style="display:flex;flex-direction:column;gap:3px">
+                            <span style="font-size:13.5px;font-weight:600">{{ l.name }}</span>
+                            <span style="font-size:11.5px;color:#6A817F">{{ l.meta }}</span>
+                          </div>
+                          <span style="font-size:14px;font-weight:650;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap">{{ l.amount }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </div>
+
+                <sc-if value="{{ short }}">
+                  <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:16px;padding:20px;display:flex;gap:14px;align-items:flex-start">
+                    <div style="width:34px;height:34px;border-radius:10px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;font-weight:700;color:#B45309">!</div>
+                    <div style="display:flex;flex-direction:column;gap:9px;min-width:0">
+                      <span style="font-size:14.5px;font-weight:650;color:#78350F;letter-spacing:-0.01em">Not enough in the wallet</span>
+                      <span style="font-size:13px;color:#92400E;line-height:1.6;text-wrap:pretty">This campaign needs {{ campaignTotal }} but only {{ available }} is available. Add {{ shortfall }} to publish, or reduce the creator list.</span>
+                      <div style="display:flex;gap:10px;flex-wrap:wrap;padding-top:3px">
+                        <button type="button" onClick="{{ goAdd }}" style="font:inherit;font-size:13.5px;font-weight:650;height:42px;padding:0 16px;border-radius:11px;border:none;background:#0E8494;color:#FFFFFF;cursor:pointer">Add {{ shortfall }}</button>
+                        <button type="button" style="font:inherit;font-size:13.5px;font-weight:600;height:42px;padding:0 16px;border-radius:11px;border:1px solid #FDE68A;background:#FFFFFF;color:#78350F;cursor:pointer">Edit creator list</button>
+                      </div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:13px">
+                  <span style="font-size:14px;font-weight:650;letter-spacing:-0.01em">What happens to the money</span>
+                  <sc-for list="{{ fundRules }}" as="f" hint-placeholder-count="3">
+                    <div style="display:flex;gap:11px;align-items:flex-start">
+                      <span style="width:6px;height:6px;border-radius:50%;background:#0E8494;margin-top:7px;flex:none"></span>
+                      <span style="font-size:13.5px;color:#4A6260;line-height:1.6">{{ f.text }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:15px;position:sticky;top:20px">
+                <span style="font-size:14px;font-weight:650;letter-spacing:-0.01em">Paid from wallet</span>
+                <div style="display:flex;flex-direction:column;gap:11px">
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                    <span style="font-size:13px;color:#4A6260">Creator payments</span>
+                    <span style="font-size:14px;font-weight:650;font-variant-numeric:tabular-nums">$1,000</span>
+                  </div>
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                    <span style="font-size:13px;color:#4A6260">Platform fee · 20%</span>
+                    <span style="font-size:14px;font-weight:650;font-variant-numeric:tabular-nums">$200</span>
+                  </div>
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-top:12px;border-top:1px solid #E0E8E7">
+                    <span style="font-size:13.5px;font-weight:650">Wallet debit</span>
+                    <span style="font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-0.025em">{{ campaignTotal }}</span>
+                  </div>
+                </div>
+                <div style="background:#F6F9F8;border-radius:12px;padding:13px;display:flex;flex-direction:column;gap:9px">
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+                    <span style="font-size:12px;color:#4A6260">Available now</span>
+                    <span style="font-size:13.5px;font-weight:650;font-variant-numeric:tabular-nums">{{ available }}</span>
+                  </div>
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+                    <span style="font-size:12px;color:#4A6260">After funding</span>
+                    <span style="font-size:13.5px;font-weight:650;font-variant-numeric:tabular-nums;color:{{ afterFundColor }}">{{ afterFund }}</span>
+                  </div>
+                </div>
+                <button type="button" disabled="{{ short }}" style="font:inherit;font-size:15px;font-weight:650;height:50px;border-radius:13px;border:none;cursor:{{ fundCursor }};width:100%;background:{{ fundBg }};color:{{ fundColor }}">{{ fundLabel }}</button>
+                <span style="font-size:11.5px;color:#6A817F;line-height:1.55;text-wrap:pretty">The debit is reserved against the campaign. Creators are paid out of it only after you approve their posts.</span>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isWithdraw }}">
+            <div style="display:grid;grid-template-columns:1fr 340px;gap:20px;max-width:1080px;align-items:start">
+              <div style="display:flex;flex-direction:column;gap:16px">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:16px">
+                  <div style="display:flex;flex-direction:column;gap:4px">
+                    <span style="font-size:15px;font-weight:650;letter-spacing:-0.015em">Move money out of the wallet</span>
+                    <span style="font-size:13px;color:#6A817F">{{ available }} is available. Reserved campaign funds cannot be withdrawn.</span>
+                  </div>
+                  <label style="display:flex;flex-direction:column;gap:7px;max-width:300px">
+                    <span style="font-size:12.5px;font-weight:600;color:#2E4644">Withdrawal amount</span>
+                    <div style="display:flex;align-items:center;height:48px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;overflow:hidden">
+                      <span style="padding:0 14px;font-size:14px;font-weight:600;color:#4A6260;border-right:1px solid #E0E8E7;height:100%;display:flex;align-items:center;background:#F6F9F8">USD</span>
+                      <input type="text" value="{{ withdrawRaw }}" style="font:inherit;font-size:16px;font-weight:600;flex:1;height:100%;padding:0 14px;border:none;outline:none;color:#08201F;font-variant-numeric:tabular-nums" />
+                    </div>
+                  </label>
+                </div>
+
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;overflow:hidden">
+                  <div style="padding:17px 20px;border-bottom:1px solid #E0E8E7">
+                    <span style="font-size:14px;font-weight:650;letter-spacing:-0.01em">Send to</span>
+                  </div>
+                  <div style="padding:20px;display:flex;flex-direction:column;gap:10px">
+                    <sc-for list="{{ destinations }}" as="d" hint-placeholder-count="3">
+                      <button type="button" onClick="{{ d.go }}" style="text-align:left;font:inherit;display:flex;align-items:center;gap:12px;border-radius:13px;padding:15px 14px;cursor:pointer;border:1.5px solid {{ d.border }};background:{{ d.bg }}">
+                        <span style="width:18px;height:18px;border-radius:50%;flex-shrink:0;border:{{ d.dotBorder }};background:{{ d.dotBg }};display:flex;align-items:center;justify-content:center">
+                          <span style="width:7px;height:7px;border-radius:50%;background:{{ d.dotInner }};display:block"></span>
+                        </span>
+                        <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+                          <span style="font-size:13.5px;font-weight:600">{{ d.label }}</span>
+                          <span style="font-size:11.5px;color:#6A817F">{{ d.meta }}</span>
+                        </div>
+                        <span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#4A6260;white-space:nowrap;flex-shrink:0">{{ d.eta }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:15px;position:sticky;top:20px">
+                <span style="font-size:14px;font-weight:650;letter-spacing:-0.01em">Withdrawal summary</span>
+                <div style="display:flex;flex-direction:column;gap:11px">
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                    <span style="font-size:13px;color:#4A6260">Amount</span>
+                    <span style="font-size:14px;font-weight:650;font-variant-numeric:tabular-nums">{{ withdrawLabel }}</span>
+                  </div>
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                    <span style="font-size:13px;color:#4A6260">Transfer fee</span>
+                    <span style="font-size:12.5px;font-weight:600;color:#B45309">{{ feeNote }}</span>
+                  </div>
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-top:12px;border-top:1px solid #E0E8E7">
+                    <span style="font-size:13.5px;font-weight:650">You receive</span>
+                    <span style="font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-0.025em">{{ withdrawLabel }}</span>
+                  </div>
+                </div>
+                <div style="background:#F6F9F8;border-radius:12px;padding:13px;display:flex;flex-direction:column;gap:5px">
+                  <span style="font-size:12px;font-weight:600;color:#2E4644">Wallet after withdrawal</span>
+                  <span style="font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;color:#0A5F6B">{{ walletAfterWithdraw }}</span>
+                </div>
+                <button type="button" style="font:inherit;font-size:15px;font-weight:650;height:50px;border-radius:13px;border:none;background:#0E8494;color:#FFFFFF;cursor:pointer;width:100%" style-hover="background:#0A5F6B">Request withdrawal</button>
+                <span style="font-size:11.5px;color:#6A817F;line-height:1.55;text-wrap:pretty">Withdrawals are reviewed before they are sent. Arrival times depend on the destination and are not guaranteed.</span>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isActivity }}">
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+                <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+                  <button type="button" onClick="{{ t.go }}" style="font:inherit;font-size:13px;font-weight:600;height:38px;padding:0 15px;border-radius:11px;cursor:pointer;white-space:nowrap;border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.color }}">{{ t.label }}</button>
+                </sc-for>
+                <div style="margin-left:auto;display:flex;align-items:center;gap:9px">
+                  <span style="font-size:12.5px;color:#6A817F">{{ rowCount }}</span>
+                  <button type="button" style="font:inherit;font-size:13px;font-weight:600;height:38px;padding:0 14px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;color:#2E4644;cursor:pointer">Export CSV</button>
+                </div>
+              </div>
+
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;overflow:hidden;min-width:0">
+                <div style="padding:13px 20px;background:#F6F9F8;border-bottom:1px solid #E0E8E7;display:grid;grid-template-columns:150px 1fr 150px 130px 120px;gap:14px">
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#6A817F">Date</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#6A817F">Description</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#6A817F;text-align:right">Amount</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#6A817F;text-align:right">Balance</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#6A817F;text-align:right">Status</span>
+                </div>
+                <sc-for list="{{ ledger }}" as="l" hint-placeholder-count="6">
+                  <button type="button" onClick="{{ goDetail }}" style="width:100%;text-align:left;font:inherit;background:#FFFFFF;border:none;border-bottom:1px solid #EFF4F3;padding:15px 20px;display:grid;grid-template-columns:150px 1fr 150px 130px 120px;gap:14px;align-items:center;cursor:pointer" style-hover="background:#F6F9F8">
+                    <div style="display:flex;flex-direction:column;gap:2px">
+                      <span style="font-size:13px;font-weight:600">{{ l.date }}</span>
+                      <span style="font-size:11px;color:#6A817F;font-variant-numeric:tabular-nums">{{ l.ref }}</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:11px;min-width:0">
+                      <div style="width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;background:{{ l.iconBg }};color:{{ l.iconColor }}">{{ l.icon }}</div>
+                      <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                        <span style="font-size:13.5px;font-weight:600;letter-spacing:-0.005em">{{ l.title }}</span>
+                        <span style="font-size:11.5px;color:#6A817F">{{ l.meta }}</span>
+                      </div>
+                    </div>
+                    <span style="font-size:14.5px;font-weight:650;text-align:right;font-variant-numeric:tabular-nums;letter-spacing:-0.015em;white-space:nowrap;color:{{ l.amountColor }}">{{ l.amount }}</span>
+                    <span style="font-size:13px;text-align:right;font-variant-numeric:tabular-nums;color:#4A6260;white-space:nowrap">{{ l.balance }}</span>
+                    <span style="justify-self:end;font-size:11px;font-weight:600;border-radius:999px;padding:4px 10px;white-space:nowrap;background:{{ l.chipBg }};color:{{ l.chipColor }}">{{ l.chip }}</span>
+                  </button>
+                </sc-for>
+                <sc-if value="{{ ledgerEmpty }}">
+                  <div style="padding:60px 20px;display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center">
+                    <div style="width:46px;height:46px;border-radius:13px;background:#EFF4F3;display:flex;align-items:center;justify-content:center;font-size:20px;color:#93A6A4">—</div>
+                    <span style="font-size:15px;font-weight:650">Nothing here yet</span>
+                    <span style="font-size:13px;color:#6A817F;max-width:320px;line-height:1.6">{{ emptyBody }}</span>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isDetail }}">
+            <div style="display:flex;flex-direction:column;gap:16px;max-width:820px">
+              <button type="button" onClick="{{ goActivity }}" style="align-self:flex-start;font:inherit;font-size:13px;font-weight:600;color:#0E8494;background:none;border:none;padding:0;cursor:pointer">← Back to activity</button>
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;overflow:hidden">
+                <div style="padding:24px;border-bottom:1px solid #E0E8E7;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap">
+                  <div style="display:flex;flex-direction:column;gap:7px">
+                    <span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#6A817F">Wallet debit · WLT-90412</span>
+                    <span style="font-size:30px;font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums">−$1,200</span>
+                    <span style="font-size:13px;color:#4A6260">Winter skincare launch · funded 27 Aug 2026, 4:12 PM</span>
+                  </div>
+                  <span style="font-size:12px;font-weight:600;color:#15803D;background:#DCFCE7;border-radius:999px;padding:6px 13px">Reserved</span>
+                </div>
+                <div style="padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:22px">
+                  <sc-for list="{{ detailRows }}" as="d" hint-placeholder-count="8">
+                    <div style="display:flex;flex-direction:column;gap:4px">
+                      <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#93A6A4">{{ d.label }}</span>
+                      <span style="font-size:14px;font-weight:600;color:#08201F">{{ d.value }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="padding:22px 24px;border-top:1px solid #E0E8E7;background:#F6F9F8;display:flex;flex-direction:column;gap:14px">
+                  <span style="font-size:13.5px;font-weight:650;letter-spacing:-0.01em">Release schedule</span>
+                  <sc-for list="{{ releases }}" as="r" hint-placeholder-count="3">
+                    <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:12px;padding:14px;display:grid;grid-template-columns:1fr 110px 120px;gap:14px;align-items:center">
+                      <div style="display:flex;flex-direction:column;gap:2px">
+                        <span style="font-size:13px;font-weight:600">{{ r.name }}</span>
+                        <span style="font-size:11.5px;color:#6A817F">{{ r.meta }}</span>
+                      </div>
+                      <span style="font-size:13.5px;font-weight:650;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap">{{ r.amount }}</span>
+                      <span style="justify-self:end;font-size:11px;font-weight:600;border-radius:999px;padding:4px 10px;white-space:nowrap;background:{{ r.chipBg }};color:{{ r.chipColor }}">{{ r.chip }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="padding:18px 24px;border-top:1px solid #E0E8E7;display:flex;gap:11px;flex-wrap:wrap">
+                  <button type="button" style="font:inherit;font-size:13.5px;font-weight:600;height:42px;padding:0 16px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;color:#2E4644;cursor:pointer">Download receipt</button>
+                  <button type="button" style="font:inherit;font-size:13.5px;font-weight:600;height:42px;padding:0 16px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;color:#2E4644;cursor:pointer">Contact support</button>
+                  <button type="button" style="font:inherit;font-size:13.5px;font-weight:600;height:42px;padding:0 16px;border-radius:11px;border:1px solid #FECACA;background:#FEF2F2;color:#B91C1C;cursor:pointer">Request refund to wallet</button>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isMethods }}">
+            <div style="display:flex;flex-direction:column;gap:16px;max-width:820px">
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;overflow:hidden">
+                <div style="padding:18px 20px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:12px">
+                  <span style="font-size:14px;font-weight:650;letter-spacing:-0.01em">Cards on file</span>
+                  <button type="button" style="font:inherit;font-size:13px;font-weight:600;height:38px;padding:0 14px;border-radius:11px;border:1px solid #A9DAE1;background:#E7F5F7;color:#0A5F6B;cursor:pointer">Add card</button>
+                </div>
+                <sc-for list="{{ savedCards }}" as="c" hint-placeholder-count="2">
+                  <div style="padding:16px 20px;border-bottom:1px solid #EFF4F3;display:flex;align-items:center;gap:13px">
+                    <div style="width:44px;height:30px;border-radius:6px;background:#08201F;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:700;color:#FFFFFF;letter-spacing:0.04em">CARD</span></div>
+                    <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                      <span style="font-size:13.5px;font-weight:600">{{ c.label }}</span>
+                      <span style="font-size:11.5px;color:#6A817F">{{ c.meta }}</span>
+                    </div>
+                    <div style="margin-left:auto;display:flex;align-items:center;gap:9px;flex-shrink:0">
+                      <sc-if value="{{ c.isDefault }}">
+                        <span style="font-size:11px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border-radius:999px;padding:4px 10px">Default</span>
+                      </sc-if>
+                      <button type="button" style="font:inherit;font-size:12.5px;font-weight:600;height:34px;padding:0 12px;border-radius:10px;border:1px solid #E0E8E7;background:#FFFFFF;color:#2E4644;cursor:pointer">Remove</button>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;overflow:hidden">
+                <div style="padding:18px 20px;border-bottom:1px solid #E0E8E7">
+                  <span style="font-size:14px;font-weight:650;letter-spacing:-0.01em">Withdrawal destinations</span>
+                </div>
+                <sc-for list="{{ savedDestinations }}" as="d" hint-placeholder-count="2">
+                  <div style="padding:16px 20px;border-bottom:1px solid #EFF4F3;display:flex;align-items:center;gap:13px">
+                    <div style="width:34px;height:34px;border-radius:10px;background:#EFF4F3;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:700;color:#2E4644">{{ d.icon }}</div>
+                    <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                      <span style="font-size:13.5px;font-weight:600">{{ d.label }}</span>
+                      <span style="font-size:11.5px;color:#6A817F">{{ d.meta }}</span>
+                    </div>
+                    <span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#4A6260;flex-shrink:0">{{ d.eta }}</span>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:14px;padding:17px;display:flex;gap:12px;align-items:flex-start">
+                <span style="font-size:15px;font-weight:700;color:#B45309;flex-shrink:0">!</span>
+                <span style="font-size:13px;color:#78350F;line-height:1.6;text-wrap:pretty">No payment processor is connected yet. Card storage, supported networks, currencies at the point of sale and fee structure will all be set by whichever gateway is chosen.</span>
+              </div>
+            </div>
+          </sc-if>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Wallet mobile" style="display:flex;flex-direction:column;gap:20px;flex:none">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">02</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Wallet · mobile app</span>
+      <span style="font-size:14px;color:#6A817F">Same wallet, thumb-first. Controls 48px and up.</span>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:22px">
+
+      <div style="width:352px;height:716px;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:30px;box-shadow:0 14px 36px rgba(8,32,31,.12);overflow:hidden;display:flex;flex-direction:column">
+        <div style="height:44px;background:#08201F;display:flex;align-items:center;justify-content:space-between;padding:0 18px;flex:none">
+          <span style="font-size:12px;font-weight:600;color:#FFFFFF">9:41</span>
+          <span style="font-size:11px;color:#93A6A4">Wallet</span>
+        </div>
+        <div style="padding:18px 16px;background:linear-gradient(160deg,#08201F 0%,#0A5F6B 100%);display:flex;flex-direction:column;gap:16px;flex:none">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:9px">
+              <img src="assets/ie-mark.png" alt="influencearn" width="28" height="28" style="display:block;flex-shrink:0;border-radius:8px" />
+              <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:14px;font-weight:700;color:#FFFFFF;letter-spacing:-0.02em">influence<span style="color:#8FD14F">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span><span style="font-size:7.3px;font-weight:600;letter-spacing:0.08em;color:#8FD14F">.com</span><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span></span></span>
+            </div>
+            <span style="font-size:11px;font-weight:600;color:#A9DAE1;border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:4px 9px">USD</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#8FD14F">Wallet balance</span>
+            <span style="font-size:34px;font-weight:700;color:#FFFFFF;letter-spacing:-0.035em;line-height:1;font-variant-numeric:tabular-nums">$4,820.00</span>
+            <span style="font-size:12px;color:#A9DAE1">$2,420.00 available · $2,400.00 reserved</span>
+          </div>
+          <div style="display:flex;gap:9px">
+            <button type="button" style="flex:1;font:inherit;font-size:13.5px;font-weight:650;height:48px;border-radius:13px;border:none;background:#FFFFFF;color:#08201F;cursor:pointer">Add funds</button>
+            <button type="button" style="flex:1;font:inherit;font-size:13.5px;font-weight:600;height:48px;border-radius:13px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.09);color:#FFFFFF;cursor:pointer">Withdraw</button>
+          </div>
+        </div>
+        <div style="flex:1;overflow:hidden;padding:16px;display:flex;flex-direction:column;gap:12px;background:#F6F9F8">
+          <span style="font-size:12.5px;font-weight:650;color:#2E4644">Recent</span>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:13px;display:flex;align-items:center;gap:11px">
+              <div style="width:34px;height:34px;border-radius:10px;background:#E7F5F7;color:#0A5F6B;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0">+</div>
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:13px;font-weight:600">Card top-up</span><span style="font-size:11px;color:#6A817F">Visa ···· 4242 · 27 Aug</span></div>
+              <span style="margin-left:auto;font-size:13.5px;font-weight:650;color:#15803D;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0">+$2,000</span>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:13px;display:flex;align-items:center;gap:11px">
+              <div style="width:34px;height:34px;border-radius:10px;background:#EFF4F3;color:#2E4644;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0">−</div>
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:13px;font-weight:600">Winter skincare launch</span><span style="font-size:11px;color:#6A817F">Campaign funded · 27 Aug</span></div>
+              <span style="margin-left:auto;font-size:13.5px;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0">−$1,200</span>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:13px;display:flex;align-items:center;gap:11px">
+              <div style="width:34px;height:34px;border-radius:10px;background:#EEF7E3;color:#4E8A1E;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0">↑</div>
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:13px;font-weight:600">Payout released</span><span style="font-size:11px;color:#6A817F">Ayesha K. · 26 Aug</span></div>
+              <span style="margin-left:auto;font-size:13.5px;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0">−$400</span>
+            </div>
+          </div>
+        </div>
+        <div style="height:62px;border-top:1px solid #E0E8E7;background:#FFFFFF;display:grid;grid-template-columns:repeat(4,1fr);flex:none">
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span style="font-size:15px;color:#93A6A4">◇</span><span style="font-size:10px;color:#93A6A4">Home</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span style="font-size:15px;color:#93A6A4">◎</span><span style="font-size:10px;color:#93A6A4">Campaigns</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span style="font-size:15px;color:#0E8494">▣</span><span style="font-size:10px;font-weight:650;color:#0E8494">Wallet</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span style="font-size:15px;color:#93A6A4">◔</span><span style="font-size:10px;color:#93A6A4">Profile</span></div>
+        </div>
+      </div>
+
+      <div style="width:352px;height:716px;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:30px;box-shadow:0 14px 36px rgba(8,32,31,.12);overflow:hidden;display:flex;flex-direction:column">
+        <div style="height:44px;background:#08201F;display:flex;align-items:center;padding:0 18px;flex:none"><span style="font-size:12px;font-weight:600;color:#FFFFFF">9:41</span></div>
+        <div style="height:54px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;gap:12px;padding:0 16px;flex:none">
+          <span style="font-size:17px;color:#2E4644">←</span>
+          <span style="font-size:15px;font-weight:650;letter-spacing:-0.015em">Add funds</span>
+        </div>
+        <div style="flex:1;overflow:hidden;padding:16px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <button type="button" style="font:inherit;font-size:15px;font-weight:650;height:52px;border-radius:13px;border:1.5px solid #E0E8E7;background:#FFFFFF;color:#2E4644;cursor:pointer;font-variant-numeric:tabular-nums">$100</button>
+            <button type="button" style="font:inherit;font-size:15px;font-weight:650;height:52px;border-radius:13px;border:1.5px solid #E0E8E7;background:#FFFFFF;color:#2E4644;cursor:pointer;font-variant-numeric:tabular-nums">$250</button>
+            <button type="button" style="font:inherit;font-size:15px;font-weight:650;height:52px;border-radius:13px;border:1.5px solid #0E8494;background:#E7F5F7;color:#0A5F6B;cursor:pointer;font-variant-numeric:tabular-nums">$500</button>
+            <button type="button" style="font:inherit;font-size:15px;font-weight:650;height:52px;border-radius:13px;border:1.5px solid #E0E8E7;background:#FFFFFF;color:#2E4644;cursor:pointer;font-variant-numeric:tabular-nums">$1,000</button>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:7px">
+            <span style="font-size:12.5px;font-weight:600;color:#2E4644">Custom amount</span>
+            <div style="display:flex;align-items:center;height:52px;border-radius:13px;border:1px solid #E0E8E7;overflow:hidden">
+              <span style="padding:0 14px;font-size:14px;font-weight:600;color:#4A6260;border-right:1px solid #E0E8E7;height:100%;display:flex;align-items:center;background:#F6F9F8">USD</span>
+              <input type="text" value="500" style="font:inherit;font-size:17px;font-weight:650;flex:1;height:100%;padding:0 14px;border:none;outline:none;color:#08201F;font-variant-numeric:tabular-nums" />
+            </div>
+          </label>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <span style="font-size:12.5px;font-weight:600;color:#2E4644">Pay with</span>
+            <div style="border:1.5px solid #0E8494;background:#E7F5F7;border-radius:13px;padding:14px;display:flex;align-items:center;gap:11px">
+              <span style="width:19px;height:19px;border-radius:50%;border:1.5px solid #0E8494;background:#FFFFFF;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="width:8px;height:8px;border-radius:50%;background:#0E8494;display:block"></span></span>
+              <div style="width:40px;height:27px;border-radius:5px;background:#08201F;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:700;color:#FFFFFF;letter-spacing:0.04em">CARD</span></div>
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:13px;font-weight:600">Visa ···· 4242</span><span style="font-size:11px;color:#6A817F">Expires 08/29</span></div>
+            </div>
+            <div style="border:1.5px solid #E0E8E7;border-radius:13px;padding:14px;display:flex;align-items:center;gap:11px">
+              <span style="width:19px;height:19px;border-radius:50%;border:1.5px solid #C2CFCD;background:#FFFFFF;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="width:8px;height:8px;border-radius:50%;background:transparent;display:block"></span></span>
+              <span style="font-size:13px;font-weight:600;color:#2E4644">Use a new card</span>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #E0E8E7;padding:14px 16px 20px;display:flex;flex-direction:column;gap:11px;flex:none;background:#FFFFFF">
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <span style="font-size:12.5px;color:#6A817F">Card is charged</span>
+            <span style="font-size:20px;font-weight:700;letter-spacing:-0.025em;font-variant-numeric:tabular-nums">$500</span>
+          </div>
+          <button type="button" style="font:inherit;font-size:15px;font-weight:650;height:52px;border-radius:14px;border:none;background:#0E8494;color:#FFFFFF;cursor:pointer">Add to wallet</button>
+        </div>
+      </div>
+
+      <div style="width:352px;height:716px;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:30px;box-shadow:0 14px 36px rgba(8,32,31,.12);overflow:hidden;display:flex;flex-direction:column">
+        <div style="height:44px;background:#08201F;display:flex;align-items:center;padding:0 18px;flex:none"><span style="font-size:12px;font-weight:600;color:#FFFFFF">9:41</span></div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:32px;text-align:center">
+          <div style="width:64px;height:64px;border-radius:50%;background:#DCFCE7;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:#15803D">✓</div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <span style="font-size:21px;font-weight:700;letter-spacing:-0.025em">$500 added</span>
+            <span style="font-size:14px;color:#4A6260;line-height:1.6">Your wallet balance is now $5,320.00. Campaigns you fund will draw from this balance.</span>
+          </div>
+          <div style="width:100%;background:#F6F9F8;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:11px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;color:#6A817F">Reference</span><span style="font-size:13px;font-weight:600;font-variant-numeric:tabular-nums">TOP-71204</span></div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;color:#6A817F">Card</span><span style="font-size:13px;font-weight:600">Visa ···· 4242</span></div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;color:#6A817F">New balance</span><span style="font-size:13px;font-weight:600;font-variant-numeric:tabular-nums">$5,320.00</span></div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #E0E8E7;padding:14px 16px 20px;display:flex;flex-direction:column;gap:10px;flex:none">
+          <button type="button" style="font:inherit;font-size:15px;font-weight:650;height:52px;border-radius:14px;border:none;background:#0E8494;color:#FFFFFF;cursor:pointer">Back to wallet</button>
+          <button type="button" style="font:inherit;font-size:14px;font-weight:600;height:48px;border-radius:13px;border:1px solid #E0E8E7;background:#FFFFFF;color:#2E4644;cursor:pointer">View receipt</button>
+        </div>
+      </div>
+
+      <div style="width:352px;height:716px;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:30px;box-shadow:0 14px 36px rgba(8,32,31,.12);overflow:hidden;display:flex;flex-direction:column">
+        <div style="height:44px;background:#08201F;display:flex;align-items:center;padding:0 18px;flex:none"><span style="font-size:12px;font-weight:600;color:#FFFFFF">9:41</span></div>
+        <div style="height:54px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;gap:12px;padding:0 16px;flex:none">
+          <span style="font-size:17px;color:#2E4644">←</span>
+          <span style="font-size:15px;font-weight:650;letter-spacing:-0.015em">Fund campaign</span>
+        </div>
+        <div style="flex:1;overflow:hidden;padding:16px;display:flex;flex-direction:column;gap:14px">
+          <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:14px;padding:15px;display:flex;flex-direction:column;gap:9px">
+            <span style="font-size:14px;font-weight:650;color:#78350F">Wallet is $1,020 short</span>
+            <span style="font-size:12.5px;color:#92400E;line-height:1.6">This campaign needs $1,200. You have $180 available.</span>
+            <button type="button" style="font:inherit;font-size:13.5px;font-weight:650;height:46px;border-radius:12px;border:none;background:#0E8494;color:#FFFFFF;cursor:pointer">Add $1,020 with card</button>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:15px;display:flex;flex-direction:column;gap:12px">
+            <span style="font-size:14px;font-weight:650;letter-spacing:-0.01em">Winter skincare launch</span>
+            <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;color:#4A6260">Creator payments</span><span style="font-size:13.5px;font-weight:650;font-variant-numeric:tabular-nums">$1,000</span></div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;color:#4A6260">Platform fee · 20%</span><span style="font-size:13.5px;font-weight:650;font-variant-numeric:tabular-nums">$200</span></div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between;padding-top:11px;border-top:1px solid #E0E8E7"><span style="font-size:13px;font-weight:650">Wallet debit</span><span style="font-size:18px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums">$1,200</span></div>
+          </div>
+          <span style="font-size:12px;color:#6A817F;line-height:1.6">The debit is reserved against the campaign. Creators are paid from it only after you approve their posts.</span>
+        </div>
+        <div style="border-top:1px solid #E0E8E7;padding:14px 16px 20px;flex:none">
+          <button type="button" disabled="{{ true }}" style="width:100%;font:inherit;font-size:15px;font-weight:650;height:52px;border-radius:14px;border:none;background:#EFF4F3;color:#93A6A4;cursor:not-allowed">Fund $1,200 from wallet</button>
+        </div>
+      </div>
+
+      <div style="width:352px;height:716px;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:30px;box-shadow:0 14px 36px rgba(8,32,31,.12);overflow:hidden;display:flex;flex-direction:column">
+        <div style="height:44px;background:#08201F;display:flex;align-items:center;padding:0 18px;flex:none"><span style="font-size:12px;font-weight:600;color:#FFFFFF">9:41</span></div>
+        <div style="height:54px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex:none">
+          <span style="font-size:15px;font-weight:650;letter-spacing:-0.015em">Activity</span>
+          <span style="font-size:12.5px;font-weight:600;color:#0E8494">Filter</span>
+        </div>
+        <div style="padding:12px 16px;display:flex;gap:8px;overflow-x:auto;flex:none;border-bottom:1px solid #EFF4F3">
+          <span style="flex:none;font-size:12.5px;font-weight:600;color:#FFFFFF;background:#0E8494;border-radius:999px;padding:8px 13px;white-space:nowrap">All</span>
+          <span style="flex:none;font-size:12.5px;font-weight:600;color:#2E4644;background:#EFF4F3;border-radius:999px;padding:8px 13px;white-space:nowrap">Top-ups</span>
+          <span style="flex:none;font-size:12.5px;font-weight:600;color:#2E4644;background:#EFF4F3;border-radius:999px;padding:8px 13px;white-space:nowrap">Campaigns</span>
+        </div>
+        <div style="flex:1;overflow:hidden;padding:14px 16px;display:flex;flex-direction:column;gap:10px;background:#F6F9F8">
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:13px;display:flex;align-items:center;gap:11px">
+            <div style="width:34px;height:34px;border-radius:10px;background:#E7F5F7;color:#0A5F6B;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0">+</div>
+            <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:13px;font-weight:600">Card top-up</span><span style="font-size:11px;color:#6A817F">27 Aug · TOP-71204</span></div>
+            <span style="margin-left:auto;font-size:13.5px;font-weight:650;color:#15803D;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0">+$2,000</span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:13px;display:flex;align-items:center;gap:11px">
+            <div style="width:34px;height:34px;border-radius:10px;background:#EFF4F3;color:#2E4644;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0">−</div>
+            <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:13px;font-weight:600">Campaign funded</span><span style="font-size:11px;color:#6A817F">27 Aug · WLT-90412</span></div>
+            <span style="margin-left:auto;font-size:13.5px;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0">−$1,200</span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:13px;display:flex;align-items:center;gap:11px">
+            <div style="width:34px;height:34px;border-radius:10px;background:#FEF3C7;color:#B45309;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0">↺</div>
+            <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:13px;font-weight:600">Refund to wallet</span><span style="font-size:11px;color:#6A817F">24 Aug · in review</span></div>
+            <span style="margin-left:auto;font-size:13.5px;font-weight:650;color:#15803D;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0">+$300</span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:13px;display:flex;align-items:center;gap:11px">
+            <div style="width:34px;height:34px;border-radius:10px;background:#EEF7E3;color:#4E8A1E;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0">↑</div>
+            <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:13px;font-weight:600">Withdrawal to bank</span><span style="font-size:11px;color:#6A817F">21 Aug · Chase ···· 8841</span></div>
+            <span style="margin-left:auto;font-size:13.5px;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0">−$900</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="width:352px;height:716px;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:30px;box-shadow:0 14px 36px rgba(8,32,31,.12);overflow:hidden;display:flex;flex-direction:column">
+        <div style="height:44px;background:#08201F;display:flex;align-items:center;padding:0 18px;flex:none"><span style="font-size:12px;font-weight:600;color:#FFFFFF">9:41</span></div>
+        <div style="height:54px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;gap:12px;padding:0 16px;flex:none">
+          <span style="font-size:17px;color:#2E4644">←</span>
+          <span style="font-size:15px;font-weight:650;letter-spacing:-0.015em">Withdraw</span>
+        </div>
+        <div style="flex:1;overflow:hidden;padding:16px;display:flex;flex-direction:column;gap:16px">
+          <div style="background:#F6F9F8;border-radius:14px;padding:15px;display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:12px;color:#6A817F">Available to withdraw</span>
+            <span style="font-size:26px;font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums">$1,545.00</span>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:7px">
+            <span style="font-size:12.5px;font-weight:600;color:#2E4644">Amount</span>
+            <div style="display:flex;align-items:center;height:52px;border-radius:13px;border:1px solid #E0E8E7;overflow:hidden">
+              <span style="padding:0 14px;font-size:14px;font-weight:600;color:#4A6260;border-right:1px solid #E0E8E7;height:100%;display:flex;align-items:center;background:#F6F9F8">USD</span>
+              <input type="text" value="900" style="font:inherit;font-size:17px;font-weight:650;flex:1;height:100%;padding:0 14px;border:none;outline:none;color:#08201F;font-variant-numeric:tabular-nums" />
+            </div>
+          </label>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <span style="font-size:12.5px;font-weight:600;color:#2E4644">Send to</span>
+            <div style="border:1.5px solid #0E8494;background:#E7F5F7;border-radius:13px;padding:14px;display:flex;align-items:center;gap:11px">
+              <span style="width:19px;height:19px;border-radius:50%;border:1.5px solid #0E8494;background:#FFFFFF;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="width:8px;height:8px;border-radius:50%;background:#0E8494;display:block"></span></span>
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:13px;font-weight:600">Bank account ···· 8841</span><span style="font-size:11px;color:#6A817F">Local transfer</span></div>
+              <span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#4A6260;flex-shrink:0">2–4 days</span>
+            </div>
+            <div style="border:1.5px solid #E0E8E7;border-radius:13px;padding:14px;display:flex;align-items:center;gap:11px">
+              <span style="width:19px;height:19px;border-radius:50%;border:1.5px solid #C2CFCD;background:#FFFFFF;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="width:8px;height:8px;border-radius:50%;background:transparent;display:block"></span></span>
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:13px;font-weight:600">PayPal</span><span style="font-size:11px;color:#6A817F">a.khan@mail.com</span></div>
+              <span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#4A6260;flex-shrink:0">1–2 days</span>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #E0E8E7;padding:14px 16px 20px;display:flex;flex-direction:column;gap:11px;flex:none">
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <span style="font-size:12.5px;color:#6A817F">You receive</span>
+            <span style="font-size:20px;font-weight:700;letter-spacing:-0.025em;font-variant-numeric:tabular-nums">$900</span>
+          </div>
+          <button type="button" style="font:inherit;font-size:15px;font-weight:650;height:52px;border-radius:14px;border:none;background:#0E8494;color:#FFFFFF;cursor:pointer">Request withdrawal</button>
+        </div>
+      </div>
+
+      <div style="width:352px;height:716px;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:30px;box-shadow:0 14px 36px rgba(8,32,31,.12);overflow:hidden;display:flex;flex-direction:column">
+        <div style="height:44px;background:#08201F;display:flex;align-items:center;padding:0 18px;flex:none"><span style="font-size:12px;font-weight:600;color:#FFFFFF">9:41</span></div>
+        <div style="padding:18px 16px;background:linear-gradient(160deg,#08201F 0%,#12786B 100%);display:flex;flex-direction:column;gap:14px;flex:none">
+          <span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#8FD14F">Creator wallet</span>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:34px;font-weight:700;color:#FFFFFF;letter-spacing:-0.035em;line-height:1;font-variant-numeric:tabular-nums">$1,845.00</span>
+            <span style="font-size:12px;color:#A9DAE1">$1,545.00 ready · $300.00 in review</span>
+          </div>
+        </div>
+        <div style="flex:1;overflow:hidden;padding:16px;display:flex;flex-direction:column;gap:12px;background:#F6F9F8">
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:15px;display:flex;flex-direction:column;gap:11px">
+            <span style="font-size:13px;font-weight:650">This month</span>
+            <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;color:#4A6260">Jobs completed</span><span style="font-size:13.5px;font-weight:650">4</span></div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;color:#4A6260">Earned into wallet</span><span style="font-size:13.5px;font-weight:650;color:#15803D;font-variant-numeric:tabular-nums">+$1,845</span></div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;color:#4A6260">Awaiting approval</span><span style="font-size:13.5px;font-weight:650;font-variant-numeric:tabular-nums">$300</span></div>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:15px;display:flex;flex-direction:column;gap:9px">
+            <span style="font-size:13px;font-weight:650">Latest job payment</span>
+            <div style="display:flex;align-items:center;gap:11px">
+              <div style="width:34px;height:34px;border-radius:10px;background:#DCFCE7;color:#15803D;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0">↓</div>
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:13px;font-weight:600">Winter skincare launch</span><span style="font-size:11px;color:#6A817F">Approved 27 Aug</span></div>
+              <span style="margin-left:auto;font-size:13.5px;font-weight:650;color:#15803D;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0">+$400</span>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #E0E8E7;padding:14px 16px 20px;flex:none">
+          <button type="button" style="width:100%;font:inherit;font-size:15px;font-weight:650;height:52px;border-radius:14px;border:none;background:#0E8494;color:#FFFFFF;cursor:pointer">Withdraw $1,545.00</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section data-screen-label="Wallet rules" style="display:flex;flex-direction:column;gap:20px;flex:none;max-width:1080px">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">03</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">How the wallet works</span>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+      <sc-for list="{{ chain }}" as="c" hint-placeholder-count="5">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:13px;padding:13px 16px;display:flex;flex-direction:column;gap:3px;min-width:172px">
+            <span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#93A6A4">{{ c.step }}</span>
+            <span style="font-size:13.5px;font-weight:650;letter-spacing:-0.01em">{{ c.label }}</span>
+            <span style="font-size:11.5px;color:#6A817F">{{ c.meta }}</span>
+          </div>
+          <sc-if value="{{ c.arrow }}" hint-placeholder-val="{{ true }}">
+            <span style="font-size:15px;color:#93A6A4">→</span>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <sc-for list="{{ rules }}" as="r" hint-placeholder-count="6">
+        <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:8px">
+          <span style="font-size:14.5px;font-weight:650;letter-spacing:-0.012em">{{ r.title }}</span>
+          <span style="font-size:13.5px;color:#4A6260;line-height:1.62;text-wrap:pretty">{{ r.body }}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:16px;padding:20px;display:flex;gap:13px;align-items:flex-start">
+      <span style="font-size:16px;font-weight:700;color:#B45309;flex-shrink:0">!</span>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-size:14px;font-weight:650;color:#78350F">Open before build</span>
+        <span style="font-size:13px;color:#92400E;line-height:1.62;text-wrap:pretty">No processor is connected. Which gateway you pick decides supported card networks, which countries can top up, whether local currency conversion happens at checkout or at the card issuer, payout corridors for withdrawals, and the fee split shown on every summary in this file.</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;role&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;advertiser&quot;,&quot;creator&quot;],&quot;default&quot;:&quot;advertiser&quot;,&quot;tsType&quot;:&quot;'advertiser' | 'creator'&quot;,&quot;section&quot;:&quot;Wallet&quot;},&quot;lowBalance&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Wallet&quot;},&quot;showCardFeeNote&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Wallet&quot;}}">
+const G = {
+  primary: '#0E8494', primaryDark: '#0A5F6B', tint: '#E7F5F7', tintBorder: '#A9DAE1',
+  border: '#E0E8E7', subtle: '#EFF4F3', bg: '#F6F9F8', muted: '#6A817F', body: '#4A6260',
+  ink: '#08201F', greenTint: '#EEF7E3', green: '#4E8A1E',
+  okBg: '#DCFCE7', okText: '#15803D', warnBg: '#FEF3C7', warnText: '#B45309',
+  badBg: '#FEE2E2', badText: '#B91C1C', white: '#FFFFFF', faint: '#93A6A4'
+};
+const usd = n => '$' + Number(n).toLocaleString('en-US');
+const usd2 = n => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+class Component extends DCLogic {
+  state = { screen: 'overview', role: 'advertiser', low: false, amount: 500, method: 'saved', dest: 'bank', outcome: 'success', tab: 'all' };
+
+  componentDidMount() {
+    if (this.props.role) this.setState({ role: this.props.role });
+    if (this.props.lowBalance) this.setState({ low: true });
+  }
+
+  set(patch) { this.setState(patch); }
+
+  screenMeta() {
+    const m = {
+      overview: ['Wallet overview', 'Wallet', 'Balance, recent movement and the card on file'],
+      add: ['Add funds', 'Wallet · Add funds', 'Card top-up — the only way money enters a wallet'],
+      processing: ['Authorising card', 'Wallet · Add funds', 'Nothing has left the card yet'],
+      done: ['Top-up result', 'Wallet · Add funds', 'Outcome screen — flip the card result above'],
+      fund: ['Fund a campaign', 'Campaigns · Funding', 'Campaign spend is debited from the wallet'],
+      withdraw: ['Withdraw', 'Wallet · Withdraw', 'Available balance out to a bank or PayPal'],
+      activity: ['Activity', 'Wallet · Activity', 'Every credit and debit against the wallet'],
+      detail: ['Transaction', 'Wallet · Activity · WLT-90412', 'One wallet debit and what it is reserved for'],
+      methods: ['Payment methods', 'Wallet · Methods', 'Cards in, destinations out']
+    };
+    return m[this.state.screen] || m.overview;
+  }
+
+  balances() {
+    const { role, low } = this.state;
+    if (role === 'creator') {
+      return low
+        ? { balance: 180, available: 180, held: 0, availLabel: 'Ready to withdraw', heldLabel: 'In review' }
+        : { balance: 1845, available: 1545, held: 300, availLabel: 'Ready to withdraw', heldLabel: 'In review' };
+    }
+    return low
+      ? { balance: 180, available: 180, held: 0, availLabel: 'Available', heldLabel: 'Reserved' }
+      : { balance: 4820, available: 2420, held: 2400, availLabel: 'Available', heldLabel: 'Reserved' };
+  }
+
+  allRows() {
+    const adv = [
+      { k: 'topup', date: '27 Aug 2026', ref: 'TOP-71204', icon: '+', title: 'Card top-up', meta: 'Visa ···· 4242 · authorised', amount: '+$2,000', balance: '$4,820.00', chip: 'Completed', good: true },
+      { k: 'campaign', date: '27 Aug 2026', ref: 'WLT-90412', icon: '−', title: 'Winter skincare launch', meta: 'Campaign funded · 3 creators', amount: '−$1,200', balance: '$2,820.00', chip: 'Reserved', neutral: true },
+      { k: 'payout', date: '26 Aug 2026', ref: 'PAY-33810', icon: '↑', title: 'Payout released · Ayesha K.', meta: 'Approved by you · Reels + Stories', amount: '−$400', balance: '$4,020.00', chip: 'Paid', green: true },
+      { k: 'refund', date: '24 Aug 2026', ref: 'REF-21094', icon: '↺', title: 'Refund to wallet', meta: 'Creator withdrew from Ramadan teaser', amount: '+$300', balance: '$4,420.00', chip: 'In review', warn: true },
+      { k: 'topup', date: '19 Aug 2026', ref: 'TOP-70988', icon: '+', title: 'Card top-up', meta: 'Mastercard ···· 5511 · authorised', amount: '+$1,000', balance: '$4,120.00', chip: 'Completed', good: true },
+      { k: 'campaign', date: '14 Aug 2026', ref: 'WLT-90201', icon: '−', title: 'Back-to-school haul', meta: 'Campaign funded · 2 creators', amount: '−$720', balance: '$3,120.00', chip: 'Settled', neutral: true }
+    ];
+    const cre = [
+      { k: 'earning', date: '27 Aug 2026', ref: 'ERN-55210', icon: '↓', title: 'Winter skincare launch', meta: 'Approved by advertiser', amount: '+$400', balance: '$1,845.00', chip: 'In wallet', good: true },
+      { k: 'earning', date: '25 Aug 2026', ref: 'ERN-55188', icon: '↓', title: 'Coffee brand story set', meta: 'Awaiting advertiser approval', amount: '+$300', balance: '$1,445.00', chip: 'In review', warn: true },
+      { k: 'withdrawal', date: '21 Aug 2026', ref: 'WDR-40771', icon: '↑', title: 'Withdrawal to bank', meta: 'Chase ···· 8841 · local transfer', amount: '−$900', balance: '$1,145.00', chip: 'Sent', green: true },
+      { k: 'earning', date: '16 Aug 2026', ref: 'ERN-55044', icon: '↓', title: 'Fitness app launch', meta: 'Approved by advertiser', amount: '+$550', balance: '$2,045.00', chip: 'In wallet', good: true },
+      { k: 'withdrawal', date: '09 Aug 2026', ref: 'WDR-40620', icon: '↑', title: 'Withdrawal to PayPal', meta: 'a.khan@mail.com', amount: '−$450', balance: '$1,495.00', chip: 'Sent', green: true }
+    ];
+    return (this.state.role === 'creator' ? cre : adv).map(r => {
+      const style = r.good
+        ? { iconBg: G.tint, iconColor: G.primaryDark, chipBg: G.okBg, chipColor: G.okText, amountColor: G.okText }
+        : r.warn
+          ? { iconBg: G.warnBg, iconColor: G.warnText, chipBg: G.warnBg, chipColor: G.warnText, amountColor: G.okText }
+          : r.green
+            ? { iconBg: G.greenTint, iconColor: G.green, chipBg: G.greenTint, chipColor: G.green, amountColor: G.ink }
+            : { iconBg: G.subtle, iconColor: '#2E4644', chipBg: G.subtle, chipColor: '#2E4644', amountColor: G.ink };
+      return Object.assign({}, r, style);
+    });
+  }
+
+  tabDefs() {
+    return this.state.role === 'creator'
+      ? [['all', 'All'], ['earning', 'Job earnings'], ['withdrawal', 'Withdrawals'], ['refund', 'Adjustments']]
+      : [['all', 'All'], ['topup', 'Top-ups'], ['campaign', 'Campaign spend'], ['payout', 'Payouts'], ['refund', 'Refunds']];
+  }
+
+  renderVals() {
+    const s = this.state;
+    const b = this.balances();
+    const [title, crumb, hint] = this.screenMeta();
+    const go = k => () => this.set({ screen: k });
+    const isCreator = s.role === 'creator';
+    const amount = Number(s.amount) || 0;
+    const rows = this.allRows();
+    const ledger = s.tab === 'all' ? rows : rows.filter(r => r.k === s.tab);
+    const campaignTotal = 1200;
+    const shortfall = Math.max(0, campaignTotal - b.available);
+    const short = shortfall > 0;
+    const feeNote = this.props.showCardFeeNote === false ? 'Included' : 'Pending gateway terms';
+
+    const navDefs = [
+      ['overview', 'Overview', ''],
+      ['add', 'Add funds', 'Card'],
+      isCreator ? null : ['fund', 'Fund a campaign', short ? 'Short' : ''],
+      ['withdraw', 'Withdraw', ''],
+      ['activity', 'Activity', String(rows.length)],
+      ['methods', 'Payment methods', '']
+    ].filter(Boolean);
+
+    return {
+      screenHint: hint, screenTitle: title, screenCrumb: crumb,
+      accountName: isCreator ? 'Ayesha Khan' : 'Lumen Skincare',
+      accountMeta: isCreator ? 'Creator · London' : 'Advertiser · New York',
+      initials: isCreator ? 'AK' : 'LS',
+      walletLabel: isCreator ? 'Creator wallet' : 'Advertiser wallet',
+      statsTitle: isCreator ? 'Earnings this month' : 'Spend this month',
+      methodsTitle: isCreator ? 'Withdrawal destination' : 'Card on file',
+      defaultMethod: isCreator ? 'Bank account ···· 8841' : 'Visa ···· 4242',
+      defaultMethodMeta: isCreator ? 'Local transfer · 2–4 days' : 'Expires 08/29 · billing US',
+
+      balance: usd2(b.balance), available: usd2(b.available), held: usd2(b.held),
+      availLabel: b.availLabel, heldLabel: b.heldLabel,
+
+      advBg: isCreator ? 'transparent' : G.white, advColor: isCreator ? G.muted : G.ink,
+      creBg: isCreator ? G.white : 'transparent', creColor: isCreator ? G.ink : G.muted,
+      setAdvertiser: () => this.set({ role: 'advertiser', tab: 'all' }),
+      setCreator: () => this.set({ role: 'creator', tab: 'all', screen: s.screen === 'fund' ? 'overview' : s.screen }),
+
+      lowLabel: s.low ? 'Balance: low' : 'Balance: funded',
+      lowBg: s.low ? G.warnBg : G.white, lowColor: s.low ? G.warnText : G.body,
+      lowBorder: s.low ? '#FDE68A' : G.border,
+      toggleLow: () => this.set({ low: !s.low }),
+      outcomeLabel: s.outcome === 'success' ? 'approved' : 'declined',
+      toggleOutcome: () => this.set({ outcome: s.outcome === 'success' ? 'failed' : 'success' }),
+
+      isOverview: s.screen === 'overview', isAdd: s.screen === 'add',
+      isProcessing: s.screen === 'processing', isDone: s.screen === 'done',
+      isFund: s.screen === 'fund', isWithdraw: s.screen === 'withdraw',
+      isActivity: s.screen === 'activity', isDetail: s.screen === 'detail',
+      isMethods: s.screen === 'methods',
+      goOverview: go('overview'), goAdd: go('add'), goWithdraw: go('withdraw'),
+      goActivity: go('activity'), goDetail: go('detail'), goMethods: go('methods'),
+
+      nav: navDefs.map(([k, label, badge]) => {
+        const on = s.screen === k || (k === 'add' && (s.screen === 'processing' || s.screen === 'done')) || (k === 'activity' && s.screen === 'detail');
+        return {
+          label, badge, go: go(k),
+          weight: on ? 650 : 500,
+          bg: on ? 'rgba(255,255,255,.11)' : 'transparent',
+          color: on ? G.white : '#A9C4C1',
+          badgeColor: badge === 'Short' ? '#FDE68A' : '#6A817F'
+        };
+      }),
+
+      stats: isCreator
+        ? [{ label: 'Jobs completed', value: '4' }, { label: 'Earned into wallet', value: usd(1845) }, { label: 'Awaiting approval', value: usd(300) }]
+        : [{ label: 'Campaigns funded', value: '3' }, { label: 'Wallet debited', value: usd(2640) }, { label: 'Platform fees', value: usd(440) }],
+
+      recent: rows.slice(0, 4),
+      ledger, ledgerEmpty: ledger.length === 0,
+      rowCount: ledger.length + (ledger.length === 1 ? ' entry' : ' entries'),
+      emptyBody: 'No ' + (this.tabDefs().find(t => t[0] === s.tab) || ['', 'matching'])[1].toLowerCase() + ' on this wallet yet.',
+      tabs: this.tabDefs().map(([k, label]) => ({
+        label, go: () => this.set({ tab: k }),
+        bg: s.tab === k ? G.primary : G.white,
+        color: s.tab === k ? G.white : G.body,
+        border: s.tab === k ? G.primary : G.border
+      })),
+
+      amountRaw: String(s.amount),
+      amountLabel: usd(amount),
+      onAmount: e => this.set({ amount: (e.target.value || '').replace(/[^0-9]/g, '') }),
+      balanceAfter: usd2(b.balance + amount),
+      presets: [100, 250, 500, 1000].map(v => ({
+        label: usd(v), go: () => this.set({ amount: v }),
+        bg: amount === v ? G.tint : G.white,
+        color: amount === v ? G.primaryDark : '#2E4644',
+        border: amount === v ? G.primary : G.border
+      })),
+      cards: [
+        { key: 'saved', label: 'Visa ···· 4242', meta: 'Expires 08/29 · default' },
+        { key: 'new', label: 'Use a new card', meta: 'Credit or debit, any country' }
+      ].map(c => {
+        const on = s.method === c.key;
+        return {
+          label: c.label, meta: c.meta, go: () => this.set({ method: c.key }),
+          border: on ? G.primary : G.border, bg: on ? G.tint : G.white,
+          dotBorder: '1.5px solid ' + (on ? G.primary : '#C2CFCD'),
+          dotBg: G.white, dotInner: on ? G.primary : 'transparent'
+        };
+      }),
+      isNewCard: s.method === 'new',
+      feeNote,
+
+      startProcessing: () => {
+        this.set({ screen: 'processing' });
+        clearTimeout(this._t);
+        this._t = setTimeout(() => this.setState({ screen: 'done' }), 1500);
+      },
+      steps: [
+        { label: 'Card details validated', mark: '✓', bg: G.okBg, color: G.okText, textColor: G.body },
+        { label: 'Authorising with issuer', mark: '•', bg: G.tint, color: G.primaryDark, textColor: G.ink },
+        { label: 'Crediting wallet', mark: '', bg: G.subtle, color: G.faint, textColor: G.faint }
+      ],
+
+      doneIcon: s.outcome === 'success' ? '✓' : '!',
+      doneIconBg: s.outcome === 'success' ? G.okBg : G.badBg,
+      doneIconColor: s.outcome === 'success' ? G.okText : G.badText,
+      doneHeaderBg: s.outcome === 'success' ? G.white : '#FEF2F2',
+      doneTitle: s.outcome === 'success' ? usd(amount) + ' added' : 'Card declined',
+      doneBody: s.outcome === 'success'
+        ? 'Your wallet balance is now ' + usd2(b.balance + amount) + '. Campaigns you fund draw down from this balance.'
+        : 'The issuer refused the charge and nothing was taken. Your wallet balance is unchanged at ' + usd2(b.balance) + '.',
+      doneRows: s.outcome === 'success'
+        ? [
+            { label: 'Reference', value: 'TOP-71204' },
+            { label: 'Card', value: 'Visa ···· 4242' },
+            { label: 'Charged', value: usd(amount) + ' USD' },
+            { label: 'New wallet balance', value: usd2(b.balance + amount) }
+          ]
+        : [
+            { label: 'Reference', value: 'TOP-71205' },
+            { label: 'Card', value: 'Visa ···· 4242' },
+            { label: 'Attempted', value: usd(amount) + ' USD' },
+            { label: 'Reason given', value: 'Do not honour' }
+          ],
+      doneActionLabel: s.outcome === 'success' ? 'View activity' : 'Try another card',
+      doneAction: s.outcome === 'success' ? go('activity') : go('add'),
+
+      campaignTotal: usd(campaignTotal),
+      shortfall: usd(shortfall),
+      short,
+      afterFund: short ? '−' + usd(shortfall) : usd2(b.available - campaignTotal),
+      afterFundColor: short ? G.badText : G.ink,
+      fundLabel: short ? 'Add funds to continue' : 'Fund ' + usd(campaignTotal) + ' from wallet',
+      fundBg: short ? G.subtle : G.primary,
+      fundColor: short ? G.faint : G.white,
+      fundCursor: short ? 'not-allowed' : 'pointer',
+      lineItems: [
+        { name: 'Ayesha Khan', meta: '128K followers · 1 Reel + 3 Stories', amount: usd(400) },
+        { name: 'Daniel Osei', meta: '94K followers · 1 Reel', amount: usd(320) },
+        { name: 'Mira Lindqvist', meta: '210K followers · 2 Stories', amount: usd(280) }
+      ],
+      fundRules: [
+        { text: 'The full ' + usd(campaignTotal) + ' leaves your available balance and is reserved against this campaign.' },
+        { text: 'Each creator is paid from the reserve only after you approve their live post.' },
+        { text: 'If a creator drops out, their share returns to your wallet — not to your card.' }
+      ],
+
+      withdrawRaw: '900',
+      withdrawLabel: usd(900),
+      walletAfterWithdraw: usd2(Math.max(0, b.balance - 900)),
+      destinations: [
+        { key: 'bank', label: 'Bank account ···· 8841', meta: 'Chase · United States', eta: '2–4 days' },
+        { key: 'paypal', label: 'PayPal', meta: 'a.khan@mail.com', eta: '1–2 days' },
+        { key: 'wise', label: 'Wise', meta: 'Multi-currency account', eta: '1–3 days' }
+      ].map(d => {
+        const on = s.dest === d.key;
+        return {
+          label: d.label, meta: d.meta, eta: d.eta, go: () => this.set({ dest: d.key }),
+          border: on ? G.primary : G.border, bg: on ? G.tint : G.white,
+          dotBorder: '1.5px solid ' + (on ? G.primary : '#C2CFCD'),
+          dotBg: G.white, dotInner: on ? G.primary : 'transparent'
+        };
+      }),
+
+      detailRows: [
+        { label: 'Type', value: 'Campaign funding' },
+        { label: 'Wallet', value: 'Lumen Skincare · USD' },
+        { label: 'Campaign', value: 'Winter skincare launch' },
+        { label: 'Creators', value: '3 booked' },
+        { label: 'Creator payments', value: usd(1000) },
+        { label: 'Platform fee', value: usd(200) + ' · 20%' },
+        { label: 'Balance before', value: usd2(4020) },
+        { label: 'Balance after', value: usd2(2820) }
+      ],
+      releases: [
+        { name: 'Ayesha Khan', meta: 'Post approved 27 Aug', amount: usd(400), chip: 'Paid', chipBg: G.okBg, chipColor: G.okText },
+        { name: 'Daniel Osei', meta: 'Awaiting your approval', amount: usd(320), chip: 'Reserved', chipBg: G.warnBg, chipColor: G.warnText },
+        { name: 'Mira Lindqvist', meta: 'Content not submitted', amount: usd(280), chip: 'Reserved', chipBg: G.subtle, chipColor: '#2E4644' }
+      ],
+
+      savedCards: [
+        { label: 'Visa ···· 4242', meta: 'Expires 08/29 · billing United States', isDefault: true },
+        { label: 'Mastercard ···· 5511', meta: 'Expires 11/27 · billing United Kingdom', isDefault: false }
+      ],
+      savedDestinations: [
+        { icon: 'B', label: 'Bank account ···· 8841', meta: 'Chase · United States', eta: '2–4 days' },
+        { icon: 'P', label: 'PayPal', meta: 'a.khan@mail.com', eta: '1–2 days' }
+      ],
+
+      chain: [
+        { step: '01', label: 'Card charged', meta: 'Money enters the wallet', arrow: true },
+        { step: '02', label: 'Wallet funded', meta: 'Balance held in USD', arrow: true },
+        { step: '03', label: 'Campaign debited', meta: 'Amount reserved', arrow: true },
+        { step: '04', label: 'Post approved', meta: 'Creator wallet credited', arrow: true },
+        { step: '05', label: 'Withdrawal', meta: 'Out to bank or PayPal', arrow: false }
+      ],
+      rules: [
+        { title: 'One wallet per account', body: 'Advertisers and creators get the same wallet object. What differs is direction of travel: advertisers mostly spend, creators mostly earn. An account that does both sees both sides in one balance.' },
+        { title: 'Cards are the only way in', body: 'Wallets are topped up by credit or debit card. There is no invoice, wire or manual credit path in this design — if one is needed later it becomes a second funding method on the Add funds screen.' },
+        { title: 'Campaigns spend the wallet', body: 'Publishing a campaign debits the wallet for creator payments plus the platform fee. If the balance is short, the campaign cannot go live until the wallet is topped up.' },
+        { title: 'Earnings land in the wallet', body: 'When an advertiser approves a creator\u2019s post, that creator\u2019s share moves into their wallet. It is not paid straight to a bank — the creator decides when to withdraw.' },
+        { title: 'USD end to end', body: 'Every balance, fee, campaign budget and payout is denominated in USD. Local currency conversion, if any, happens at the card issuer or the payout bank, not inside the product.' },
+        { title: 'Global by default', body: 'Country appears only as billing detail on a card and as a withdrawal corridor. Nothing in the flow assumes a single market, and city or currency is never used to gate a feature.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

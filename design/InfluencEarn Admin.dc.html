@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Plus Jakarta Sans", -apple-system, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; background: #F6F9F8; color: #08201F; }
+  a { color: #0E8494; text-decoration: none; }
+  a:hover { color: #0A5F6B; }
+  ::selection { background: #A9DAE1; }
+  input, textarea, select { font-family: inherit; }
+</style>
+</helmet>
+
+<div style="padding:56px 56px 96px;display:flex;flex-direction:column;gap:64px;background:#F6F9F8">
+
+  <div style="display:flex;flex-direction:column;gap:10px;max-width:880px;flex:none">
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="assets/ie-mark.png" alt="influencearn" width="30" height="30" style="display:block;flex-shrink:0;border-radius:9px" />
+      <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:16px;font-weight:700;letter-spacing:-0.025em">influence<span style="color:#4E8A1E">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span><span style="font-size:8.3px;font-weight:600;letter-spacing:0.08em;color:#4E8A1E">.com</span><span style="height:1px;flex:1;background:#4E8A1E;opacity:.65;display:block"></span></span></span>
+      <span style="font-size:11.5px;font-weight:600;color:#08201F;background:#E0E8E7;border-radius:999px;padding:3px 9px">Agency Admin</span>
+    </div>
+    <h1 style="margin:0;font-size:36px;font-weight:700;letter-spacing:-0.03em;line-height:1.15">The agency control center</h1>
+    <p style="margin:0;font-size:16px;color:#4A6260;line-height:1.6">Everything the agency operates: campaigns, users, task reviews waiting on payout, payments and platform revenue. The app is live — move through the sidebar, switch table tabs, open a payout and release or hold it.</p>
+  </div>
+
+  <section data-screen-label="Admin app" style="display:flex;flex-direction:column;gap:20px;flex:none">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">01</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Admin app · desktop</span>
+      <span style="font-size:14px;color:#6A817F">{{ screenHint }}</span>
+    </div>
+
+    <div style="width:1560px;flex:none;position:relative;border:1px solid #E0E8E7;border-radius:20px;background:#F6F9F8;box-shadow:0 32px 80px -40px rgba(8,32,31,.28);overflow:hidden;display:grid;grid-template-columns:250px 1fr">
+
+      <aside style="background:#0B2523;padding:20px 14px;display:flex;flex-direction:column;gap:22px;min-height:1240px">
+        <div style="display:flex;align-items:center;gap:10px;padding:4px 8px 0">
+          <img src="assets/ie-mark.png" alt="influencearn" width="30" height="30" style="display:block;flex-shrink:0;border-radius:9px" />
+          <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:15.5px;font-weight:700;letter-spacing:-0.025em;color:#FFFFFF">influence<span style="color:#8FD14F">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span><span style="font-size:8.1px;font-weight:600;letter-spacing:0.08em;color:#8FD14F">.com</span><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span></span></span>
+        </div>
+        <nav style="display:flex;flex-direction:column;gap:2px">
+          <sc-for list="{{ nav }}" as="n" hint-placeholder-count="13">
+            <button type="button" onClick="{{ n.onClick }}" style="font:inherit;display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:{{ n.weight }};color:{{ n.fg }};background:{{ n.bg }};border:none;border-radius:11px;padding:9px 12px;cursor:pointer;text-align:left" style-hover="background:rgba(255,255,255,.08)">
+              <span style="width:15px;height:15px;border:2px solid {{ n.dot }};border-radius:{{ n.radius }};display:block;flex:none"></span>{{ n.label }}
+              <span style="margin-left:auto;font-size:11px;font-weight:600;color:{{ n.badgeFg }};background:{{ n.badgeBg }};border-radius:999px;padding:2px 7px">{{ n.badge }}</span>
+            </button>
+            <sc-if value="{{ n.rule }}"><span style="height:1px;background:rgba(255,255,255,.1);margin:10px 8px;display:block"></span></sc-if>
+          </sc-for>
+        </nav>
+        <div style="margin-top:auto;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px">
+          <span style="font-size:13px;font-weight:600;color:#FFFFFF">{{ payoutNoteTitle }}</span>
+          <span style="font-size:12.5px;color:#93A6A4;line-height:1.55">Advertisers approve the work. The agency releases each creator payment by hand.</span>
+          <button type="button" onClick="{{ goPayouts }}" style="font:inherit;font-size:12.5px;font-weight:600;color:#A9DAE1;background:transparent;border:none;padding:0;text-align:left;cursor:pointer" style-hover="color:#FFFFFF">Open payout queue →</button>
+        </div>
+      </aside>
+
+      <div style="display:flex;flex-direction:column;background:#F6F9F8;min-width:0">
+
+        <div style="height:68px;background:#FFFFFF;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 28px;flex:none">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="display:flex;align-items:center;gap:10px;height:40px;padding:0 14px 0 10px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF">
+              <span style="width:24px;height:24px;border-radius:7px;background:#0B2523;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:11px;font-weight:700">AA</span>
+              <span style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.15">
+                <span style="font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Current role</span>
+                <span style="font-size:13.5px;font-weight:600;color:#08201F">Agency Admin</span>
+              </span>
+            </span>
+            <span style="font-size:13px;color:#6A817F">{{ breadcrumb }}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button type="button" onClick="{{ goNotifications }}" style="font:inherit;position:relative;width:38px;height:38px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;display:flex;align-items:center;justify-content:center;cursor:pointer" style-hover="background:#F6F9F8">
+              <span style="width:14px;height:14px;border:2px solid #4A6260;border-radius:5px 5px 6px 6px;display:block"></span>
+              <span style="position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;background:#DC2626;border:1.5px solid #FFFFFF"></span>
+            </button>
+            <span style="width:38px;height:38px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#4A6260;cursor:pointer" style-hover="background:#F6F9F8">?</span>
+            <span style="display:flex;align-items:center;gap:9px;padding:4px 10px 4px 4px;border-radius:12px;border:1px solid #E0E8E7;cursor:pointer" style-hover="background:#F6F9F8">
+              <span style="width:30px;height:30px;border-radius:9px;background:#0E8494;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#FFFFFF">FK</span>
+              <span style="display:flex;flex-direction:column;line-height:1.2"><span style="font-size:13px;font-weight:600">Faisal Khan</span><span style="font-size:11.5px;color:#6A817F">Agency operations</span></span>
+              <span style="font-size:10px;color:#6A817F">▼</span>
+            </span>
+          </div>
+        </div>
+
+        <div style="padding:32px;display:flex;flex-direction:column;gap:24px;min-width:0">
+
+          <!-- DASHBOARD -->
+          <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:24px">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Agency Overview</h2>
+                  <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">Monitor campaigns, approvals, payments, and platform activity.</p>
+                </div>
+                <button type="button" onClick="{{ goReviews }}" style="font:inherit;font-size:14.5px;font-weight:550;height:46px;padding:0 20px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Review payouts ({{ readyCount }})</button>
+              </div>
+
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+                <sc-for list="{{ summary }}" as="s" hint-placeholder-count="7">
+                  <button type="button" onClick="{{ s.onClick }}" style="font:inherit;text-align:left;background:{{ s.bg }};border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:18px 20px;display:flex;flex-direction:column;gap:8px;cursor:pointer" style-hover="border-color:#A9DAE1;box-shadow:0 8px 24px -14px rgba(10,95,107,.35)">
+                    <span style="font-size:12px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:{{ s.sub }}">{{ s.label }}</span>
+                    <span style="font-size:27px;font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums;color:{{ s.fg }}">{{ s.value }}</span>
+                    <span style="font-size:12.5px;color:{{ s.sub }};line-height:1.5">{{ s.hint }}</span>
+                  </button>
+                </sc-for>
+              </div>
+
+              <span style="display:flex;gap:11px;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:14px 18px">
+                <span style="width:6px;height:6px;border-radius:50%;background:#0E8494;margin-top:7px;flex:none"></span>
+                <span style="font-size:13px;color:#4A6260;line-height:1.6">Figures on this page are sample operational data for design review, not live platform statistics.</span>
+              </span>
+
+              <div style="display:grid;grid-template-columns:1fr 400px;gap:20px;align-items:start">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                  <div style="padding:18px 22px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:16px">
+                    <span style="display:flex;flex-direction:column;gap:3px">
+                      <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Ready for payout</span>
+                      <span style="font-size:13px;color:#6A817F">Advertiser-approved tasks waiting on the agency to release payment.</span>
+                    </span>
+                    <button type="button" onClick="{{ goReviews }}" style="font:inherit;font-size:13.5px;font-weight:550;height:38px;padding:0 14px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">See all</button>
+                  </div>
+                  <sc-for list="{{ dashReviews }}" as="r" hint-placeholder-count="4">
+                    <div style="padding:15px 22px;border-bottom:1px solid #EFF4F3;display:flex;align-items:center;gap:16px">
+                      <span style="width:36px;height:36px;border-radius:11px;flex:none;background:#EEF7E3;color:#0A5F6B;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700">{{ r.initial }}</span>
+                      <span style="display:flex;flex-direction:column;gap:3px;flex:1;min-width:0">
+                        <span style="font-size:14.5px;font-weight:600;letter-spacing:-0.01em">{{ r.influencer }}</span>
+                        <span style="font-size:12.5px;color:#6A817F">{{ r.campaign }} · {{ r.advertiser }}</span>
+                      </span>
+                      <span style="font-size:12px;font-weight:600;color:#047857;background:#ECFDF5;border-radius:999px;padding:5px 11px;flex:none">Ready for Payout</span>
+                      <span style="font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;width:96px;text-align:right;flex:none">{{ r.reward }}</span>
+                      <button type="button" onClick="{{ r.onOpen }}" style="font:inherit;font-size:13px;font-weight:550;height:36px;padding:0 13px;border-radius:10px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;flex:none" style-hover="background:#0A5F6B">Review Payout</button>
+                    </div>
+                  </sc-for>
+                </div>
+
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                  <div style="padding:18px 20px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:12px">
+                    <span style="font-size:16px;font-weight:650;letter-spacing:-0.02em">Activity log</span>
+                    <button type="button" onClick="{{ goNotifications }}" style="font:inherit;font-size:12.5px;font-weight:600;color:#0E8494;background:transparent;border:none;padding:0;cursor:pointer">Full log</button>
+                  </div>
+                  <div style="padding:18px 20px;display:flex;flex-direction:column;gap:0">
+                    <sc-for list="{{ activityShort }}" as="a" hint-placeholder-count="6">
+                      <div style="display:flex;gap:12px">
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:none">
+                          <span style="width:26px;height:26px;border-radius:8px;flex:none;background:{{ a.iconBg }};color:{{ a.iconFg }};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ a.icon }}</span>
+                          <sc-if value="{{ a.hasLine }}" hint-placeholder-val="{{ true }}"><span style="width:2px;height:20px;background:#E0E8E7;display:block;border-radius:2px"></span></sc-if>
+                        </div>
+                        <span style="display:flex;flex-direction:column;gap:2px;padding-bottom:10px;min-width:0">
+                          <span style="font-size:13.5px;color:#08201F;line-height:1.5">{{ a.text }}</span>
+                          <span style="font-size:12px;color:#6A817F">{{ a.time }}</span>
+                        </span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- CAMPAIGNS -->
+          <sc-if value="{{ isCampaigns }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Campaigns</h2>
+                  <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">Every campaign on the platform and where it sits in the flow.</p>
+                </div>
+                <span style="font-size:13.5px;color:#6A817F">{{ campaignCount }}</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ campaignTabs }}" as="t" hint-placeholder-count="6">
+                  <button type="button" onClick="{{ t.onClick }}" style="font:inherit;font-size:13px;font-weight:{{ t.weight }};height:38px;padding:0 14px;border-radius:999px;border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.fg }};cursor:pointer">{{ t.label }}</button>
+                </sc-for>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                <div style="display:grid;grid-template-columns:2.1fr 1.3fr 0.9fr 0.7fr 0.7fr 0.8fr 0.8fr 1.2fr 1.3fr 100px;gap:12px;padding:13px 20px;background:#F6F9F8;border-bottom:1px solid #E0E8E7">
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Campaign</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Advertiser</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Platform</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Required</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Selected</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Completed</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Approved</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Payment</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Status</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F;text-align:right">Action</span>
+                </div>
+                <sc-for list="{{ campaignRows }}" as="c" hint-placeholder-count="8">
+                  <div style="display:grid;grid-template-columns:2.1fr 1.3fr 0.9fr 0.7fr 0.7fr 0.8fr 0.8fr 1.2fr 1.3fr 100px;gap:12px;align-items:center;padding:14px 20px;border-bottom:1px solid #EFF4F3">
+                    <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                      <span style="font-size:14px;font-weight:600;letter-spacing:-0.01em">{{ c.title }}</span>
+                      <span style="font-size:12px;color:#6A817F">{{ c.category }} · {{ c.value }}</span>
+                    </span>
+                    <span style="font-size:13px;color:#2E4644">{{ c.advertiser }}</span>
+                    <span style="font-size:13px;color:#2E4644">{{ c.platform }}</span>
+                    <span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ c.required }}</span>
+                    <span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ c.selected }}</span>
+                    <span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ c.completed }}</span>
+                    <span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ c.approved }}</span>
+                    <span style="justify-self:start;font-size:11.5px;font-weight:600;color:{{ c.payFg }};background:{{ c.payBg }};border-radius:999px;padding:5px 10px">{{ c.payment }}</span>
+                    <span style="justify-self:start;font-size:11.5px;font-weight:600;color:{{ c.stFg }};background:{{ c.stBg }};border-radius:999px;padding:5px 10px">{{ c.status }}</span>
+                    <span style="justify-self:end;display:flex;gap:6px">
+                      <button type="button" style="font:inherit;font-size:12.5px;font-weight:550;height:32px;padding:0 10px;border-radius:9px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">View</button>
+                      <button type="button" onClick="{{ c.onMenu }}" style="font:inherit;width:32px;height:32px;border-radius:9px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;font-size:13px;cursor:pointer" style-hover="background:#F6F9F8">⋯</button>
+                    </span>
+                  </div>
+                  <sc-if value="{{ c.menuOpen }}">
+                    <div style="padding:0 20px 14px;display:flex;justify-content:flex-end;border-bottom:1px solid #EFF4F3">
+                      <span style="display:flex;gap:8px;background:#F6F9F8;border:1px solid #E0E8E7;border-radius:12px;padding:8px">
+                        <sc-for list="{{ c.actions }}" as="a" hint-placeholder-count="2">
+                          <button type="button" style="font:inherit;font-size:12.5px;font-weight:550;height:32px;padding:0 12px;border-radius:9px;border:1px solid {{ a.border }};background:#FFFFFF;color:{{ a.fg }};cursor:pointer" style-hover="background:#FFFFFF">{{ a.label }}</button>
+                        </sc-for>
+                      </span>
+                    </div>
+                  </sc-if>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- APPLICATIONS -->
+          <sc-if value="{{ isApplications }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Applications</h2>
+                <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">Applications across all campaigns. Advertisers make every selection themselves.</p>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                <div style="display:grid;grid-template-columns:1.4fr 2fr 1.3fr 0.9fr 1fr 1.2fr;gap:14px;padding:13px 20px;background:#F6F9F8;border-bottom:1px solid #E0E8E7">
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Influencer</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Campaign</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Advertiser</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Platform</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Applied</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Status</span>
+                </div>
+                <sc-for list="{{ applicationRows }}" as="a" hint-placeholder-count="7">
+                  <div style="display:grid;grid-template-columns:1.4fr 2fr 1.3fr 0.9fr 1fr 1.2fr;gap:14px;align-items:center;padding:14px 20px;border-bottom:1px solid #EFF4F3">
+                    <span style="display:flex;align-items:center;gap:10px;min-width:0">
+                      <span style="width:30px;height:30px;border-radius:9px;flex:none;background:#EEF7E3;color:#0A5F6B;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ a.initial }}</span>
+                      <span style="font-size:13.5px;font-weight:600">{{ a.influencer }}</span>
+                    </span>
+                    <span style="font-size:13.5px;color:#08201F">{{ a.campaign }}</span>
+                    <span style="font-size:13px;color:#2E4644">{{ a.advertiser }}</span>
+                    <span style="font-size:13px;color:#2E4644">{{ a.platform }}</span>
+                    <span style="font-size:13px;color:#2E4644">{{ a.applied }}</span>
+                    <span style="justify-self:start;font-size:11.5px;font-weight:600;color:{{ a.stFg }};background:{{ a.stBg }};border-radius:999px;padding:5px 10px">{{ a.status }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- TASK REVIEWS -->
+          <sc-if value="{{ isReviews }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Task Reviews</h2>
+                  <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">Tasks the advertiser has approved. Each one waits here for the agency to process the payout.</p>
+                </div>
+                <span style="font-size:13.5px;color:#6A817F">{{ reviewSummary }}</span>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                <div style="display:grid;grid-template-columns:1.4fr 1.9fr 1.3fr 0.9fr 1fr 1.2fr 1.3fr 130px;gap:14px;padding:13px 20px;background:#F6F9F8;border-bottom:1px solid #E0E8E7">
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Influencer</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Campaign</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Advertiser</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Platform</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Reward</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Approved on</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Payment status</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F;text-align:right">Action</span>
+                </div>
+                <sc-for list="{{ reviewRows }}" as="r" hint-placeholder-count="6">
+                  <div style="display:grid;grid-template-columns:1.4fr 1.9fr 1.3fr 0.9fr 1fr 1.2fr 1.3fr 130px;gap:14px;align-items:center;padding:14px 20px;border-bottom:1px solid #EFF4F3">
+                    <span style="display:flex;align-items:center;gap:10px;min-width:0">
+                      <span style="width:30px;height:30px;border-radius:9px;flex:none;background:#EEF7E3;color:#0A5F6B;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ r.initial }}</span>
+                      <span style="font-size:13.5px;font-weight:600">{{ r.influencer }}</span>
+                    </span>
+                    <span style="font-size:13.5px;color:#08201F">{{ r.campaign }}</span>
+                    <span style="font-size:13px;color:#2E4644">{{ r.advertiser }}</span>
+                    <span style="font-size:13px;color:#2E4644">{{ r.platform }}</span>
+                    <span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ r.reward }}</span>
+                    <span style="font-size:13px;color:#2E4644">{{ r.approvedOn }}</span>
+                    <span style="justify-self:start;font-size:11.5px;font-weight:600;color:{{ r.stFg }};background:{{ r.stBg }};border-radius:999px;padding:5px 10px">{{ r.status }}</span>
+                    <button type="button" onClick="{{ r.onOpen }}" style="font:inherit;justify-self:end;font-size:12.5px;font-weight:550;height:34px;padding:0 12px;border-radius:10px;border:1px solid {{ r.ctaBorder }};background:{{ r.ctaBg }};color:{{ r.ctaFg }};cursor:pointer">{{ r.cta }}</button>
+                  </div>
+                </sc-for>
+                <div style="padding:14px 20px"><span style="font-size:12.5px;color:#6A817F;line-height:1.5">The agency releases each payment manually after the advertiser approves the work.</span></div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- PAYOUT REVIEW -->
+          <sc-if value="{{ isPayoutReview }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <button type="button" onClick="{{ goReviews }}" style="font:inherit;align-self:flex-start;font-size:13.5px;font-weight:550;color:#4A6260;background:transparent;border:none;padding:0;cursor:pointer" style-hover="color:#0E8494">← Back to task reviews</button>
+
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:24px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap">
+                <div style="display:flex;gap:16px;min-width:0">
+                  <span style="width:60px;height:60px;border-radius:16px;flex:none;background:#EEF7E3;color:#0A5F6B;font-size:19px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ payout.initial }}</span>
+                  <div style="display:flex;flex-direction:column;gap:7px;min-width:0">
+                    <span style="display:flex;flex-wrap:wrap;gap:6px">
+                      <span style="font-size:11.5px;font-weight:600;color:{{ payout.stFg }};background:{{ payout.stBg }};border-radius:999px;padding:4px 10px">{{ payout.status }}</span>
+                      <span style="font-size:11.5px;font-weight:600;color:#08201F;background:#EFF4F3;border-radius:999px;padding:4px 10px">{{ payout.platform }}</span>
+                      <span style="font-size:11.5px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border-radius:999px;padding:4px 10px">{{ payout.taskType }}</span>
+                    </span>
+                    <span style="font-size:24px;font-weight:700;letter-spacing:-0.025em">{{ payout.influencer }}</span>
+                    <span style="font-size:13.5px;color:#4A6260">{{ payout.handle }} · {{ payout.city }} · {{ payout.followers }} followers (self-reported)</span>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+                  <span style="display:flex;flex-direction:column;align-items:flex-end;gap:1px">
+                    <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Creator reward</span>
+                    <span style="font-size:28px;font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums">{{ payout.reward }}</span>
+                  </span>
+                  <span style="display:flex;gap:10px">
+                    <button type="button" onClick="{{ payout.onHold }}" style="font:inherit;font-size:14px;font-weight:550;height:46px;padding:0 18px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;cursor:pointer" style-hover="background:#F6F9F8">Hold Payment</button>
+                    <button type="button" onClick="{{ payout.onRelease }}" style="font:inherit;font-size:14px;font-weight:550;height:46px;padding:0 20px;border-radius:12px;border:1px solid {{ payout.ctaBorder }};background:{{ payout.ctaBg }};color:{{ payout.ctaFg }};cursor:{{ payout.ctaCursor }};box-shadow:{{ payout.ctaShadow }}">{{ payout.ctaLabel }}</button>
+                  </span>
+                </div>
+              </div>
+
+              <sc-if value="{{ payout.showHoldForm }}">
+                <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px">
+                  <span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em;color:#92400E">Hold this payment</span>
+                  <span style="font-size:13.5px;color:#78350F;line-height:1.6">The creator sees that the payment is on hold. Adding a reason saves a support message later.</span>
+                  <textarea value="{{ payout.holdReason }}" onChange="{{ payout.onHoldReason }}" rows="3" placeholder="Reason (optional) — e.g. bank details need confirming" style="border:1px solid #FDE68A;border-radius:12px;padding:12px 14px;font-size:14.5px;line-height:1.6;background:#FFFFFF;color:#08201F;outline:none;resize:vertical" style-focus="border-color:#B45309"></textarea>
+                  <span style="display:flex;gap:10px">
+                    <button type="button" onClick="{{ payout.onConfirmHold }}" style="font:inherit;font-size:14px;font-weight:550;height:44px;padding:0 18px;border-radius:12px;border:1px solid #B45309;background:#B45309;color:#FFFFFF;cursor:pointer" style-hover="background:#92400E">Confirm hold</button>
+                    <button type="button" onClick="{{ payout.onCancelHold }}" style="font:inherit;font-size:14px;font-weight:550;height:44px;padding:0 16px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;cursor:pointer">Cancel</button>
+                  </span>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ payout.released }}">
+                <div style="background:#ECFDF5;border:1px solid #A7F3D0;border-radius:16px;padding:20px;display:flex;gap:12px">
+                  <span style="width:24px;height:24px;border-radius:8px;flex:none;background:#D1FAE5;color:#047857;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">✓</span>
+                  <span style="display:flex;flex-direction:column;gap:3px">
+                    <span style="font-size:14.5px;font-weight:650;color:#065F46">Payment released</span>
+                    <span style="font-size:13.5px;color:#047857;line-height:1.6">{{ payout.reward }} sent to {{ payout.influencer }} by {{ payout.method }}. The payout moves to Paid and the creator is notified.</span>
+                  </span>
+                </div>
+              </sc-if>
+
+              <div style="display:grid;grid-template-columns:1fr 400px;gap:20px;align-items:start">
+                <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                    <div style="padding:18px 22px;border-bottom:1px solid #E0E8E7"><span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Submission &amp; approval</span></div>
+                    <div style="padding:20px 22px;display:flex;flex-direction:column;gap:18px">
+                      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+                        <sc-for list="{{ payout.facts }}" as="f" hint-placeholder-count="6">
+                          <span style="display:flex;flex-direction:column;gap:3px;background:#F6F9F8;border-radius:12px;padding:12px 14px">
+                            <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">{{ f.label }}</span>
+                            <span style="font-size:14.5px;font-weight:650">{{ f.value }}</span>
+                          </span>
+                        </sc-for>
+                      </div>
+                      <span style="display:flex;align-items:center;gap:12px;border:1px solid #E0E8E7;border-radius:12px;padding:13px 15px">
+                        <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                          <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Submitted social link</span>
+                          <span style="font-size:13.5px;color:#0A5F6B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ payout.link }}</span>
+                        </span>
+                        <span style="margin-left:auto;font-size:12.5px;font-weight:600;color:#0E8494;flex:none;cursor:pointer">Open ↗</span>
+                      </span>
+                      <span style="display:flex;gap:11px;background:#ECFDF5;border-radius:12px;padding:13px 15px">
+                        <span style="width:6px;height:6px;border-radius:50%;background:#047857;margin-top:7px;flex:none"></span>
+                        <span style="font-size:13.5px;color:#065F46;line-height:1.6">{{ payout.approvalNote }}</span>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                    <div style="padding:18px 22px;border-bottom:1px solid #E0E8E7"><span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Money on this task</span></div>
+                    <div style="padding:20px 22px;display:flex;flex-direction:column;gap:12px">
+                      <span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><span style="font-size:14px;color:#4A6260">Creator reward (payable now)</span><span style="font-size:14.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ payout.reward }}</span></span>
+                      <span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><span style="font-size:14px;color:#4A6260">Platform fee on this task (20% of campaign value)</span><span style="font-size:14.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ payout.fee }}</span></span>
+                      <span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><span style="font-size:14px;color:#4A6260">Paid by advertiser at publish</span><span style="font-size:14.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ payout.charged }}</span></span>
+                      <span style="height:1px;background:#E0E8E7;display:block"></span>
+                      <span style="font-size:12.5px;color:#6A817F;line-height:1.6">The advertiser paid the full campaign amount before publishing. The agency holds the funds in its own account and releases each creator reward manually after approval.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:20px">
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:20px;display:flex;flex-direction:column;gap:12px">
+                    <span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em">Payout method</span>
+                    <span style="display:flex;flex-direction:column;gap:3px;border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Method</span><span style="font-size:14px;font-weight:600">{{ payout.method }}</span></span>
+                    <span style="display:flex;flex-direction:column;gap:3px;border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Account title</span><span style="font-size:14px;font-weight:600">{{ payout.influencer }}</span></span>
+                    <span style="display:flex;flex-direction:column;gap:3px;border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Account</span><span style="font-size:14px;font-weight:600;font-variant-numeric:tabular-nums">{{ payout.account }}</span></span>
+                    <button type="button" onClick="{{ payout.onProfile }}" style="font:inherit;font-size:13.5px;font-weight:550;height:42px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">Open influencer profile</button>
+                  </div>
+
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:20px;display:flex;flex-direction:column;gap:14px">
+                    <span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em">Trail</span>
+                    <sc-for list="{{ payout.trail }}" as="t" hint-placeholder-count="5">
+                      <span style="display:flex;gap:11px">
+                        <span style="width:22px;height:22px;border-radius:7px;flex:none;background:{{ t.bg }};color:{{ t.fg }};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ t.icon }}</span>
+                        <span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span style="font-size:13.5px;color:#08201F;line-height:1.45">{{ t.label }}</span><span style="font-size:12px;color:#6A817F">{{ t.time }}</span></span>
+                      </span>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- USERS -->
+          <sc-if value="{{ isUsers }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Users</h2>
+                  <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">One account can act as an advertiser and an influencer. Suspending an account stops both roles.</p>
+                </div>
+                <span style="font-size:13.5px;color:#6A817F">{{ userCount }}</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ userTabs }}" as="t" hint-placeholder-count="4">
+                  <button type="button" onClick="{{ t.onClick }}" style="font:inherit;font-size:13.5px;font-weight:{{ t.weight }};height:40px;padding:0 15px;border-radius:999px;border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.fg }};cursor:pointer">{{ t.label }}</button>
+                </sc-for>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                <div style="display:grid;grid-template-columns:1.6fr 1.8fr 1.1fr 1.3fr 0.9fr 1.1fr 1fr 190px;gap:14px;padding:13px 20px;background:#F6F9F8;border-bottom:1px solid #E0E8E7">
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Name</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Email</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Role</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Social accounts</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Campaigns</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Status</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Joined</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F;text-align:right">Actions</span>
+                </div>
+                <sc-for list="{{ userRows }}" as="u" hint-placeholder-count="8">
+                  <div style="display:grid;grid-template-columns:1.6fr 1.8fr 1.1fr 1.3fr 0.9fr 1.1fr 1fr 190px;gap:14px;align-items:center;padding:14px 20px;border-bottom:1px solid #EFF4F3">
+                    <span style="display:flex;align-items:center;gap:10px;min-width:0">
+                      <span style="width:32px;height:32px;border-radius:10px;flex:none;background:{{ u.avatarBg }};color:{{ u.avatarFg }};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ u.initial }}</span>
+                      <span style="font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ u.name }}</span>
+                    </span>
+                    <span style="font-size:13px;color:#2E4644;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ u.email }}</span>
+                    <span style="justify-self:start;font-size:11.5px;font-weight:600;color:{{ u.roleFg }};background:{{ u.roleBg }};border-radius:999px;padding:5px 10px">{{ u.role }}</span>
+                    <span style="font-size:13px;color:#2E4644">{{ u.socials }}</span>
+                    <span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ u.campaigns }}</span>
+                    <span style="justify-self:start;font-size:11.5px;font-weight:600;color:{{ u.stFg }};background:{{ u.stBg }};border-radius:999px;padding:5px 10px">{{ u.status }}</span>
+                    <span style="font-size:13px;color:#2E4644">{{ u.joined }}</span>
+                    <span style="justify-self:end;display:flex;gap:6px">
+                      <button type="button" onClick="{{ u.onView }}" style="font:inherit;font-size:12.5px;font-weight:550;height:32px;padding:0 10px;border-radius:9px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">View Profile</button>
+                      <button type="button" onClick="{{ u.onStatus }}" style="font:inherit;font-size:12.5px;font-weight:550;height:32px;padding:0 10px;border-radius:9px;border:1px solid {{ u.actionBorder }};background:#FFFFFF;color:{{ u.actionFg }};cursor:pointer" style-hover="background:#F6F9F8">{{ u.actionLabel }}</button>
+                    </span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- INFLUENCER PROFILE -->
+          <sc-if value="{{ isInfluencerProfile }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <button type="button" onClick="{{ goUsers }}" style="font:inherit;align-self:flex-start;font-size:13.5px;font-weight:550;color:#4A6260;background:transparent;border:none;padding:0;cursor:pointer" style-hover="color:#0E8494">← Back to users</button>
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:24px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap">
+                <div style="display:flex;gap:18px;min-width:0">
+                  <span style="width:76px;height:76px;border-radius:20px;flex:none;background:#EEF7E3;color:#0A5F6B;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ inf.initial }}</span>
+                  <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+                    <span style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                      <span style="font-size:24px;font-weight:700;letter-spacing:-0.025em">{{ inf.name }}</span>
+                      <span style="font-size:11.5px;font-weight:600;color:{{ inf.stFg }};background:{{ inf.stBg }};border-radius:999px;padding:4px 10px">{{ inf.status }}</span>
+                    </span>
+                    <span style="font-size:13.5px;color:#4A6260">{{ inf.email }} · {{ inf.city }} · joined {{ inf.joined }}</span>
+                    <p style="margin:0;font-size:14px;color:#2E4644;line-height:1.65;max-width:560px">{{ inf.bio }}</p>
+                    <span style="display:flex;flex-wrap:wrap;gap:6px">
+                      <sc-for list="{{ inf.categories }}" as="c" hint-placeholder-count="3">
+                        <span style="font-size:11.5px;font-weight:600;color:#0A5F6B;background:#EEF7E3;border-radius:999px;padding:4px 10px">{{ c }}</span>
+                      </sc-for>
+                    </span>
+                  </div>
+                </div>
+                <span style="display:flex;gap:10px">
+                  <button type="button" style="font:inherit;font-size:14px;font-weight:550;height:44px;padding:0 16px;border-radius:12px;border:1px solid #FCA5A5;background:#FFFFFF;color:#B91C1C;cursor:pointer" style-hover="background:#FEF2F2">Suspend</button>
+                  <button type="button" style="font:inherit;font-size:14px;font-weight:550;height:44px;padding:0 16px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;cursor:pointer" style-hover="background:#F6F9F8">Deactivate</button>
+                </span>
+              </div>
+
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+                <sc-for list="{{ inf.stats }}" as="s" hint-placeholder-count="4">
+                  <span style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:18px 20px;display:flex;flex-direction:column;gap:6px">
+                    <span style="font-size:12px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">{{ s.label }}</span>
+                    <span style="font-size:24px;font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums">{{ s.value }}</span>
+                  </span>
+                </sc-for>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 400px;gap:20px;align-items:start">
+                <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                    <div style="padding:18px 22px;border-bottom:1px solid #E0E8E7"><span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Campaign history</span></div>
+                    <div style="display:grid;grid-template-columns:2fr 1.3fr 1fr 1fr 1.2fr;gap:14px;padding:12px 22px;background:#F6F9F8;border-bottom:1px solid #E0E8E7">
+                      <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Campaign</span>
+                      <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Advertiser</span>
+                      <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Task</span>
+                      <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Reward</span>
+                      <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Status</span>
+                    </div>
+                    <sc-for list="{{ inf.history }}" as="h" hint-placeholder-count="6">
+                      <div style="display:grid;grid-template-columns:2fr 1.3fr 1fr 1fr 1.2fr;gap:14px;align-items:center;padding:13px 22px;border-bottom:1px solid #EFF4F3">
+                        <span style="font-size:13.5px;font-weight:600">{{ h.campaign }}</span>
+                        <span style="font-size:13px;color:#2E4644">{{ h.advertiser }}</span>
+                        <span style="font-size:13px;color:#2E4644">{{ h.task }}</span>
+                        <span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ h.reward }}</span>
+                        <span style="justify-self:start;font-size:11.5px;font-weight:600;color:{{ h.stFg }};background:{{ h.stBg }};border-radius:999px;padding:5px 10px">{{ h.status }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:20px">
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:20px;display:flex;flex-direction:column;gap:12px">
+                    <span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em">Social accounts</span>
+                    <sc-for list="{{ inf.socials }}" as="a" hint-placeholder-count="4">
+                      <span style="display:flex;align-items:center;gap:11px;border:1px solid #E0E8E7;border-radius:12px;padding:11px 13px">
+                        <span style="width:30px;height:30px;border-radius:9px;flex:none;background:{{ a.iconBg }};color:{{ a.iconFg }};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ a.initial }}</span>
+                        <span style="display:flex;flex-direction:column;gap:1px;min-width:0">
+                          <span style="font-size:13.5px;font-weight:600;color:{{ a.fg }}">{{ a.label }}</span>
+                          <span style="font-size:12px;color:#6A817F">{{ a.detail }}</span>
+                        </span>
+                        <span style="margin-left:auto;font-size:11.5px;font-weight:600;color:{{ a.stFg }};background:{{ a.stBg }};border-radius:999px;padding:4px 9px;flex:none">{{ a.status }}</span>
+                      </span>
+                    </sc-for>
+                    <span style="font-size:12px;color:#6A817F;line-height:1.55">Follower counts are entered by the creator. InfluencEarn does not verify them automatically.</span>
+                  </div>
+                  <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:20px;display:flex;flex-direction:column;gap:12px">
+                    <span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em">Payments</span>
+                    <sc-for list="{{ inf.payments }}" as="p" hint-placeholder-count="3">
+                      <span style="display:flex;align-items:center;gap:12px;border-bottom:1px solid #EFF4F3;padding-bottom:10px">
+                        <span style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0"><span style="font-size:13.5px;font-weight:600">{{ p.campaign }}</span><span style="font-size:12px;color:#6A817F">{{ p.date }}</span></span>
+                        <span style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex:none"><span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ p.amount }}</span><span style="font-size:11px;font-weight:600;color:{{ p.stFg }};background:{{ p.stBg }};border-radius:999px;padding:3px 8px">{{ p.status }}</span></span>
+                      </span>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- ADVERTISER PROFILE -->
+          <sc-if value="{{ isAdvertiserProfile }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <button type="button" onClick="{{ goUsers }}" style="font:inherit;align-self:flex-start;font-size:13.5px;font-weight:550;color:#4A6260;background:transparent;border:none;padding:0;cursor:pointer" style-hover="color:#0E8494">← Back to users</button>
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:24px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap">
+                <div style="display:flex;gap:18px;min-width:0">
+                  <span style="width:76px;height:76px;border-radius:20px;flex:none;background:#0B2523;color:#FFFFFF;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ adv.initial }}</span>
+                  <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+                    <span style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                      <span style="font-size:24px;font-weight:700;letter-spacing:-0.025em">{{ adv.name }}</span>
+                      <span style="font-size:11.5px;font-weight:600;color:{{ adv.stFg }};background:{{ adv.stBg }};border-radius:999px;padding:4px 10px">{{ adv.status }}</span>
+                    </span>
+                    <span style="font-size:13.5px;color:#4A6260">{{ adv.email }} · {{ adv.city }} · joined {{ adv.joined }}</span>
+                    <span style="font-size:13.5px;color:#4A6260">Primary contact {{ adv.contact }}</span>
+                  </div>
+                </div>
+                <span style="display:flex;gap:10px">
+                  <button type="button" style="font:inherit;font-size:14px;font-weight:550;height:44px;padding:0 16px;border-radius:12px;border:1px solid #FCA5A5;background:#FFFFFF;color:#B91C1C;cursor:pointer" style-hover="background:#FEF2F2">Suspend</button>
+                  <button type="button" style="font:inherit;font-size:14px;font-weight:550;height:44px;padding:0 16px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#4A6260;cursor:pointer" style-hover="background:#F6F9F8">Restore</button>
+                </span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+                <sc-for list="{{ adv.stats }}" as="s" hint-placeholder-count="4">
+                  <span style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:18px 20px;display:flex;flex-direction:column;gap:6px">
+                    <span style="font-size:12px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">{{ s.label }}</span>
+                    <span style="font-size:24px;font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums">{{ s.value }}</span>
+                  </span>
+                </sc-for>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                  <div style="padding:18px 22px;border-bottom:1px solid #E0E8E7"><span style="font-size:16px;font-weight:650;letter-spacing:-0.02em">Campaigns</span></div>
+                  <sc-for list="{{ adv.campaigns }}" as="c" hint-placeholder-count="5">
+                    <div style="padding:14px 22px;border-bottom:1px solid #EFF4F3;display:flex;align-items:center;gap:14px">
+                      <span style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0"><span style="font-size:14px;font-weight:600">{{ c.title }}</span><span style="font-size:12.5px;color:#6A817F">{{ c.meta }}</span></span>
+                      <span style="font-size:11.5px;font-weight:600;color:{{ c.stFg }};background:{{ c.stBg }};border-radius:999px;padding:5px 10px;flex:none">{{ c.status }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                  <div style="padding:18px 22px;border-bottom:1px solid #E0E8E7"><span style="font-size:16px;font-weight:650;letter-spacing:-0.02em">Payment history</span></div>
+                  <sc-for list="{{ adv.payments }}" as="p" hint-placeholder-count="5">
+                    <div style="padding:14px 22px;border-bottom:1px solid #EFF4F3;display:flex;align-items:center;gap:14px">
+                      <span style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0"><span style="font-size:14px;font-weight:600">{{ p.campaign }}</span><span style="font-size:12.5px;color:#6A817F">{{ p.method }} · {{ p.date }}</span></span>
+                      <span style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex:none"><span style="font-size:14px;font-weight:600;font-variant-numeric:tabular-nums">{{ p.amount }}</span><span style="font-size:11px;font-weight:600;color:{{ p.stFg }};background:{{ p.stBg }};border-radius:999px;padding:3px 8px">{{ p.status }}</span></span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- PAYMENTS -->
+          <sc-if value="{{ isPayments }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Payments</h2>
+                <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">Advertiser payments into the platform, with the 20% platform fee and gateway cost on each one.</p>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px">
+                <sc-for list="{{ paymentCards }}" as="p" hint-placeholder-count="5">
+                  <span style="background:{{ p.bg }};border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:18px 20px;display:flex;flex-direction:column;gap:6px">
+                    <span style="font-size:12px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:{{ p.sub }}">{{ p.label }}</span>
+                    <span style="font-size:23px;font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums;color:{{ p.fg }}">{{ p.value }}</span>
+                    <span style="font-size:12.5px;color:{{ p.sub }};line-height:1.5">{{ p.hint }}</span>
+                  </span>
+                </sc-for>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                <div style="padding:18px 20px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between;gap:16px">
+                  <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Transactions</span>
+                  <span style="font-size:12.5px;color:#6A817F">Campaign payments, fees and refunds</span>
+                </div>
+                <div style="display:grid;grid-template-columns:1.2fr 1.3fr 1.8fr 1fr 1fr 1fr 1fr 1.2fr 1.1fr 1fr;gap:12px;padding:13px 20px;background:#F6F9F8;border-bottom:1px solid #E0E8E7">
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Transaction</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Advertiser</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Campaign</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Amount</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Platform fee</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Gateway fee</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Total</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Method</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Status</span>
+                  <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Date</span>
+                </div>
+                <sc-for list="{{ transactionRows }}" as="t" hint-placeholder-count="7">
+                  <div style="display:grid;grid-template-columns:1.2fr 1.3fr 1.8fr 1fr 1fr 1fr 1fr 1.2fr 1.1fr 1fr;gap:12px;align-items:center;padding:14px 20px;border-bottom:1px solid #EFF4F3">
+                    <span style="font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums;color:#0A5F6B">{{ t.id }}</span>
+                    <span style="font-size:13px;color:#2E4644">{{ t.advertiser }}</span>
+                    <span style="font-size:13px;color:#08201F;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ t.campaign }}</span>
+                    <span style="font-size:13px;font-variant-numeric:tabular-nums">{{ t.amount }}</span>
+                    <span style="font-size:13px;font-variant-numeric:tabular-nums">{{ t.fee }}</span>
+                    <span style="font-size:13px;font-variant-numeric:tabular-nums;color:#6A817F">{{ t.gateway }}</span>
+                    <span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ t.total }}</span>
+                    <span style="font-size:13px;color:#2E4644">{{ t.method }}</span>
+                    <span style="justify-self:start;font-size:11.5px;font-weight:600;color:{{ t.stFg }};background:{{ t.stBg }};border-radius:999px;padding:5px 10px">{{ t.status }}</span>
+                    <span style="font-size:13px;color:#2E4644">{{ t.date }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- PAYOUTS -->
+          <sc-if value="{{ isPayouts }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Payouts</h2>
+                  <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">Creator payments the agency releases by hand once the advertiser has approved the work.</p>
+                </div>
+                <span style="font-size:13.5px;color:#6A817F">{{ payoutSummary }}</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ payoutTabs }}" as="t" hint-placeholder-count="5">
+                  <button type="button" onClick="{{ t.onClick }}" style="font:inherit;font-size:13.5px;font-weight:{{ t.weight }};height:40px;padding:0 15px;border-radius:999px;border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.fg }};cursor:pointer">{{ t.label }}</button>
+                </sc-for>
+              </div>
+              <sc-if value="{{ hasPayoutRows }}" hint-placeholder-val="{{ true }}">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                  <div style="display:grid;grid-template-columns:1.5fr 2fr 1fr 1.2fr 1.4fr 1.2fr 140px;gap:14px;padding:13px 20px;background:#F6F9F8;border-bottom:1px solid #E0E8E7">
+                    <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Influencer</span>
+                    <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Campaign</span>
+                    <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Reward</span>
+                    <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Approval date</span>
+                    <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Payout method</span>
+                    <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Status</span>
+                    <span style="font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F;text-align:right">Action</span>
+                  </div>
+                  <sc-for list="{{ payoutRows }}" as="p" hint-placeholder-count="6">
+                    <div style="display:grid;grid-template-columns:1.5fr 2fr 1fr 1.2fr 1.4fr 1.2fr 140px;gap:14px;align-items:center;padding:14px 20px;border-bottom:1px solid #EFF4F3">
+                      <span style="display:flex;align-items:center;gap:10px;min-width:0">
+                        <span style="width:30px;height:30px;border-radius:9px;flex:none;background:#EEF7E3;color:#0A5F6B;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ p.initial }}</span>
+                        <span style="font-size:13.5px;font-weight:600">{{ p.influencer }}</span>
+                      </span>
+                      <span style="font-size:13.5px;color:#08201F">{{ p.campaign }}</span>
+                      <span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ p.reward }}</span>
+                      <span style="font-size:13px;color:#2E4644">{{ p.approvedOn }}</span>
+                      <span style="font-size:13px;color:#2E4644">{{ p.method }}</span>
+                      <span style="justify-self:start;font-size:11.5px;font-weight:600;color:{{ p.stFg }};background:{{ p.stBg }};border-radius:999px;padding:5px 10px">{{ p.status }}</span>
+                      <button type="button" onClick="{{ p.onAction }}" style="font:inherit;justify-self:end;font-size:12.5px;font-weight:550;height:34px;padding:0 12px;border-radius:10px;border:1px solid {{ p.ctaBorder }};background:{{ p.ctaBg }};color:{{ p.ctaFg }};cursor:pointer">{{ p.cta }}</button>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ noPayoutRows }}">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:56px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center">
+                  <span style="width:52px;height:52px;border-radius:16px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;color:#047857">✓</span>
+                  <span style="font-size:18px;font-weight:650;letter-spacing:-0.02em">{{ payoutEmptyTitle }}</span>
+                  <span style="font-size:14px;color:#4A6260;line-height:1.6;max-width:440px">Nothing sits in this queue right now. Approved tasks land here as soon as an advertiser signs off on the work.</span>
+                  <button type="button" onClick="{{ goReviews }}" style="font:inherit;font-size:14px;font-weight:550;height:44px;padding:0 18px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer;margin-top:4px" style-hover="background:#F6F9F8">Open task reviews</button>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <!-- REPORTS -->
+          <sc-if value="{{ isReports }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Reports</h2>
+                <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">Platform revenue and operational counts for the last six months. Sample data for design review.</p>
+              </div>
+
+              <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px">
+                <sc-for list="{{ revenueCards }}" as="r" hint-placeholder-count="5">
+                  <span style="background:{{ r.bg }};border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:18px 20px;display:flex;flex-direction:column;gap:6px">
+                    <span style="font-size:12px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:{{ r.sub }}">{{ r.label }}</span>
+                    <span style="font-size:23px;font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums;color:{{ r.fg }}">{{ r.value }}</span>
+                    <span style="font-size:12.5px;color:{{ r.sub }};line-height:1.5">{{ r.hint }}</span>
+                  </span>
+                </sc-for>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:22px;display:flex;flex-direction:column;gap:18px">
+                  <span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px">
+                    <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Platform fees by month</span>
+                    <span style="font-size:12.5px;color:#6A817F">20% of each campaign value</span>
+                  </span>
+                  <div style="display:flex;align-items:flex-end;gap:18px;height:220px;padding-top:8px">
+                    <sc-for list="{{ chartBars }}" as="b" hint-placeholder-count="6">
+                      <span style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;justify-content:flex-end">
+                        <span style="font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ b.value }}</span>
+                        <span style="width:100%;height:160px;display:flex;align-items:flex-end;flex:none">
+                          <span style="width:100%;height:{{ b.height }};background:{{ b.color }};border-radius:10px 10px 4px 4px;display:block"></span>
+                        </span>
+                        <span style="font-size:12px;color:#6A817F">{{ b.month }}</span>
+                      </span>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:22px;display:flex;flex-direction:column;gap:16px">
+                  <span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Funnel this month</span>
+                  <sc-for list="{{ funnel }}" as="f" hint-placeholder-count="5">
+                    <span style="display:flex;flex-direction:column;gap:7px">
+                      <span style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><span style="font-size:13.5px;color:#2E4644">{{ f.label }}</span><span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ f.value }}</span></span>
+                      <span style="height:8px;border-radius:999px;background:#EFF4F3;display:block;overflow:hidden"><span style="display:block;height:100%;width:{{ f.pct }};background:{{ f.color }};border-radius:999px"></span></span>
+                    </span>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                <div style="padding:18px 22px;border-bottom:1px solid #E0E8E7"><span style="font-size:16.5px;font-weight:650;letter-spacing:-0.02em">Saved reports</span></div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:20px 22px">
+                  <sc-for list="{{ reportCards }}" as="r" hint-placeholder-count="6">
+                    <span style="border:1px solid #E0E8E7;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:7px;cursor:pointer" style-hover="border-color:#A9DAE1;background:#F6F9F8">
+                      <span style="font-size:14.5px;font-weight:650;letter-spacing:-0.02em">{{ r.title }}</span>
+                      <span style="font-size:12.5px;color:#6A817F;line-height:1.55">{{ r.hint }}</span>
+                      <span style="font-size:12.5px;font-weight:600;color:#0E8494;margin-top:2px">Export CSV →</span>
+                    </span>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- NOTIFICATIONS -->
+          <sc-if value="{{ isNotifications }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Notifications</h2>
+                  <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">What happened on the platform, and the full activity log beside it.</p>
+                </div>
+                <button type="button" onClick="{{ markAllRead }}" style="font:inherit;font-size:13.5px;font-weight:550;height:40px;padding:0 15px;border-radius:11px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer" style-hover="background:#F6F9F8">Mark all as read ({{ unreadCount }})</button>
+              </div>
+              <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:20px;align-items:start">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                  <sc-for list="{{ notifications }}" as="n" hint-placeholder-count="6">
+                    <div style="padding:16px 20px;border-bottom:1px solid #EFF4F3;display:flex;align-items:flex-start;gap:14px;background:{{ n.bg }}">
+                      <span style="width:34px;height:34px;border-radius:11px;flex:none;background:{{ n.iconBg }};color:{{ n.iconFg }};font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ n.icon }}</span>
+                      <span style="display:flex;flex-direction:column;gap:3px;flex:1;min-width:0">
+                        <span style="font-size:14px;font-weight:{{ n.weight }};color:#08201F;line-height:1.5">{{ n.message }}</span>
+                        <span style="font-size:12.5px;color:#6A817F">{{ n.time }}</span>
+                      </span>
+                      <button type="button" onClick="{{ n.onAction }}" style="font:inherit;font-size:12.5px;font-weight:600;color:#0E8494;background:transparent;border:none;padding:0;cursor:pointer;flex:none" style-hover="color:#0A5F6B">{{ n.action }}</button>
+                      <sc-if value="{{ n.unread }}"><span style="width:8px;height:8px;border-radius:50%;background:#0E8494;flex:none;margin-top:12px"></span></sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);overflow:hidden">
+                  <div style="padding:18px 20px;border-bottom:1px solid #E0E8E7;display:flex;flex-direction:column;gap:3px">
+                    <span style="font-size:16px;font-weight:650;letter-spacing:-0.02em">Activity log</span>
+                    <span style="font-size:13px;color:#6A817F">Every step, in order, for audit.</span>
+                  </div>
+                  <div style="padding:18px 20px;display:flex;flex-direction:column;gap:0">
+                    <sc-for list="{{ activityFull }}" as="a" hint-placeholder-count="8">
+                      <div style="display:flex;gap:12px">
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:none">
+                          <span style="width:26px;height:26px;border-radius:8px;flex:none;background:{{ a.iconBg }};color:{{ a.iconFg }};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ a.icon }}</span>
+                          <sc-if value="{{ a.hasLine }}" hint-placeholder-val="{{ true }}"><span style="width:2px;height:20px;background:#E0E8E7;display:block;border-radius:2px"></span></sc-if>
+                        </div>
+                        <span style="display:flex;flex-direction:column;gap:2px;padding-bottom:10px;min-width:0">
+                          <span style="font-size:13.5px;color:#08201F;line-height:1.5">{{ a.text }}</span>
+                          <span style="font-size:12px;color:#6A817F">{{ a.time }}</span>
+                        </span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- SETTINGS -->
+          <sc-if value="{{ isSettings }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <h2 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.03em">Settings</h2>
+                <p style="margin:0;font-size:15.5px;color:#4A6260;line-height:1.6">Platform fee, payout handling and who on the agency team gets notified.</p>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px">
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:20px;display:flex;flex-direction:column;gap:14px">
+                  <span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em">Fees</span>
+                  <span style="display:flex;flex-direction:column;gap:3px;border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Platform fee</span><span style="font-size:14px;font-weight:600">20% added to every campaign value</span></span>
+                  <span style="display:flex;flex-direction:column;gap:3px;border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px"><span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6A817F">Gateway cost</span><span style="font-size:14px;font-weight:600">2.5% of each advertiser payment</span></span>
+                  <span style="font-size:12.5px;color:#6A817F;line-height:1.55">Changing the fee applies to campaigns created afterwards. Live campaigns keep the fee they were published with.</span>
+                </div>
+                <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:20px;display:flex;flex-direction:column;gap:14px">
+                  <span style="font-size:15.5px;font-weight:650;letter-spacing:-0.02em">Payout handling</span>
+                  <sc-for list="{{ settingsToggles }}" as="t" hint-placeholder-count="3">
+                    <button type="button" onClick="{{ t.onClick }}" style="font:inherit;display:flex;align-items:center;gap:12px;border:1px solid #E0E8E7;border-radius:12px;padding:12px 14px;background:#FFFFFF;cursor:pointer;text-align:left" style-hover="background:#F6F9F8">
+                      <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:13.5px;font-weight:600">{{ t.label }}</span><span style="font-size:12.5px;color:#6A817F;line-height:1.5">{{ t.hint }}</span></span>
+                      <span style="margin-left:auto;width:42px;height:24px;border-radius:999px;background:{{ t.trackBg }};display:flex;align-items:center;padding:3px;flex:none;justify-content:{{ t.justify }}"><span style="width:18px;height:18px;border-radius:50%;background:#FFFFFF;display:block;box-shadow:0 1px 3px rgba(8,32,31,.3)"></span></span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Admin empty states" style="display:flex;flex-direction:column;gap:20px;flex:none">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">02</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Empty states</span>
+      <span style="font-size:14px;color:#6A817F">Each one says what fills it and where to go next</span>
+    </div>
+    <div style="width:1560px;flex:none;display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+      <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:32px 28px;display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center;min-height:270px;justify-content:center">
+        <span style="width:52px;height:52px;border-radius:16px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;color:#047857">✓</span>
+        <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">No pending payouts</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6;max-width:300px">Every approved task has been paid. New ones arrive here as soon as an advertiser signs off on a submission.</span>
+        <button type="button" style="font:inherit;font-size:13.5px;font-weight:550;height:42px;padding:0 17px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer;margin-top:4px" style-hover="background:#F6F9F8">Open task reviews</button>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:32px 28px;display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center;min-height:270px;justify-content:center">
+        <span style="width:52px;height:52px;border-radius:16px;background:#EFF4F3;display:flex;align-items:center;justify-content:center"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:5px;display:block"></span></span>
+        <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">No campaigns yet</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6;max-width:300px">Campaigns appear here the moment an advertiser saves a draft, and go live once their payment clears.</span>
+        <button type="button" style="font:inherit;font-size:13.5px;font-weight:550;height:42px;padding:0 17px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer;margin-top:4px" style-hover="background:#F6F9F8">View advertisers</button>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:32px 28px;display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center;min-height:270px;justify-content:center">
+        <span style="width:52px;height:52px;border-radius:16px;background:#EEF7E3;display:flex;align-items:center;justify-content:center"><span style="width:18px;height:18px;border:2px solid #0E8494;border-radius:50%;display:block"></span></span>
+        <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">No users in this view</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6;max-width:300px">Nothing matches this tab. Switch to All Users to see every account on the platform.</span>
+        <button type="button" style="font:inherit;font-size:13.5px;font-weight:550;height:42px;padding:0 17px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;margin-top:4px;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Show all users</button>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:32px 28px;display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center;min-height:270px;justify-content:center">
+        <span style="width:52px;height:52px;border-radius:16px;background:#EFF4F3;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#6A817F">$</span>
+        <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">No transactions</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6;max-width:300px">Advertiser payments show up here with the platform fee and gateway cost on each one.</span>
+        <button type="button" style="font:inherit;font-size:13.5px;font-weight:550;height:42px;padding:0 17px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer;margin-top:4px" style-hover="background:#F6F9F8">Go to campaigns</button>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:32px 28px;display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center;min-height:270px;justify-content:center">
+        <span style="width:52px;height:52px;border-radius:16px;background:#EFF4F3;display:flex;align-items:center;justify-content:center"><span style="width:16px;height:16px;border:2px solid #93A6A4;border-radius:5px 5px 6px 6px;display:block"></span></span>
+        <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">You are all caught up</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6;max-width:300px">No unread notifications. Approvals, payments and published campaigns land here as they happen.</span>
+        <button type="button" style="font:inherit;font-size:13.5px;font-weight:550;height:42px;padding:0 17px;border-radius:12px;border:1px solid #E0E8E7;background:#FFFFFF;color:#08201F;cursor:pointer;margin-top:4px" style-hover="background:#F6F9F8">View activity log</button>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;box-shadow:0 1px 2px rgba(8,32,31,.04);padding:32px 28px;display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center;min-height:270px;justify-content:center">
+        <span style="width:52px;height:52px;border-radius:16px;background:#E7F5F7;display:flex;align-items:center;justify-content:center"><span style="width:18px;height:18px;border:2px solid #0E8494;border-radius:5px;display:block"></span></span>
+        <span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">No activity in this range</span>
+        <span style="font-size:13.5px;color:#4A6260;line-height:1.6;max-width:300px">Nothing was logged for the dates you picked. Widen the range to audit a longer period.</span>
+        <button type="button" style="font:inherit;font-size:13.5px;font-weight:550;height:42px;padding:0 17px;border-radius:12px;border:1px solid #0E8494;background:#0E8494;color:#FFFFFF;cursor:pointer;margin-top:4px;box-shadow:0 2px 8px rgba(10,95,107,.28)" style-hover="background:#0A5F6B">Reset date range</button>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Admin mobile" style="display:flex;flex-direction:column;gap:20px;flex:none">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#0E8494">03</span>
+      <span style="font-size:19px;font-weight:650;letter-spacing:-0.02em">Mobile</span>
+      <span style="font-size:14px;color:#6A817F">Collapsible sidebar, card tables, sticky release action, bottom sheet</span>
+    </div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;flex:none">
+
+      <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:24px;background:#F6F9F8;box-shadow:0 24px 60px -32px rgba(8,32,31,.3);overflow:hidden;display:flex;flex-direction:column;min-height:820px">
+        <div style="height:56px;background:#FFFFFF;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;gap:12px;padding:0 16px;flex:none">
+          <span style="display:flex;flex-direction:column;gap:3.5px;width:20px;flex:none"><span style="height:2px;background:#08201F;border-radius:2px;display:block"></span><span style="height:2px;background:#08201F;border-radius:2px;display:block"></span><span style="height:2px;background:#08201F;border-radius:2px;display:block"></span></span>
+          <span style="font-size:15px;font-weight:700;letter-spacing:-0.025em">Agency Overview</span>
+          <span style="margin-left:auto;position:relative;width:34px;height:34px;border-radius:10px;border:1px solid #E0E8E7;display:flex;align-items:center;justify-content:center"><span style="width:13px;height:13px;border:2px solid #4A6260;border-radius:5px 5px 6px 6px;display:block"></span><span style="position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:#DC2626;border:1.5px solid #FFFFFF"></span></span>
+        </div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div style="background:#0B2523;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:11.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#93A6A4">Pending payouts</span>
+            <span style="font-size:30px;font-weight:700;letter-spacing:-0.03em;color:#FFFFFF;font-variant-numeric:tabular-nums">$203</span>
+            <span style="font-size:12.5px;color:#93A6A4">3 ready to release now</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <span style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:3px"><span style="font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Active campaigns</span><span style="font-size:19px;font-weight:700;font-variant-numeric:tabular-nums">5</span></span>
+            <span style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:3px"><span style="font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Platform revenue</span><span style="font-size:19px;font-weight:700;font-variant-numeric:tabular-nums">$945</span></span>
+            <span style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:3px"><span style="font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Advertisers</span><span style="font-size:19px;font-weight:700;font-variant-numeric:tabular-nums">135</span></span>
+            <span style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:3px"><span style="font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Influencers</span><span style="font-size:19px;font-weight:700;font-variant-numeric:tabular-nums">690</span></span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;overflow:hidden">
+            <div style="padding:13px 16px;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;justify-content:space-between"><span style="font-size:14px;font-weight:650;letter-spacing:-0.02em">Ready for payout</span><span style="font-size:12px;font-weight:600;color:#0E8494">See all</span></div>
+            <div style="padding:13px 16px;border-bottom:1px solid #EFF4F3;display:flex;align-items:center;gap:12px">
+              <span style="width:34px;height:34px;border-radius:11px;flex:none;background:#EEF7E3;color:#0A5F6B;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">SA</span>
+              <span style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0"><span style="font-size:13.5px;font-weight:600">Sofia Marchetti</span><span style="font-size:12px;color:#6A817F">Glow Serum Review Wave</span></span>
+              <span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums;flex:none">$35</span>
+            </div>
+            <div style="padding:13px 16px;border-bottom:1px solid #EFF4F3;display:flex;align-items:center;gap:12px">
+              <span style="width:34px;height:34px;border-radius:11px;flex:none;background:#EEF7E3;color:#0A5F6B;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">AN</span>
+              <span style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0"><span style="font-size:13.5px;font-weight:600">Ana Rivera</span><span style="font-size:12px;color:#6A817F">Winter Collection Launch</span></span>
+              <span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums;flex:none">$50</span>
+            </div>
+            <div style="padding:13px 16px;display:flex;align-items:center;gap:12px">
+              <span style="width:34px;height:34px;border-radius:11px;flex:none;background:#EEF7E3;color:#0A5F6B;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">BT</span>
+              <span style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0"><span style="font-size:13.5px;font-weight:600">Daniel Osei</span><span style="font-size:12px;color:#6A817F">Sneaker Drop Teaser</span></span>
+              <span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums;flex:none">$60</span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:auto;background:#FFFFFF;border-top:1px solid #E0E8E7;padding:9px 8px 12px;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;flex:none">
+          <span style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0"><span style="width:18px;height:18px;border:2px solid #0E8494;border-radius:5px;display:block"></span><span style="font-size:10.5px;font-weight:600;color:#0E8494">Overview</span></span>
+          <span style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:5px;display:block"></span><span style="font-size:10.5px;color:#6A817F">Campaigns</span></span>
+          <span style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:50%;display:block"></span><span style="font-size:10.5px;color:#6A817F">Payouts</span></span>
+          <span style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:5px;display:block"></span><span style="font-size:10.5px;color:#6A817F">Users</span></span>
+          <span style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0"><span style="width:18px;height:18px;border:2px solid #93A6A4;border-radius:50%;display:block"></span><span style="font-size:10.5px;color:#6A817F">More</span></span>
+        </div>
+      </div>
+
+      <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:24px;background:#0B2523;box-shadow:0 24px 60px -32px rgba(8,32,31,.3);overflow:hidden;display:flex;flex-direction:column;min-height:820px">
+        <div style="height:56px;display:flex;align-items:center;gap:10px;padding:0 16px;flex:none">
+          <span style="width:26px;height:26px;border-radius:8px;background:#0E8494;display:flex;align-items:center;justify-content:center"><span style="width:9px;height:9px;border-radius:3px;border:2px solid #FFFFFF;display:block"></span></span>
+          <span style="display:flex;flex-direction:column;gap:2px;line-height:1;flex-shrink:0"><span style="font-size:15px;font-weight:700;letter-spacing:-0.025em;color:#FFFFFF">influence<span style="color:#8FD14F">arn</span></span><span style="display:flex;align-items:center;gap:3px"><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span><span style="font-size:7.8px;font-weight:600;letter-spacing:0.08em;color:#8FD14F">.com</span><span style="height:1px;flex:1;background:#8FD14F;opacity:.65;display:block"></span></span></span>
+          <span style="margin-left:auto;font-size:18px;color:#93A6A4">×</span>
+        </div>
+        <div style="padding:8px 12px 20px;display:flex;flex-direction:column;gap:2px">
+          <span style="display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:600;color:#FFFFFF;background:rgba(255,255,255,.1);border-radius:11px;padding:12px"><span style="width:16px;height:16px;border:2px solid #82C8D2;border-radius:4px;display:block;flex:none"></span>Dashboard</span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14.5px;color:#C2CFCD;border-radius:11px;padding:12px"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:50%;display:block;flex:none"></span>Users<span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#E0E8E7;background:rgba(255,255,255,.12);border-radius:999px;padding:2px 8px">812</span></span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14.5px;color:#C2CFCD;border-radius:11px;padding:12px"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Advertisers</span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14.5px;color:#C2CFCD;border-radius:11px;padding:12px"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:50%;display:block;flex:none"></span>Influencers</span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14.5px;color:#C2CFCD;border-radius:11px;padding:12px"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Campaigns<span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#E0E8E7;background:rgba(255,255,255,.12);border-radius:999px;padding:2px 8px">10</span></span>
+          <span style="height:1px;background:rgba(255,255,255,.1);margin:10px 12px;display:block"></span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14.5px;color:#C2CFCD;border-radius:11px;padding:12px"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Applications</span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14.5px;color:#C2CFCD;border-radius:11px;padding:12px"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Task Reviews<span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#FFFFFF;background:#D97706;border-radius:999px;padding:2px 8px">3</span></span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14.5px;color:#C2CFCD;border-radius:11px;padding:12px"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Payments</span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14.5px;color:#C2CFCD;border-radius:11px;padding:12px"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:50%;display:block;flex:none"></span>Payouts<span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#E0E8E7;background:rgba(255,255,255,.12);border-radius:999px;padding:2px 8px">3</span></span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14.5px;color:#C2CFCD;border-radius:11px;padding:12px"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Transactions</span>
+          <span style="height:1px;background:rgba(255,255,255,.1);margin:10px 12px;display:block"></span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14.5px;color:#C2CFCD;border-radius:11px;padding:12px"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:50%;display:block;flex:none"></span>Notifications<span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#FFFFFF;background:#0E8494;border-radius:999px;padding:2px 8px">3</span></span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14.5px;color:#C2CFCD;border-radius:11px;padding:12px"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Reports</span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:14.5px;color:#C2CFCD;border-radius:11px;padding:12px"><span style="width:16px;height:16px;border:2px solid #6A817F;border-radius:4px;display:block;flex:none"></span>Settings</span>
+        </div>
+        <div style="margin-top:auto;padding:16px;flex:none">
+          <span style="display:flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:12px">
+            <span style="width:34px;height:34px;border-radius:10px;background:#0E8494;color:#FFFFFF;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">FK</span>
+            <span style="display:flex;flex-direction:column;gap:1px"><span style="font-size:13.5px;font-weight:600;color:#FFFFFF">Faisal Khan</span><span style="font-size:12px;color:#93A6A4">Agency operations</span></span>
+          </span>
+        </div>
+      </div>
+
+      <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:24px;background:#F6F9F8;box-shadow:0 24px 60px -32px rgba(8,32,31,.3);overflow:hidden;display:flex;flex-direction:column;min-height:820px">
+        <div style="height:56px;background:#FFFFFF;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;gap:12px;padding:0 16px;flex:none">
+          <span style="font-size:16px;color:#4A6260">←</span>
+          <span style="font-size:15px;font-weight:650;letter-spacing:-0.015em">Payout review</span>
+          <span style="margin-left:auto;font-size:11.5px;font-weight:600;color:#047857;background:#ECFDF5;border-radius:999px;padding:4px 9px">Ready</span>
+        </div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;gap:14px;align-items:center">
+            <span style="width:48px;height:48px;border-radius:14px;flex:none;background:#EEF7E3;color:#0A5F6B;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center">SA</span>
+            <span style="display:flex;flex-direction:column;gap:3px;min-width:0"><span style="font-size:17px;font-weight:650;letter-spacing:-0.02em">Sofia Marchetti</span><span style="font-size:12.5px;color:#6A817F">@sarah.styles · 38.2K followers</span></span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px">
+            <span style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13px;color:#6A817F">Campaign</span><span style="font-size:13.5px;font-weight:600">Glow Serum Review Wave</span></span>
+            <span style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13px;color:#6A817F">Advertiser</span><span style="font-size:13.5px;font-weight:600">Lumin Beauty</span></span>
+            <span style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13px;color:#6A817F">Task type</span><span style="font-size:13.5px;font-weight:600">UGC video · TikTok</span></span>
+            <span style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:13px;color:#6A817F">Approved</span><span style="font-size:13.5px;font-weight:600">Aug 21, 3:40 PM</span></span>
+            <span style="height:1px;background:#E0E8E7;display:block"></span>
+            <span style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:14px;font-weight:650">Creator reward</span><span style="font-size:20px;font-weight:700;font-variant-numeric:tabular-nums">$35</span></span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px">
+            <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Submitted link</span><span style="font-size:13px;color:#0A5F6B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">tiktok.com/@sarah.styles/video/7391045</span></span>
+            <span style="margin-left:auto;font-size:12.5px;font-weight:600;color:#0E8494;flex:none">Open ↗</span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6A817F">Payout method</span>
+            <span style="font-size:14px;font-weight:600">Bank transfer · Chase</span>
+            <span style="font-size:13px;color:#6A817F;font-variant-numeric:tabular-nums">PK•• •••• 4821 · Sofia Marchetti</span>
+          </div>
+          <span style="display:flex;gap:10px;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:14px;padding:13px 15px"><span style="width:6px;height:6px;border-radius:50%;background:#0E8494;margin-top:7px;flex:none"></span><span style="font-size:12.5px;color:#4A6260;line-height:1.6">The advertiser approved this work. Releasing sends the reward and marks the payout paid.</span></span>
+        </div>
+        <div style="margin-top:auto;background:#FFFFFF;border-top:1px solid #E0E8E7;padding:12px 16px 16px;display:flex;gap:10px;flex:none">
+          <span style="font-size:15px;font-weight:550;height:52px;padding:0 18px;border-radius:14px;border:1px solid #E0E8E7;display:flex;align-items:center;color:#4A6260">Hold</span>
+          <span style="flex:1;font-size:15.5px;font-weight:600;height:52px;border-radius:14px;background:#0E8494;color:#FFFFFF;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(10,95,107,.32)">Release $35</span>
+        </div>
+      </div>
+
+      <div style="width:390px;flex:none;border:1px solid #E0E8E7;border-radius:24px;background:#F6F9F8;box-shadow:0 24px 60px -32px rgba(8,32,31,.3);overflow:hidden;display:flex;flex-direction:column;min-height:820px;position:relative">
+        <div style="height:56px;background:#FFFFFF;border-bottom:1px solid #E0E8E7;display:flex;align-items:center;gap:12px;padding:0 16px;flex:none">
+          <span style="font-size:15px;font-weight:650;letter-spacing:-0.015em">Campaigns</span>
+          <span style="margin-left:auto;font-size:12.5px;font-weight:550;color:#0E8494">Filter</span>
+        </div>
+        <div style="padding:14px 16px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;gap:8px;overflow-x:auto">
+            <span style="flex:none;font-size:13px;font-weight:600;color:#FFFFFF;background:#0B2523;border-radius:999px;padding:9px 13px;white-space:nowrap">All 10</span>
+            <span style="flex:none;font-size:13px;color:#08201F;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:999px;padding:9px 13px;white-space:nowrap">In Progress</span>
+            <span style="flex:none;font-size:13px;color:#08201F;background:#FFFFFF;border:1px solid #E0E8E7;border-radius:999px;padding:9px 13px;white-space:nowrap">Review</span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:11px">
+            <span style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+              <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:650;letter-spacing:-0.02em">Winter Collection Launch</span><span style="font-size:12.5px;color:#6A817F">Brand House · Instagram</span></span>
+              <span style="font-size:11px;font-weight:600;color:#0A5F6B;background:#E7F5F7;border-radius:999px;padding:4px 9px;flex:none">In Progress</span>
+            </span>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+              <span style="display:flex;flex-direction:column;gap:1px;background:#F6F9F8;border-radius:10px;padding:8px 9px"><span style="font-size:10px;font-weight:600;text-transform:uppercase;color:#6A817F">Req</span><span style="font-size:14px;font-weight:650;font-variant-numeric:tabular-nums">20</span></span>
+              <span style="display:flex;flex-direction:column;gap:1px;background:#F6F9F8;border-radius:10px;padding:8px 9px"><span style="font-size:10px;font-weight:600;text-transform:uppercase;color:#6A817F">Sel</span><span style="font-size:14px;font-weight:650;font-variant-numeric:tabular-nums">20</span></span>
+              <span style="display:flex;flex-direction:column;gap:1px;background:#F6F9F8;border-radius:10px;padding:8px 9px"><span style="font-size:10px;font-weight:600;text-transform:uppercase;color:#6A817F">Done</span><span style="font-size:14px;font-weight:650;font-variant-numeric:tabular-nums">14</span></span>
+              <span style="display:flex;flex-direction:column;gap:1px;background:#F6F9F8;border-radius:10px;padding:8px 9px"><span style="font-size:10px;font-weight:600;text-transform:uppercase;color:#6A817F">Appr</span><span style="font-size:14px;font-weight:650;font-variant-numeric:tabular-nums">11</span></span>
+            </div>
+            <span style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;font-weight:600;color:#047857;background:#ECFDF5;border-radius:999px;padding:4px 9px">Payment successful</span><span style="font-size:12.5px;color:#6A817F">$1,200</span></span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E0E8E7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:11px">
+            <span style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+              <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:650;letter-spacing:-0.02em">Eid Gift Guide</span><span style="font-size:12.5px;color:#6A817F">Zeenat Apparel · Instagram</span></span>
+              <span style="font-size:11px;font-weight:600;color:#B45309;background:#FEF3C7;border-radius:999px;padding:4px 9px;flex:none">Payment Pending</span>
+            </span>
+            <span style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;font-weight:600;color:#B45309;background:#FEF3C7;border-radius:999px;padding:4px 9px">Not published</span><span style="font-size:12.5px;color:#6A817F">$900 due</span></span>
+          </div>
+        </div>
+        <div style="position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-top:1px solid #E0E8E7;border-radius:20px 20px 24px 24px;padding:14px 16px 18px;display:flex;flex-direction:column;gap:12px;box-shadow:0 -18px 40px -24px rgba(8,32,31,.4)">
+          <span style="width:40px;height:4px;border-radius:999px;background:#E0E8E7;align-self:center;display:block"></span>
+          <span style="font-size:15px;font-weight:650;letter-spacing:-0.02em">Winter Collection Launch</span>
+          <span style="font-size:12.5px;color:#6A817F;line-height:1.55">Admin actions for a published campaign.</span>
+          <span style="font-size:14.5px;font-weight:550;height:48px;border-radius:12px;border:1px solid #E0E8E7;display:flex;align-items:center;padding:0 16px">View campaign</span>
+          <span style="font-size:14.5px;font-weight:550;height:48px;border-radius:12px;border:1px solid #FDE68A;color:#B45309;display:flex;align-items:center;padding:0 16px">Pause campaign</span>
+          <span style="font-size:14.5px;font-weight:550;height:48px;border-radius:12px;border:1px solid #FCA5A5;color:#B91C1C;display:flex;align-items:center;padding:0 16px">Cancel campaign</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1680}}">
+class Component extends DCLogic {
+  state = {
+    screen: "dashboard",
+    campaignTab: "All",
+    userTab: "All Users",
+    payoutTab: "Ready to Release",
+    payoutId: "p1",
+    menuId: "",
+    holdOpen: false,
+    holdReason: "",
+    releasedIds: [],
+    heldIds: [],
+    readAll: false,
+    toggles: { manualOnly: true, dailyDigest: true, autoNotify: false }
+  };
+
+  money(n) { return "$" + Math.round((Number(n) || 0) / 100).toLocaleString("en-US"); }
+
+  campaigns = [
+    { title: "Winter Collection Launch", advertiser: "Brand House", category: "Fashion", platform: "Instagram", value: 100000, required: 20, selected: 20, completed: 14, approved: 11, payment: "Successful", status: "In Progress" },
+    { title: "Summer Collection Promotion", advertiser: "Zeenat Apparel", category: "Fashion", platform: "Instagram", value: 100000, required: 100, selected: 68, completed: 41, approved: 33, payment: "Successful", status: "In Progress" },
+    { title: "Glow Serum Review Wave", advertiser: "Lumin Beauty", category: "Beauty", platform: "TikTok", value: 140000, required: 40, selected: 40, completed: 38, approved: 36, payment: "Successful", status: "Review Pending" },
+    { title: "Spring Menu Teaser", advertiser: "Casa Verde", category: "Food", platform: "Instagram", value: 90000, required: 60, selected: 0, completed: 0, approved: 0, payment: "Successful", status: "Applications Open" },
+    { title: "Gaming Headset Unboxing", advertiser: "Nexa Tech", category: "Gaming", platform: "YouTube", value: 96000, required: 8, selected: 0, completed: 0, approved: 0, payment: "Successful", status: "Selection In Progress" },
+    { title: "Fitness Challenge Kickoff", advertiser: "PowerFuel", category: "Lifestyle", platform: "Facebook", value: 120000, required: 150, selected: 150, completed: 150, approved: 148, payment: "Successful", status: "Completed" },
+    { title: "Sneaker Drop Teaser", advertiser: "Stride Athletics", category: "Fashion", platform: "TikTok", value: 60000, required: 10, selected: 10, completed: 10, approved: 10, payment: "Successful", status: "Completed" },
+    { title: "Eid Gift Guide", advertiser: "Zeenat Apparel", category: "Fashion", platform: "Instagram", value: 75000, required: 25, selected: 0, completed: 0, approved: 0, payment: "Pending", status: "Payment Pending" },
+    { title: "Café Aroma Relaunch", advertiser: "Café Aroma", category: "Food", platform: "Instagram", value: 40000, required: 20, selected: 0, completed: 0, approved: 0, payment: "Pending", status: "Draft" },
+    { title: "Monsoon Skincare Push", advertiser: "Lumin Beauty", category: "Beauty", platform: "Instagram", value: 55000, required: 15, selected: 6, completed: 2, approved: 0, payment: "Refunded", status: "Cancelled" }
+  ];
+
+  payouts = [
+    { id: "p1", influencer: "Sofia Marchetti", initial: "SA", handle: "@sarah.styles", city: "New York", followers: "38.2K", campaign: "Glow Serum Review Wave", advertiser: "Lumin Beauty", platform: "TikTok", taskType: "UGC video", reward: 3500, approvedOn: "Aug 21, 3:40 PM", state: "ready", method: "Bank transfer · Chase", account: "PK•• •••• 4821", link: "tiktok.com/@sarah.styles/video/7391045", submittedOn: "Aug 20, 6:12 PM" },
+    { id: "p2", influencer: "Ana Rivera", initial: "AN", handle: "@ana.styles", city: "New York", followers: "24.8K", campaign: "Winter Collection Launch", advertiser: "Brand House", platform: "Instagram", taskType: "Reel", reward: 5000, approvedOn: "Aug 21, 1:05 PM", state: "ready", method: "Bank transfer · Chase", account: "PK•• •••• 9137", link: "instagram.com/reel/winter-brandhouse-anum", submittedOn: "Aug 20, 9:30 AM" },
+    { id: "p3", influencer: "Daniel Osei", initial: "BT", handle: "@bilalshoots", city: "London", followers: "51.4K", campaign: "Sneaker Drop Teaser", advertiser: "Stride Athletics", platform: "TikTok", taskType: "Video", reward: 6000, approvedOn: "Aug 20, 11:20 AM", state: "ready", method: "PayPal", account: "0300 •••4412", link: "tiktok.com/@bilalshoots/video/7390118", submittedOn: "Aug 19, 8:02 PM" },
+    { id: "p4", influencer: "Mei Tanaka", initial: "HS", handle: "@meitanaka", city: "Berlin", followers: "12.6K", campaign: "Fitness Challenge Kickoff", advertiser: "PowerFuel", platform: "Facebook", taskType: "Share", reward: 800, approvedOn: "Aug 20, 9:15 AM", state: "processing", method: "Wise", account: "0333 •••7788", link: "facebook.com/hirasheikh/posts/challenge", submittedOn: "Aug 19, 4:44 PM" },
+    { id: "p5", influencer: "Zoe Lindqvist", initial: "ZM", handle: "@zoeeats", city: "New York", followers: "9.3K", campaign: "Spring Menu Teaser", advertiser: "Casa Verde", platform: "Instagram", taskType: "Story", reward: 1500, approvedOn: "Aug 19, 5:30 PM", state: "paid", method: "Bank transfer · Barclays", account: "•••• •••• 2210", link: "instagram.com/stories/zoyaeats/spring-menu", submittedOn: "Aug 18, 7:15 PM" },
+    { id: "p6", influencer: "Lucas Ferreira", initial: "UJ", handle: "@usmanplays", city: "London", followers: "63.7K", campaign: "Sneaker Drop Teaser", advertiser: "Stride Athletics", platform: "TikTok", taskType: "Video", reward: 6000, approvedOn: "Aug 18, 2:10 PM", state: "paid", method: "Bank transfer · UBL", account: "PK•• •••• 5502", link: "tiktok.com/@usmanplays/video/7388420", submittedOn: "Aug 17, 3:50 PM" },
+    { id: "p7", influencer: "Mehak Noor", initial: "MN", handle: "@mehaknoor", city: "New York", followers: "18.1K", campaign: "Summer Collection Promotion", advertiser: "Zeenat Apparel", platform: "Instagram", taskType: "Comment", reward: 1000, approvedOn: "Aug 17, 10:05 AM", state: "failed", method: "Bank transfer · Chase", account: "PK•• •••• 8890", link: "instagram.com/p/zeenat-summer-launch", submittedOn: "Aug 16, 6:20 PM" },
+    { id: "p8", influencer: "Marco Silva", initial: "AR", handle: "@alirazapk", city: "Multan", followers: "7.8K", campaign: "Winter Collection Launch", advertiser: "Brand House", platform: "Instagram", taskType: "Story", reward: 5000, approvedOn: "—", state: "pending", method: "Bank transfer · Chase", account: "PK•• •••• 3341", link: "instagram.com/stories/alirazapk/winter", submittedOn: "Aug 21, 10:12 AM" }
+  ];
+
+  users = [
+    { name: "Ana Rivera", email: "ana.rivera@email.com", role: "Influencer", socials: "IG · TT", campaigns: 14, status: "Active", joined: "Feb 2026", kind: "influencer" },
+    { name: "Brand House", email: "ops@brandhouse.com", role: "Advertiser", socials: "—", campaigns: 6, status: "Active", joined: "Jan 2026", kind: "advertiser" },
+    { name: "Sofia Marchetti", email: "sofia.marchetti@email.com", role: "Influencer", socials: "IG · TT · YT", campaigns: 22, status: "Active", joined: "Nov 2025", kind: "influencer" },
+    { name: "Zeenat Apparel", email: "marketing@zeenat.com", role: "Advertiser", socials: "—", campaigns: 9, status: "Active", joined: "Oct 2025", kind: "advertiser" },
+    { name: "Daniel Osei", email: "daniel.osei@email.com", role: "Both roles", socials: "IG · TT", campaigns: 11, status: "Active", joined: "Mar 2026", kind: "influencer" },
+    { name: "Lumin Beauty", email: "hello@luminbeauty.com", role: "Advertiser", socials: "—", campaigns: 12, status: "Active", joined: "Sep 2025", kind: "advertiser" },
+    { name: "Mehak Noor", email: "mehak.noor@email.com", role: "Influencer", socials: "IG", campaigns: 5, status: "Suspended", joined: "Apr 2026", kind: "influencer" },
+    { name: "Nexa Tech", email: "growth@nexatech.com", role: "Advertiser", socials: "—", campaigns: 3, status: "Suspended", joined: "May 2026", kind: "advertiser" },
+    { name: "Mei Tanaka", email: "mei.tanaka@email.com", role: "Influencer", socials: "FB · IG", campaigns: 8, status: "Active", joined: "Jun 2026", kind: "influencer" },
+    { name: "Café Aroma", email: "team@cafearoma.com", role: "Advertiser", socials: "—", campaigns: 2, status: "Deactivated", joined: "Jul 2026", kind: "advertiser" }
+  ];
+
+  transactions = [
+    { id: "TXN-4821", advertiser: "Brand House", campaign: "Winter Collection Launch", amount: 100000, fee: 20000, gateway: 3000, method: "Bank transfer", status: "Successful", date: "Aug 12" },
+    { id: "TXN-4820", advertiser: "Zeenat Apparel", campaign: "Summer Collection Promotion", amount: 100000, fee: 20000, gateway: 3000, method: "Card", status: "Successful", date: "Aug 10" },
+    { id: "TXN-4819", advertiser: "Lumin Beauty", campaign: "Glow Serum Review Wave", amount: 140000, fee: 28000, gateway: 4200, method: "Bank transfer", status: "Successful", date: "Aug 08" },
+    { id: "TXN-4818", advertiser: "Zeenat Apparel", campaign: "Eid Gift Guide", amount: 75000, fee: 15000, gateway: 2250, method: "PayPal", status: "Pending", date: "Aug 21" },
+    { id: "TXN-4817", advertiser: "Nexa Tech", campaign: "Gaming Headset Unboxing", amount: 96000, fee: 19200, gateway: 2880, method: "Card", status: "Successful", date: "Aug 06" },
+    { id: "TXN-4816", advertiser: "Lumin Beauty", campaign: "Monsoon Skincare Push", amount: 55000, fee: 11000, gateway: 1650, method: "Card", status: "Refunded", date: "Aug 04" },
+    { id: "TXN-4815", advertiser: "Café Aroma", campaign: "Café Aroma Relaunch", amount: 40000, fee: 8000, gateway: 1200, method: "Wise", status: "Failed", date: "Aug 02" },
+    { id: "TXN-4814", advertiser: "PowerFuel", campaign: "Fitness Challenge Kickoff", amount: 120000, fee: 24000, gateway: 3600, method: "Bank transfer", status: "Successful", date: "Jul 29" }
+  ];
+
+  applications = [
+    { influencer: "Ana Rivera", initial: "AN", campaign: "Spring Menu Teaser", advertiser: "Casa Verde", platform: "Instagram", applied: "Aug 14", status: "Pending" },
+    { influencer: "Sofia Marchetti", initial: "SA", campaign: "Glow Serum Review Wave", advertiser: "Lumin Beauty", platform: "TikTok", applied: "Aug 10", status: "Selected" },
+    { influencer: "Daniel Osei", initial: "BT", campaign: "Sneaker Drop Teaser", advertiser: "Stride Athletics", platform: "TikTok", applied: "Jul 30", status: "Completed" },
+    { influencer: "Mei Tanaka", initial: "HS", campaign: "Fitness Challenge Kickoff", advertiser: "PowerFuel", platform: "Facebook", applied: "Aug 09", status: "Selected" },
+    { influencer: "Mehak Noor", initial: "MN", campaign: "Summer Collection Promotion", advertiser: "Zeenat Apparel", platform: "Instagram", applied: "Aug 08", status: "Rejected" },
+    { influencer: "Lucas Ferreira", initial: "UJ", campaign: "Gaming Headset Unboxing", advertiser: "Nexa Tech", platform: "YouTube", applied: "Aug 05", status: "Not Selected" },
+    { influencer: "Zoe Lindqvist", initial: "ZM", campaign: "Spring Menu Teaser", advertiser: "Casa Verde", platform: "Instagram", applied: "Aug 15", status: "Pending" },
+    { influencer: "Marco Silva", initial: "AR", campaign: "Winter Collection Launch", advertiser: "Brand House", platform: "Instagram", applied: "Aug 11", status: "Selected" }
+  ];
+
+  activity = [
+    { text: "Agency released $15 payout to Zoe Lindqvist", time: "Today, 4:10 PM", icon: "$", kind: "payout" },
+    { text: "Lumin Beauty approved Sofia Marchetti's completed task", time: "Today, 3:40 PM", icon: "✓", kind: "approve" },
+    { text: "Sofia Marchetti submitted a completion for Glow Serum Review Wave", time: "Today, 1:22 PM", icon: "↑", kind: "submit" },
+    { text: "Brand House approved Ana Rivera's completed task", time: "Today, 1:05 PM", icon: "✓", kind: "approve" },
+    { text: "Casa Verde selected 12 influencers for Spring Menu Teaser", time: "Yesterday, 6:30 PM", icon: "◆", kind: "select" },
+    { text: "Zoe Lindqvist applied to Spring Menu Teaser", time: "Yesterday, 2:15 PM", icon: "→", kind: "apply" },
+    { text: "Spring Menu Teaser published after payment cleared", time: "Aug 20, 11:02 AM", icon: "▲", kind: "publish" },
+    { text: "Casa Verde completed payment of $1,080", time: "Aug 20, 10:58 AM", icon: "$", kind: "payment" },
+    { text: "Casa Verde created campaign Spring Menu Teaser", time: "Aug 20, 10:31 AM", icon: "+", kind: "create" }
+  ];
+
+  notificationList = [
+    { message: "Advertiser approved Sarah's completed task.", time: "Today, 3:40 PM", action: "Review payout", icon: "✓", kind: "approve", unread: true, to: "payout" },
+    { message: "Payout requires review — $50 to Ana Rivera.", time: "Today, 1:08 PM", action: "Open", icon: "$", kind: "payout", unread: true, to: "payouts" },
+    { message: "Campaign payment received from Casa Verde.", time: "Aug 20, 10:58 AM", action: "View payment", icon: "$", kind: "payment", unread: true, to: "payments" },
+    { message: "New campaign published — Spring Menu Teaser.", time: "Aug 20, 11:02 AM", action: "View campaign", icon: "▲", kind: "publish", unread: false, to: "campaigns" },
+    { message: "Influencer completed task — Daniel Osei, Sneaker Drop Teaser.", time: "Aug 19, 8:02 PM", action: "View task", icon: "↑", kind: "submit", unread: false, to: "reviews" },
+    { message: "Advertiser rejected a task — Café Aroma, comment wave.", time: "Aug 18, 12:40 PM", action: "View campaign", icon: "!", kind: "reject", unread: false, to: "campaigns" }
+  ];
+
+  statusStyle(v) {
+    const map = {
+      "Draft": { bg: "#EFF4F3", fg: "#4A6260" },
+      "Payment Pending": { bg: "#FEF3C7", fg: "#B45309" },
+      "Published": { bg: "#E7F5F7", fg: "#0A5F6B" },
+      "Applications Open": { bg: "#E7F5F7", fg: "#0A5F6B" },
+      "Selection In Progress": { bg: "#EEF7E3", fg: "#0A5F6B" },
+      "In Progress": { bg: "#E7F5F7", fg: "#0A5F6B" },
+      "Review Pending": { bg: "#FEF3C7", fg: "#B45309" },
+      "Completed": { bg: "#ECFDF5", fg: "#047857" },
+      "Cancelled": { bg: "#FEF2F2", fg: "#B91C1C" },
+      "Pending": { bg: "#FEF3C7", fg: "#B45309" },
+      "Successful": { bg: "#ECFDF5", fg: "#047857" },
+      "Failed": { bg: "#FEF2F2", fg: "#B91C1C" },
+      "Refunded": { bg: "#EFF4F3", fg: "#4A6260" },
+      "Ready for Payout": { bg: "#ECFDF5", fg: "#047857" },
+      "Ready to Release": { bg: "#ECFDF5", fg: "#047857" },
+      "Processing": { bg: "#E7F5F7", fg: "#0A5F6B" },
+      "Paid": { bg: "#ECFDF5", fg: "#047857" },
+      "On Hold": { bg: "#FEF3C7", fg: "#B45309" },
+      "Active": { bg: "#ECFDF5", fg: "#047857" },
+      "Suspended": { bg: "#FEF2F2", fg: "#B91C1C" },
+      "Deactivated": { bg: "#EFF4F3", fg: "#4A6260" },
+      "Selected": { bg: "#E7F5F7", fg: "#0A5F6B" },
+      "Rejected": { bg: "#FEF2F2", fg: "#B91C1C" },
+      "Not Selected": { bg: "#EFF4F3", fg: "#4A6260" },
+      "Advertiser": { bg: "#EFF4F3", fg: "#08201F" },
+      "Influencer": { bg: "#EEF7E3", fg: "#0A5F6B" },
+      "Both roles": { bg: "#E7F5F7", fg: "#0A5F6B" }
+    };
+    return map[v] || { bg: "#EFF4F3", fg: "#4A6260" };
+  }
+
+  iconStyle(kind) {
+    const map = {
+      approve: { bg: "#ECFDF5", fg: "#047857" },
+      payout: { bg: "#E7F5F7", fg: "#0A5F6B" },
+      payment: { bg: "#E7F5F7", fg: "#0A5F6B" },
+      publish: { bg: "#EEF7E3", fg: "#0A5F6B" },
+      submit: { bg: "#EFF4F3", fg: "#4A6260" },
+      select: { bg: "#EEF7E3", fg: "#0A5F6B" },
+      apply: { bg: "#EFF4F3", fg: "#4A6260" },
+      create: { bg: "#EFF4F3", fg: "#4A6260" },
+      reject: { bg: "#FEF2F2", fg: "#B91C1C" }
+    };
+    return map[kind] || { bg: "#EFF4F3", fg: "#4A6260" };
+  }
+
+  go = (screen) => this.setState({ screen, menuId: "", holdOpen: false });
+
+  payoutState(p) {
+    if (this.state.releasedIds.indexOf(p.id) > -1) return "paid";
+    if (this.state.heldIds.indexOf(p.id) > -1) return "hold";
+    return p.state;
+  }
+
+  payoutLabel(p) {
+    const st = this.payoutState(p);
+    return { ready: "Ready to Release", processing: "Processing", paid: "Paid", failed: "Failed", pending: "Pending", hold: "On Hold" }[st];
+  }
+
+  renderVals() {
+    const s = this.state;
+
+    const readyPayouts = this.payouts.filter(p => this.payoutState(p) === "ready");
+    const pendingPayoutTotal = this.payouts.filter(p => ["ready", "processing", "pending", "hold"].indexOf(this.payoutState(p)) > -1).reduce((a, p) => a + p.reward, 0);
+    const payout = this.payouts.filter(p => p.id === s.payoutId)[0] || this.payouts[0];
+    const payoutSt = this.payoutState(payout);
+    const payoutStyle = this.statusStyle(this.payoutLabel(payout));
+
+    const totalFees = this.transactions.filter(t => t.status === "Successful").reduce((a, t) => a + t.fee, 0);
+    const totalGateway = this.transactions.filter(t => t.status === "Successful").reduce((a, t) => a + t.gateway, 0);
+    const totalValue = this.transactions.filter(t => t.status === "Successful").reduce((a, t) => a + t.amount, 0);
+    const refunded = this.transactions.filter(t => t.status === "Refunded").reduce((a, t) => a + t.amount + t.fee, 0);
+    const paidOut = this.payouts.filter(p => this.payoutState(p) === "paid").reduce((a, p) => a + p.reward, 0);
+
+    const campaignStatuses = ["All", "Draft", "Payment Pending", "Applications Open", "In Progress", "Review Pending", "Completed", "Cancelled"];
+    const campaignRows = this.campaigns.filter(c => s.campaignTab === "All" || c.status === s.campaignTab);
+    const userTabs = ["All Users", "Advertisers", "Influencers", "Suspended"];
+    const userRows = this.users.filter(u => {
+      if (s.userTab === "Advertisers") return u.kind === "advertiser";
+      if (s.userTab === "Influencers") return u.kind === "influencer";
+      if (s.userTab === "Suspended") return u.status === "Suspended" || u.status === "Deactivated";
+      return true;
+    });
+    const payoutTabDefs = [
+      { label: "Pending", match: "pending" },
+      { label: "Ready to Release", match: "ready" },
+      { label: "Processing", match: "processing" },
+      { label: "Paid", match: "paid" },
+      { label: "Failed", match: "failed" }
+    ];
+    const payoutRows = this.payouts.filter(p => {
+      const st = this.payoutState(p);
+      if (s.payoutTab === "Pending") return st === "pending" || st === "hold";
+      return this.payoutLabel(p) === s.payoutTab;
+    });
+
+    const unread = this.notificationList.filter(n => n.unread && !s.readAll).length;
+    const advertiserAccounts = 135;
+    const influencerAccounts = 690;
+    const dualRoleAccounts = 13;
+    const advertiserCount = this.users.filter(u => u.kind === "advertiser").length;
+    const influencerCount = this.users.filter(u => u.kind === "influencer").length;
+    const activeCampaigns = this.campaigns.filter(c => ["In Progress", "Applications Open", "Selection In Progress", "Review Pending", "Published"].indexOf(c.status) > -1).length;
+
+    const navDef = [
+      { id: "dashboard", label: "Dashboard", radius: "4px", badge: "" },
+      { id: "users", label: "Users", radius: "50%", badge: String(this.users.length) },
+      { id: "advertisers", label: "Advertisers", radius: "4px", badge: String(advertiserCount) },
+      { id: "influencers", label: "Influencers", radius: "50%", badge: String(influencerCount) },
+      { id: "campaigns", label: "Campaigns", radius: "4px", badge: String(this.campaigns.length), rule: true },
+      { id: "applications", label: "Applications", radius: "4px", badge: String(this.applications.length) },
+      { id: "reviews", label: "Task Reviews", radius: "4px", badge: String(readyPayouts.length) },
+      { id: "payments", label: "Payments", radius: "4px", badge: "" },
+      { id: "payouts", label: "Payouts", radius: "50%", badge: String(readyPayouts.length) },
+      { id: "transactions", label: "Transactions", radius: "4px", badge: "", rule: true },
+      { id: "notifications", label: "Notifications", radius: "50%", badge: unread ? String(unread) : "" },
+      { id: "reports", label: "Reports", radius: "4px", badge: "" },
+      { id: "settings", label: "Settings", radius: "4px", badge: "" }
+    ];
+
+    const screenOf = { advertisers: "users", influencers: "users", transactions: "payments" };
+    const active = screenOf[s.screen] || s.screen;
+
+    const titles = {
+      dashboard: "Agency Overview", users: "Users", campaigns: "Campaigns", applications: "Applications",
+      reviews: "Task Reviews", payoutReview: "Task Reviews / " + payout.influencer, payments: "Payments",
+      payouts: "Payouts", notifications: "Notifications", reports: "Reports", settings: "Settings",
+      influencerProfile: "Users / Sofia Marchetti", advertiserProfile: "Users / Brand House"
+    };
+
+    const barValues = [{ month: "Mar", v: 62000 }, { month: "Apr", v: 74000 }, { month: "May", v: 81000 }, { month: "Jun", v: 96000 }, { month: "Jul", v: 88000 }, { month: "Aug", v: 112000 }];
+    const barMax = 120000;
+
+    return {
+      nav: navDef.map(n => {
+        const on = n.id === active || (active === "users" && (n.id === "users" && s.screen === "users"));
+        const isActive = n.id === active || (s.screen === "payoutReview" && n.id === "reviews") || ((s.screen === "influencerProfile" || s.screen === "advertiserProfile") && n.id === "users");
+        return {
+          label: n.label, radius: n.radius, rule: !!n.rule, badge: n.badge,
+          onClick: () => {
+            if (n.id === "advertisers") { this.setState({ screen: "users", userTab: "Advertisers", menuId: "" }); return; }
+            if (n.id === "influencers") { this.setState({ screen: "users", userTab: "Influencers", menuId: "" }); return; }
+            if (n.id === "transactions") { this.setState({ screen: "payments", menuId: "" }); return; }
+            this.go(n.id);
+          },
+          bg: isActive ? "rgba(255,255,255,.1)" : "transparent",
+          fg: isActive ? "#FFFFFF" : "#C2CFCD",
+          weight: isActive ? "600" : "500",
+          dot: isActive ? "#82C8D2" : "#6A817F",
+          badgeBg: n.badge ? "rgba(255,255,255,.12)" : "transparent",
+          badgeFg: "#E0E8E7"
+        };
+      }),
+      screenHint: {
+        dashboard: "Seven summary cards, payout queue, activity log",
+        campaigns: "Ten campaigns across every status",
+        reviews: "Advertiser-approved work waiting on payout",
+        payoutReview: "Release or hold a single creator payment",
+        users: "Tabs for advertisers, influencers and suspended accounts",
+        payments: "Advertiser payments, fees and refunds",
+        payouts: "Five payout queues",
+        reports: "Revenue and funnel",
+        notifications: "Notifications beside the audit log"
+      }[s.screen] || "Agency workspace",
+      breadcrumb: titles[s.screen] || "Agency Overview",
+      payoutNoteTitle: readyPayouts.length + " payouts ready",
+      goPayouts: () => this.go("payouts"),
+      goReviews: () => this.go("reviews"),
+      goNotifications: () => this.go("notifications"),
+      goUsers: () => this.go("users"),
+      readyCount: String(readyPayouts.length),
+
+      isDashboard: s.screen === "dashboard",
+      isCampaigns: s.screen === "campaigns",
+      isApplications: s.screen === "applications",
+      isReviews: s.screen === "reviews",
+      isPayoutReview: s.screen === "payoutReview",
+      isUsers: s.screen === "users",
+      isInfluencerProfile: s.screen === "influencerProfile",
+      isAdvertiserProfile: s.screen === "advertiserProfile",
+      isPayments: s.screen === "payments",
+      isPayouts: s.screen === "payouts",
+      isReports: s.screen === "reports",
+      isNotifications: s.screen === "notifications",
+      isSettings: s.screen === "settings",
+
+      summary: [
+        { label: "Total users", value: String(advertiserAccounts + influencerAccounts - dualRoleAccounts), hint: dualRoleAccounts + " accounts use both roles", bg: "#0B2523", fg: "#FFFFFF", sub: "#93A6A4", onClick: () => this.go("users") },
+        { label: "Advertisers", value: String(advertiserAccounts), hint: "Brands with at least one campaign", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F", onClick: () => this.setState({ screen: "users", userTab: "Advertisers" }) },
+        { label: "Influencers", value: String(influencerAccounts), hint: "Creators with a completed profile", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F", onClick: () => this.setState({ screen: "users", userTab: "Influencers" }) },
+        { label: "Active campaigns", value: String(activeCampaigns), hint: "Published and running right now", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F", onClick: () => this.go("campaigns") },
+        { label: "Pending reviews", value: String(readyPayouts.length), hint: "Approved tasks waiting on payout", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F", onClick: () => this.go("reviews") },
+        { label: "Pending payouts", value: this.money(pendingPayoutTotal), hint: "Owed to creators, not yet released", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F", onClick: () => this.go("payouts") },
+        { label: "Platform revenue", value: this.money(totalFees - totalGateway), hint: "Platform fees minus gateway costs", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F", onClick: () => this.go("reports") }
+      ],
+
+      dashReviews: readyPayouts.slice(0, 4).map(p => ({
+        initial: p.initial, influencer: p.influencer, campaign: p.campaign, advertiser: p.advertiser,
+        reward: this.money(p.reward),
+        onOpen: () => this.setState({ screen: "payoutReview", payoutId: p.id, holdOpen: false })
+      })),
+
+      activityShort: this.activity.slice(0, 6).map((a, i, arr) => {
+        const st = this.iconStyle(a.kind);
+        return { text: a.text, time: a.time, icon: a.icon, iconBg: st.bg, iconFg: st.fg, hasLine: i < arr.length - 1 };
+      }),
+      activityFull: this.activity.map((a, i, arr) => {
+        const st = this.iconStyle(a.kind);
+        return { text: a.text, time: a.time, icon: a.icon, iconBg: st.bg, iconFg: st.fg, hasLine: i < arr.length - 1 };
+      }),
+
+      campaignCount: campaignRows.length + " of " + this.campaigns.length + " campaigns",
+      campaignTabs: campaignStatuses.map(label => ({
+        label, onClick: () => this.setState({ campaignTab: label, menuId: "" }),
+        bg: s.campaignTab === label ? "#0B2523" : "#FFFFFF",
+        fg: s.campaignTab === label ? "#FFFFFF" : "#4A6260",
+        border: s.campaignTab === label ? "#0B2523" : "#E0E8E7",
+        weight: s.campaignTab === label ? "600" : "500"
+      })),
+      campaignRows: campaignRows.map((c, i) => {
+        const st = this.statusStyle(c.status), pay = this.statusStyle(c.payment);
+        const id = c.title;
+        const actions = [];
+        if (["In Progress", "Applications Open", "Selection In Progress", "Review Pending"].indexOf(c.status) > -1) actions.push({ label: "Pause", fg: "#B45309", border: "#FDE68A" });
+        if (["Draft", "Payment Pending", "Applications Open", "Selection In Progress", "In Progress"].indexOf(c.status) > -1) actions.push({ label: "Cancel", fg: "#B91C1C", border: "#FCA5A5" });
+        if (!actions.length) actions.push({ label: "No actions available", fg: "#6A817F", border: "#E0E8E7" });
+        return {
+          title: c.title, advertiser: c.advertiser, category: c.category, platform: c.platform,
+          value: this.money(c.value),
+          required: String(c.required), selected: String(c.selected), completed: String(c.completed), approved: String(c.approved),
+          payment: c.payment, payBg: pay.bg, payFg: pay.fg,
+          status: c.status, stBg: st.bg, stFg: st.fg,
+          menuOpen: s.menuId === id, actions,
+          onMenu: () => this.setState({ menuId: s.menuId === id ? "" : id })
+        };
+      }),
+
+      applicationRows: this.applications.map(a => {
+        const st = this.statusStyle(a.status);
+        return { influencer: a.influencer, initial: a.initial, campaign: a.campaign, advertiser: a.advertiser, platform: a.platform, applied: a.applied, status: a.status, stBg: st.bg, stFg: st.fg };
+      }),
+
+      reviewSummary: readyPayouts.length + " ready for payout · " + this.money(readyPayouts.reduce((a, p) => a + p.reward, 0)) + " to release",
+      reviewRows: this.payouts.filter(p => ["ready", "processing", "hold"].indexOf(this.payoutState(p)) > -1).map(p => {
+        const label = this.payoutState(p) === "ready" ? "Ready for Payout" : this.payoutLabel(p);
+        const st = this.statusStyle(label);
+        const ready = this.payoutState(p) === "ready";
+        return {
+          initial: p.initial, influencer: p.influencer, campaign: p.campaign, advertiser: p.advertiser,
+          platform: p.platform, reward: this.money(p.reward), approvedOn: p.approvedOn,
+          status: label, stBg: st.bg, stFg: st.fg,
+          cta: ready ? "Review Payout" : "View",
+          ctaBg: ready ? "#0E8494" : "#FFFFFF",
+          ctaFg: ready ? "#FFFFFF" : "#08201F",
+          ctaBorder: ready ? "#0E8494" : "#E0E8E7",
+          onOpen: () => this.setState({ screen: "payoutReview", payoutId: p.id, holdOpen: false })
+        };
+      }),
+
+      payout: {
+        initial: payout.initial, influencer: payout.influencer, handle: payout.handle, city: payout.city,
+        followers: payout.followers, platform: payout.platform, taskType: payout.taskType,
+        reward: this.money(payout.reward), fee: this.money(Math.round(payout.reward * 0.2)),
+        charged: this.money(Math.round(payout.reward * 1.2)),
+        method: payout.method, account: payout.account, link: payout.link,
+        status: this.payoutLabel(payout), stBg: payoutStyle.bg, stFg: payoutStyle.fg,
+        released: payoutSt === "paid",
+        approvalNote: payout.advertiser + " approved this submission on " + payout.approvedOn + ". The agency has not released the payment yet.",
+        facts: [
+          { label: "Campaign", value: payout.campaign },
+          { label: "Advertiser", value: payout.advertiser },
+          { label: "Task type", value: payout.taskType },
+          { label: "Submitted", value: payout.submittedOn },
+          { label: "Advertiser approval", value: payout.approvedOn },
+          { label: "Payment status", value: this.payoutLabel(payout) }
+        ],
+        trail: [
+          { label: "Influencer selected by " + payout.advertiser, time: "Aug 15", icon: "◆", bg: "#EEF7E3", fg: "#0A5F6B" },
+          { label: "Task completed and link submitted", time: payout.submittedOn, icon: "↑", bg: "#EFF4F3", fg: "#4A6260" },
+          { label: "Advertiser approved the work", time: payout.approvedOn, icon: "✓", bg: "#ECFDF5", fg: "#047857" },
+          { label: payoutSt === "paid" ? "Agency released the payment" : "Waiting on the agency to release payment", time: payoutSt === "paid" ? "Just now" : "Now", icon: "$", bg: payoutSt === "paid" ? "#ECFDF5" : "#FEF3C7", fg: payoutSt === "paid" ? "#047857" : "#B45309" }
+        ],
+        ctaLabel: payoutSt === "paid" ? "Payment released" : "Release Payment",
+        ctaBg: payoutSt === "paid" ? "#EFF4F3" : "#0E8494",
+        ctaFg: payoutSt === "paid" ? "#6A817F" : "#FFFFFF",
+        ctaBorder: payoutSt === "paid" ? "#E0E8E7" : "#0E8494",
+        ctaShadow: payoutSt === "paid" ? "none" : "0 2px 8px rgba(10,95,107,.28)",
+        ctaCursor: payoutSt === "paid" ? "default" : "pointer",
+        onRelease: () => { if (payoutSt !== "paid") this.setState({ releasedIds: s.releasedIds.concat([payout.id]), heldIds: s.heldIds.filter(x => x !== payout.id), holdOpen: false }); },
+        onHold: () => this.setState({ holdOpen: true }),
+        showHoldForm: s.holdOpen,
+        holdReason: s.holdReason,
+        onHoldReason: ev => this.setState({ holdReason: ev.target.value }),
+        onConfirmHold: () => this.setState({ heldIds: s.heldIds.concat([payout.id]), holdOpen: false }),
+        onCancelHold: () => this.setState({ holdOpen: false, holdReason: "" }),
+        onProfile: () => this.go("influencerProfile")
+      },
+
+      userCount: userRows.length + " of " + this.users.length + " accounts",
+      userTabs: userTabs.map(label => ({
+        label, onClick: () => this.setState({ userTab: label }),
+        bg: s.userTab === label ? "#0B2523" : "#FFFFFF",
+        fg: s.userTab === label ? "#FFFFFF" : "#4A6260",
+        border: s.userTab === label ? "#0B2523" : "#E0E8E7",
+        weight: s.userTab === label ? "600" : "500"
+      })),
+      userRows: userRows.map(u => {
+        const st = this.statusStyle(u.status), role = this.statusStyle(u.role);
+        return {
+          name: u.name, email: u.email, role: u.role, roleBg: role.bg, roleFg: role.fg,
+          socials: u.socials, campaigns: String(u.campaigns), joined: u.joined,
+          status: u.status, stBg: st.bg, stFg: st.fg,
+          initial: u.name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase(),
+          avatarBg: u.kind === "advertiser" ? "#0B2523" : "#EEF7E3",
+          avatarFg: u.kind === "advertiser" ? "#FFFFFF" : "#0A5F6B",
+          actionLabel: u.status === "Active" ? "Suspend" : u.status === "Suspended" ? "Restore" : "Reactivate",
+          actionFg: u.status === "Active" ? "#B91C1C" : "#047857",
+          actionBorder: u.status === "Active" ? "#FCA5A5" : "#A7F3D0",
+          onView: () => this.go(u.kind === "advertiser" ? "advertiserProfile" : "influencerProfile"),
+          onStatus: () => {}
+        };
+      }),
+
+      inf: {
+        initial: "SA", name: "Sofia Marchetti", email: "sofia.marchetti@email.com", city: "New York", joined: "Nov 2025",
+        status: "Active", stBg: "#ECFDF5", stFg: "#047857",
+        bio: "Beauty and skincare creator posting honest routine videos and product tests. Works with local brands on UGC, reels and reviews.",
+        categories: ["Beauty", "Skincare", "Lifestyle"],
+        stats: [
+          { label: "Applications", value: "34" },
+          { label: "Selected", value: "22" },
+          { label: "Completed tasks", value: "19" },
+          { label: "Total paid", value: "$715" }
+        ],
+        socials: [
+          { label: "Instagram", initial: "IG", detail: "@sarah.styles · 38.2K followers · connected Feb 2026", status: "Connected", stBg: "#ECFDF5", stFg: "#047857", iconBg: "#0B2523", iconFg: "#FFFFFF", fg: "#08201F" },
+          { label: "TikTok", initial: "TT", detail: "@sarah.styles · 24.1K followers · connected Feb 2026", status: "Connected", stBg: "#ECFDF5", stFg: "#047857", iconBg: "#0B2523", iconFg: "#FFFFFF", fg: "#08201F" },
+          { label: "YouTube", initial: "YT", detail: "Sofia Marchetti · 6.4K subscribers · connected Jun 2026", status: "Connected", stBg: "#ECFDF5", stFg: "#047857", iconBg: "#0B2523", iconFg: "#FFFFFF", fg: "#08201F" },
+          { label: "Facebook", initial: "FB", detail: "No account linked", status: "Not connected", stBg: "#EFF4F3", stFg: "#6A817F", iconBg: "#EFF4F3", iconFg: "#6A817F", fg: "#93A6A4" }
+        ],
+        history: [
+          { campaign: "Glow Serum Review Wave", advertiser: "Lumin Beauty", task: "UGC video", reward: "$35", status: "Ready for Payout" },
+          { campaign: "Winter Skincare Set", advertiser: "Lumin Beauty", task: "Video", reward: "$55", status: "Paid" },
+          { campaign: "Summer Linen Edit", advertiser: "Zeenat Apparel", task: "Reel", reward: "$45", status: "Paid" },
+          { campaign: "Summer Collection Promotion", advertiser: "Zeenat Apparel", task: "Comment", reward: "$10", status: "Paid" },
+          { campaign: "Gaming Headset Unboxing", advertiser: "Nexa Tech", task: "Post", reward: "$120", status: "Not Selected" },
+          { campaign: "Spring Menu Teaser", advertiser: "Casa Verde", task: "Story", reward: "$15", status: "Pending" }
+        ].map(h => { const st = this.statusStyle(h.status); return Object.assign({}, h, { stBg: st.bg, stFg: st.fg }); }),
+        payments: [
+          { campaign: "Winter Skincare Set", date: "Paid Jun 05", amount: "$55", status: "Paid" },
+          { campaign: "Summer Linen Edit", date: "Paid Aug 02", amount: "$45", status: "Paid" },
+          { campaign: "Glow Serum Review Wave", date: "Approved Aug 21", amount: "$35", status: "Pending" }
+        ].map(p => { const st = this.statusStyle(p.status); return Object.assign({}, p, { stBg: st.bg, stFg: st.fg }); })
+      },
+
+      adv: {
+        initial: "BH", name: "Brand House", email: "ops@brandhouse.com", city: "London", joined: "Jan 2026",
+        contact: "Ana Rivera · +1 300 1234567",
+        status: "Active", stBg: "#ECFDF5", stFg: "#047857",
+        stats: [
+          { label: "Campaigns created", value: "6" },
+          { label: "Campaign spending", value: "$6,120" },
+          { label: "Current campaigns", value: "2" },
+          { label: "Completed campaigns", value: "3" }
+        ],
+        campaigns: [
+          { title: "Winter Collection Launch", meta: "Instagram · 20 creators · $1,000", status: "In Progress" },
+          { title: "Autumn Layering Edit", meta: "Instagram · 15 creators · $820", status: "Completed" },
+          { title: "Denim Fit Check", meta: "Instagram · 12 creators · $840", status: "Completed" },
+          { title: "Eid Capsule Drop", meta: "TikTok · 18 creators · $1,080", status: "Completed" },
+          { title: "Festive Preview", meta: "Instagram · 10 creators · $600", status: "Payment Pending" }
+        ].map(c => { const st = this.statusStyle(c.status); return Object.assign({}, c, { stBg: st.bg, stFg: st.fg }); }),
+        payments: [
+          { campaign: "Winter Collection Launch", method: "Bank transfer", date: "Aug 12", amount: "$1,200", status: "Successful" },
+          { campaign: "Eid Capsule Drop", method: "Card", date: "Jun 18", amount: "$1,296", status: "Successful" },
+          { campaign: "Denim Fit Check", method: "Bank transfer", date: "Apr 09", amount: "$1,008", status: "Successful" },
+          { campaign: "Festive Preview", method: "PayPal", date: "Aug 21", amount: "$720", status: "Pending" },
+          { campaign: "Autumn Layering Edit", method: "Card", date: "Feb 26", amount: "$984", status: "Successful" }
+        ].map(p => { const st = this.statusStyle(p.status); return Object.assign({}, p, { stBg: st.bg, stFg: st.fg }); })
+      },
+
+      paymentCards: [
+        { label: "Campaign payments", value: this.money(totalValue), hint: "Received from advertisers", bg: "#0B2523", fg: "#FFFFFF", sub: "#93A6A4" },
+        { label: "Platform fees", value: this.money(totalFees), hint: "20% on each campaign value", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F" },
+        { label: "Gateway fees", value: this.money(totalGateway), hint: "Charged by the payment provider", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F" },
+        { label: "Refunds", value: this.money(refunded), hint: "Cancelled campaigns returned in full", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F" },
+        { label: "Payouts released", value: this.money(paidOut), hint: "Sent to creators after approval", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F" }
+      ],
+      transactionRows: this.transactions.map(t => {
+        const st = this.statusStyle(t.status);
+        return {
+          id: t.id, advertiser: t.advertiser, campaign: t.campaign,
+          amount: this.money(t.amount), fee: this.money(t.fee), gateway: this.money(t.gateway),
+          total: this.money(t.amount + t.fee), method: t.method, date: t.date,
+          status: t.status, stBg: st.bg, stFg: st.fg
+        };
+      }),
+
+      payoutSummary: this.money(pendingPayoutTotal) + " waiting to be released",
+      payoutTabs: payoutTabDefs.map(t => {
+        const count = this.payouts.filter(p => {
+          const st = this.payoutState(p);
+          if (t.label === "Pending") return st === "pending" || st === "hold";
+          return this.payoutLabel(p) === t.label;
+        }).length;
+        return {
+          label: t.label + " " + count,
+          onClick: () => this.setState({ payoutTab: t.label }),
+          bg: s.payoutTab === t.label ? "#0B2523" : "#FFFFFF",
+          fg: s.payoutTab === t.label ? "#FFFFFF" : "#4A6260",
+          border: s.payoutTab === t.label ? "#0B2523" : "#E0E8E7",
+          weight: s.payoutTab === t.label ? "600" : "500"
+        };
+      }),
+      hasPayoutRows: payoutRows.length > 0,
+      noPayoutRows: payoutRows.length === 0,
+      payoutEmptyTitle: "No payouts in " + s.payoutTab.toLowerCase(),
+      payoutRows: payoutRows.map(p => {
+        const label = this.payoutLabel(p);
+        const st = this.statusStyle(label);
+        const ready = this.payoutState(p) === "ready";
+        return {
+          initial: p.initial, influencer: p.influencer, campaign: p.campaign,
+          reward: this.money(p.reward), approvedOn: p.approvedOn, method: p.method,
+          status: label, stBg: st.bg, stFg: st.fg,
+          cta: ready ? "Release Payment" : "View",
+          ctaBg: ready ? "#0E8494" : "#FFFFFF",
+          ctaFg: ready ? "#FFFFFF" : "#08201F",
+          ctaBorder: ready ? "#0E8494" : "#E0E8E7",
+          onAction: () => this.setState({ screen: "payoutReview", payoutId: p.id, holdOpen: false })
+        };
+      }),
+
+      revenueCards: [
+        { label: "Campaign value", value: this.money(totalValue), hint: "Paid to creators across campaigns", bg: "#0B2523", fg: "#FFFFFF", sub: "#93A6A4" },
+        { label: "Platform fees", value: this.money(totalFees), hint: "20% added at checkout", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F" },
+        { label: "Gateway costs", value: this.money(totalGateway), hint: "Deducted from fee income", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F" },
+        { label: "Net platform revenue", value: this.money(totalFees - totalGateway), hint: "Fees after gateway costs", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F" },
+        { label: "Completed campaigns", value: String(this.campaigns.filter(c => c.status === "Completed").length), hint: "All tasks approved and paid", bg: "#FFFFFF", fg: "#08201F", sub: "#6A817F" }
+      ],
+      chartBars: barValues.map((b, i) => ({
+        month: b.month, value: this.money(b.v).replace("$", ""),
+        height: Math.round(b.v / barMax * 100) + "%",
+        color: i === barValues.length - 1 ? "#0E8494" : "#A9DAE1"
+      })),
+      funnel: [
+        { label: "Applications received", value: "884", pct: "100%", color: "#0E8494" },
+        { label: "Creators selected", value: "294", pct: "33%", color: "#0E8494" },
+        { label: "Tasks completed", value: "255", pct: "29%", color: "#0E8494" },
+        { label: "Advertiser approved", value: "238", pct: "27%", color: "#0E8494" },
+        { label: "Payouts released", value: "216", pct: "24%", color: "#047857" }
+      ],
+      reportCards: [
+        { title: "Campaign performance", hint: "Per campaign: required, selected, completed, approved." },
+        { title: "Applications", hint: "Applications by campaign, platform and month." },
+        { title: "Selections", hint: "How many applicants each advertiser selected." },
+        { title: "Task completion", hint: "Completed against selected, per campaign." },
+        { title: "Approval rate", hint: "Approved and rejected submissions per advertiser." },
+        { title: "Payouts", hint: "Released, pending and failed payouts by month." }
+      ],
+
+      unreadCount: String(unread),
+      markAllRead: () => this.setState({ readAll: true }),
+      notifications: this.notificationList.map(n => {
+        const st = this.iconStyle(n.kind);
+        const unreadNow = n.unread && !s.readAll;
+        return {
+          message: n.message, time: n.time, action: n.action, icon: n.icon,
+          iconBg: st.bg, iconFg: st.fg,
+          bg: unreadNow ? "#F6F9F8" : "#FFFFFF",
+          weight: unreadNow ? "600" : "500",
+          unread: unreadNow,
+          onAction: () => this.go(n.to === "payout" ? "payoutReview" : n.to)
+        };
+      }),
+
+      settingsToggles: [
+        { key: "manualOnly", label: "Manual payout release only", hint: "Every creator payment is released by a person on the agency team." },
+        { key: "dailyDigest", label: "Daily payout digest", hint: "One email each morning listing everything approved overnight." },
+        { key: "autoNotify", label: "Notify creator on hold", hint: "Send the creator a message when a payment is put on hold." }
+      ].map(t => ({
+        label: t.label, hint: t.hint,
+        trackBg: s.toggles[t.key] ? "#0E8494" : "#C2CFCD",
+        justify: s.toggles[t.key] ? "flex-end" : "flex-start",
+        onClick: () => this.setState({ toggles: Object.assign({}, s.toggles, { [t.key]: !s.toggles[t.key] }) })
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>
