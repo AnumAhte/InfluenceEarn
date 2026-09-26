@@ -32,10 +32,10 @@ export const NAVIGATION: Record<ShellArea, readonly NavGroup[]> = {
   advertiser: [
     [
       { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-      { label: "Campaigns", href: null, icon: Megaphone },
+      { label: "Campaigns", href: "/campaigns", icon: Megaphone },
       { label: "Applicants", href: null, icon: Users },
       { label: "Tasks & reviews", href: null, icon: ClipboardCheck },
-      { label: "Wallet", href: null, icon: Wallet },
+      { label: "Wallet", href: "/wallet", icon: Wallet },
       { label: "Notifications", href: null, icon: Bell },
     ],
     [{ label: "My profile", href: "/settings/profile", icon: UserRound }],
@@ -47,7 +47,7 @@ export const NAVIGATION: Record<ShellArea, readonly NavGroup[]> = {
       { label: "My applications", href: null, icon: FileText },
       { label: "Active tasks", href: null, icon: ListChecks },
       { label: "Completed tasks", href: null, icon: ClipboardCheck },
-      { label: "Wallet", href: null, icon: Wallet },
+      { label: "Wallet", href: "/wallet", icon: Wallet },
     ],
     [
       { label: "Social accounts", href: null, icon: Link2 },

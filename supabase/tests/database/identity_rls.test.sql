@@ -78,7 +78,10 @@ select throws_ok(
 select set_config('request.jwt.claims', '{"sub":"33333333-3333-3333-3333-333333333333","role":"authenticated"}', true);
 
 select is(public.is_admin(), true, 'an admin is recognised by is_admin()');
-select is((select count(*) from public.profiles)::int, 3, 'an admin can read all profiles');
+select is(
+  (select count(*) from public.profiles where id in (
+    '11111111-1111-1111-1111-111111111111', '22222222-2222-2222-2222-222222222222', '33333333-3333-3333-3333-333333333333'))::int,
+  3, 'an admin can read all profiles');
 
 update public.profiles set full_name = 'edited by admin' where id = '22222222-2222-2222-2222-222222222222';
 

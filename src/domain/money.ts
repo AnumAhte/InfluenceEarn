@@ -5,6 +5,18 @@
 export type Cents = number & { readonly __brand: "Cents" };
 
 export const BASE_CURRENCY = "USD" as const;
+export type Currency = typeof BASE_CURRENCY;
+
+export class UnsupportedCurrencyError extends Error {
+  constructor(readonly currency: string) {
+    super(`Unsupported currency: ${currency}. Only ${BASE_CURRENCY} is supported in V1.`);
+    this.name = "UnsupportedCurrencyError";
+  }
+}
+
+export function assertSupportedCurrency(currency: string): asserts currency is Currency {
+  if (currency !== BASE_CURRENCY) throw new UnsupportedCurrencyError(currency);
+}
 
 export function cents(value: number): Cents {
   if (!Number.isSafeInteger(value)) {
@@ -60,4 +72,26 @@ export function formatMoney(amount: Cents, { showCents = true }: FormatOptions =
     maximumFractionDigits: showCents ? 2 : 0,
   });
   return formatter.format(amount / 100);
+}
+
+const DOLLAR_INPUT = /^(\d{1,9})(?:\.(\d{1,2}))?$/;
+
+/**
+ * Parses a user-entered dollar amount ("10", "10.5", "1,250.75") into cents using
+ * string arithmetic only. Returns null for anything that is not a plain amount.
+ */
+export function parseDollarsToCents(input: string): Cents | null {
+  const normalised = input.trim().replace(/^\$/, "").replace(/,/g, "");
+  const match = DOLLAR_INPUT.exec(normalised);
+  if (!match) return null;
+  const whole = Number(match[1]);
+  const fraction = Number((match[2] ?? "").padEnd(2, "0"));
+  return cents(whole * 100 + fraction);
+}
+
+/** Formats cents for an editable input, e.g. 1050 → "10.50", 1000 → "10". */
+export function centsToDollarInput(amount: Cents): string {
+  const whole = Math.trunc(amount / 100);
+  const fraction = Math.abs(amount % 100);
+  return fraction === 0 ? String(whole) : `${whole}.${String(fraction).padStart(2, "0")}`;
 }
