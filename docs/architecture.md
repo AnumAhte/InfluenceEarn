@@ -1,6 +1,6 @@
 # InfluencEarn — Architecture
 
-Status: **Phase 3 complete** (social accounts, eligibility, discovery, applications, manual selection, notifications). Phase 2: campaigns + wallet. Phase 1: foundation.
+Status: **Phase 4 complete** (work submissions, advertiser reviews, campaign lifecycle, read-only payout queue). Phase 3: social accounts, eligibility, applications. Phase 2: campaigns + wallet. Phase 1: foundation.
 
 ---
 
@@ -323,3 +323,51 @@ trigram search on name + handles.
 - pgTAP: 99 assertions total (39 new).
 - Vitest: 100 unit tests.
 - End-to-end (production build + local Supabase): 40/40 for phase 3 and the phase 2 suite re-run 40/40.
+
+---
+
+## 8. Phase 4 — work submissions and advertiser reviews
+
+### Flow
+
+`selected` (application) → assignment `in_progress` → creator submits → `submitted` →
+advertiser **approves** → `approved` (ready for payout; admins notified) **or rejects with a reason** →
+`revision_requested` (resubmission allowed, before the deadline, max 3 attempts) or `rejected` (final).
+When the campaign is completed, unfinished past-deadline work becomes `expired`. `payout_pending` / `paid` are
+reserved for phase 5.
+
+Campaign lifecycle: close applications → `selection_in_progress` → **Start campaign work** → `in_progress` ⇄
+`review_pending` (automatic while any submission awaits review) → **Mark campaign complete** → `completed`
+(blocked while anything awaits review or can still be submitted).
+
+### Decisions
+
+- **One assignment per selected creator**, created inside `decide_application`; snapshots reward and deadline.
+- **One submission covers every campaign task.** Proof per task comes from `campaign_task_type_rules`:
+  links must be `https://` on the task platform's own domain (`proof_url_matches_platform`), comment tasks
+  need the comment text, follow tasks need nothing (any link sent is discarded). Screenshots are never
+  required. The TypeScript mirror (`src/domain/tasks/proof.ts`) gives instant feedback; SQL decides.
+- **Reviews are owner-only and final per submission.** Rejection requires a reason; the advertiser chooses
+  whether the creator may resubmit.
+- **Notifications:** task submitted → advertiser; changes requested / rejected / approved → creator; approved
+  → every admin (`payout_ready`). Admins added later see approved work in the queue, not past notifications.
+- **Admin payout queue is read-only** until a payment provider exists.
+
+### Tables and functions (added)
+
+`campaign_assignments`, `task_submissions`, `task_submission_items`, `task_reviews`. Functions:
+`submit_task_completion`, `review_task_submission`, `start_campaign_work`, `complete_campaign`,
+`campaign_assignment_counts`, `proof_url_matches_platform`; `decide_application` now creates assignments;
+`campaign_transition_allowed` adds `in_progress → completed`.
+
+### RLS (added)
+
+Assignments, submissions, items and reviews: the creator, the campaign owner and admins can read; **nobody
+writes directly** — only the functions above. A creator cannot review (approve) their own work; other
+advertisers see nothing.
+
+### Verification (phase 4)
+
+- pgTAP: 136 assertions total (37 new).
+- Vitest: 108 unit tests.
+- End-to-end (production build + local Supabase): phase 4 flow 34/34; phase 2 and phase 3 suites re-run 40/40 each.

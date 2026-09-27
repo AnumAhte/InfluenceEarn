@@ -1,5 +1,5 @@
 /** Paths that require a signed-in user. */
-export const PROTECTED_PREFIXES = ["/dashboard", "/onboarding", "/settings", "/admin", "/campaigns", "/wallet", "/discover", "/applications", "/notifications"] as const;
+export const PROTECTED_PREFIXES = ["/dashboard", "/onboarding", "/settings", "/admin", "/campaigns", "/wallet", "/discover", "/applications", "/notifications", "/tasks", "/reviews"] as const;
 
 /** Pages that only make sense for signed-out visitors. */
 export const GUEST_ONLY_PATHS = ["/login", "/signup", "/forgot-password"] as const;

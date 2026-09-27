@@ -5,7 +5,7 @@ import { resolveRouteAccess } from "./route-access";
 
 describe("resolveRouteAccess", () => {
   it("sends signed-out visitors on protected pages to login with a return path", () => {
-    for (const path of ["/dashboard", "/onboarding/role", "/settings/profile", "/admin", "/admin/payouts", "/campaigns", "/campaigns/new", "/wallet", "/discover", "/discover/abc", "/applications", "/notifications"]) {
+    for (const path of ["/dashboard", "/onboarding/role", "/settings/profile", "/admin", "/admin/payouts", "/campaigns", "/campaigns/new", "/wallet", "/discover", "/discover/abc", "/applications", "/notifications", "/tasks", "/tasks/abc", "/reviews"]) {
       expect(resolveRouteAccess(path, false)).toEqual({ type: "redirect", to: "/login", withNext: true });
     }
   });
