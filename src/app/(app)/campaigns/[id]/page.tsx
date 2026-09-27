@@ -22,6 +22,8 @@ import { countryName } from "@/domain/geo/countries";
 import { cents, formatMoney } from "@/domain/money";
 import { calculateCampaignFunding } from "@/domain/pricing";
 import { requireOnboardedAccount } from "@/features/account/queries";
+import { closeApplications } from "@/features/applications/actions";
+import { getApplicationCounts } from "@/features/applications/queries";
 import { requestFunding } from "@/features/campaigns/actions";
 import { CampaignStatusBadge, CostBreakdown, formatDate, PlatformTile } from "@/features/campaigns/components/campaign-bits";
 import { CancelCampaignButton } from "@/features/campaigns/components/cancel-campaign-button";
@@ -44,6 +46,8 @@ export default async function CampaignDetailPage({ params, searchParams }: PageP
   if (!campaign) notFound();
 
   const editable = isEditable(campaign.status);
+  const acceptsApplications = !editable && campaign.status !== "cancelled";
+  const applicationCounts = acceptsApplications ? await getApplicationCounts(campaign.id) : null;
   const funding =
     campaign.payment_per_creator_cents !== null && campaign.creators_required !== null
       ? calculateCampaignFunding(cents(campaign.payment_per_creator_cents), campaign.creators_required)
@@ -103,9 +107,34 @@ export default async function CampaignDetailPage({ params, searchParams }: PageP
               <Link href={`/campaigns/${campaign.id}/fund`}>Fund &amp; publish</Link>
             </Button>
           ) : null}
+          {acceptsApplications ? (
+            <Button asChild className="shadow-primary">
+              <Link href={`/campaigns/${campaign.id}/applicants`}>Review applicants</Link>
+            </Button>
+          ) : null}
+          {campaign.status === "applications_open" ? (
+            <form action={closeApplications}>
+              <input type="hidden" name="campaignId" value={campaign.id} />
+              <SubmitButton variant="secondary" pendingLabel="Closing…">Close applications</SubmitButton>
+            </form>
+          ) : null}
           {canCancel(campaign.status) ? <CancelCampaignButton campaignId={campaign.id} title={campaign.title} /> : null}
         </div>
       </header>
+
+      {applicationCounts ? (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <MetricCard label="Applications" value={applicationCounts.all.toLocaleString("en-US")} hint={`${applicationCounts.pending} waiting for review`} />
+          <MetricCard label="Shortlisted" value={applicationCounts.shortlisted.toLocaleString("en-US")} hint="Chosen by you for a closer look" />
+          <MetricCard
+            label="Selected"
+            value={`${applicationCounts.selected} / ${campaign.creators_required ?? 0}`}
+            hint="Selected by you manually"
+            tone={campaign.creators_required !== null && applicationCounts.selected >= campaign.creators_required ? "default" : "attention"}
+          />
+          <MetricCard label="Rejected" value={applicationCounts.rejected.toLocaleString("en-US")} hint="Not selected" />
+        </div>
+      ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard label="Creators needed" value={campaign.creators_required?.toLocaleString("en-US") ?? "—"} hint="Selected by you from applicants" />

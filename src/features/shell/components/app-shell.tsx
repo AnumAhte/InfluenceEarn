@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { Logo } from "@/components/brand/logo";
 import { initialsFor } from "@/features/account/onboarding";
 import type { CurrentAccount } from "@/features/account/queries";
+import { NotificationBell } from "@/features/notifications/components/notification-bell";
 
 import type { ShellArea } from "../navigation";
 import { MobileNav } from "./mobile-nav";
@@ -46,6 +47,8 @@ export function AppShell({ account, area, children }: { account: CurrentAccount;
               <RoleSwitcher current={area} />
             )}
           </div>
+          <div className="flex items-center gap-2">
+          <NotificationBell userId={account.userId} />
           <UserMenu
             name={profile.full_name}
             email={account.email}
@@ -54,6 +57,7 @@ export function AppShell({ account, area, children }: { account: CurrentAccount;
             isAdmin={account.isAdmin}
             area={area === "admin" ? "admin" : "workspace"}
           />
+          </div>
         </header>
 
         <main id="main" className="flex-1 px-4 py-6 sm:px-8 sm:py-8">

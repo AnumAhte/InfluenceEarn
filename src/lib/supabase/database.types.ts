@@ -36,6 +36,169 @@ export type Database = {
   }
   public: {
     Tables: {
+      application_social_accounts: {
+        Row: {
+          application_id: string
+          follower_count: number | null
+          handle: string
+          platform: Database["public"]["Enums"]["social_platform"]
+          profile_url: string
+          social_account_id: string
+        }
+        Insert: {
+          application_id: string
+          follower_count?: number | null
+          handle: string
+          platform: Database["public"]["Enums"]["social_platform"]
+          profile_url: string
+          social_account_id: string
+        }
+        Update: {
+          application_id?: string
+          follower_count?: number | null
+          handle?: string
+          platform?: Database["public"]["Enums"]["social_platform"]
+          profile_url?: string
+          social_account_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "application_social_accounts_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "campaign_applications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "application_social_accounts_social_account_id_fkey"
+            columns: ["social_account_id"]
+            isOneToOne: false
+            referencedRelation: "social_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaign_application_events: {
+        Row: {
+          actor_id: string | null
+          application_id: string
+          created_at: string
+          from_status: Database["public"]["Enums"]["application_status"] | null
+          id: number
+          to_status: Database["public"]["Enums"]["application_status"]
+        }
+        Insert: {
+          actor_id?: string | null
+          application_id: string
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["application_status"] | null
+          id?: never
+          to_status: Database["public"]["Enums"]["application_status"]
+        }
+        Update: {
+          actor_id?: string | null
+          application_id?: string
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["application_status"] | null
+          id?: never
+          to_status?: Database["public"]["Enums"]["application_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_application_events_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_application_events_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "campaign_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaign_applications: {
+        Row: {
+          campaign_id: string
+          created_at: string
+          creator_age: number | null
+          creator_categories: string[]
+          creator_city: string | null
+          creator_country_code: string | null
+          creator_gender: Database["public"]["Enums"]["creator_gender"] | null
+          creator_id: string
+          creator_name: string
+          decided_by: string | null
+          id: string
+          max_follower_count: number | null
+          pitch: string | null
+          search_text: string
+          status: Database["public"]["Enums"]["application_status"]
+          status_changed_at: string
+        }
+        Insert: {
+          campaign_id: string
+          created_at?: string
+          creator_age?: number | null
+          creator_categories?: string[]
+          creator_city?: string | null
+          creator_country_code?: string | null
+          creator_gender?: Database["public"]["Enums"]["creator_gender"] | null
+          creator_id: string
+          creator_name: string
+          decided_by?: string | null
+          id?: string
+          max_follower_count?: number | null
+          pitch?: string | null
+          search_text: string
+          status?: Database["public"]["Enums"]["application_status"]
+          status_changed_at?: string
+        }
+        Update: {
+          campaign_id?: string
+          created_at?: string
+          creator_age?: number | null
+          creator_categories?: string[]
+          creator_city?: string | null
+          creator_country_code?: string | null
+          creator_gender?: Database["public"]["Enums"]["creator_gender"] | null
+          creator_id?: string
+          creator_name?: string
+          decided_by?: string | null
+          id?: string
+          max_follower_count?: number | null
+          pitch?: string | null
+          search_text?: string
+          status?: Database["public"]["Enums"]["application_status"]
+          status_changed_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_applications_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_applications_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_applications_decided_by_fkey"
+            columns: ["decided_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       campaign_creator_categories: {
         Row: {
           campaign_id: string
@@ -462,6 +625,71 @@ export type Database = {
         }
         Relationships: []
       }
+      creator_profile_categories: {
+        Row: {
+          category_slug: string
+          user_id: string
+        }
+        Insert: {
+          category_slug: string
+          user_id: string
+        }
+        Update: {
+          category_slug?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "creator_profile_categories_category_slug_fkey"
+            columns: ["category_slug"]
+            isOneToOne: false
+            referencedRelation: "creator_categories"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "creator_profile_categories_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "creator_profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      creator_profiles: {
+        Row: {
+          country_code: string | null
+          created_at: string
+          date_of_birth: string | null
+          gender: Database["public"]["Enums"]["creator_gender"] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          country_code?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          gender?: Database["public"]["Enums"]["creator_gender"] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          country_code?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          gender?: Database["public"]["Enums"]["creator_gender"] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "creator_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ledger_transactions: {
         Row: {
           campaign_id: string | null
@@ -516,6 +744,53 @@ export type Database = {
             columns: ["payment_transaction_id"]
             isOneToOne: true
             referencedRelation: "payment_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          body: string
+          created_at: string
+          data: Json
+          email_status: Database["public"]["Enums"]["notification_email_status"]
+          id: string
+          link_path: string | null
+          read_at: string | null
+          recipient_id: string
+          title: string
+          type: Database["public"]["Enums"]["notification_type"]
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          data?: Json
+          email_status?: Database["public"]["Enums"]["notification_email_status"]
+          id?: string
+          link_path?: string | null
+          read_at?: string | null
+          recipient_id: string
+          title: string
+          type: Database["public"]["Enums"]["notification_type"]
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          data?: Json
+          email_status?: Database["public"]["Enums"]["notification_email_status"]
+          id?: string
+          link_path?: string | null
+          read_at?: string | null
+          recipient_id?: string
+          title?: string
+          type?: Database["public"]["Enums"]["notification_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -652,6 +927,59 @@ export type Database = {
           workspace_chosen_at?: string | null
         }
         Relationships: []
+      }
+      social_accounts: {
+        Row: {
+          connection_method: Database["public"]["Enums"]["social_connection_method"]
+          created_at: string
+          disconnected_at: string | null
+          follower_count: number | null
+          handle: string
+          id: string
+          platform: Database["public"]["Enums"]["social_platform"]
+          provider_account_id: string | null
+          status: Database["public"]["Enums"]["social_account_status"]
+          updated_at: string
+          user_id: string
+          verification_status: Database["public"]["Enums"]["social_verification_status"]
+        }
+        Insert: {
+          connection_method?: Database["public"]["Enums"]["social_connection_method"]
+          created_at?: string
+          disconnected_at?: string | null
+          follower_count?: number | null
+          handle: string
+          id?: string
+          platform: Database["public"]["Enums"]["social_platform"]
+          provider_account_id?: string | null
+          status?: Database["public"]["Enums"]["social_account_status"]
+          updated_at?: string
+          user_id?: string
+          verification_status?: Database["public"]["Enums"]["social_verification_status"]
+        }
+        Update: {
+          connection_method?: Database["public"]["Enums"]["social_connection_method"]
+          created_at?: string
+          disconnected_at?: string | null
+          follower_count?: number | null
+          handle?: string
+          id?: string
+          platform?: Database["public"]["Enums"]["social_platform"]
+          provider_account_id?: string | null
+          status?: Database["public"]["Enums"]["social_account_status"]
+          updated_at?: string
+          user_id?: string
+          verification_status?: Database["public"]["Enums"]["social_verification_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_accounts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
@@ -868,7 +1196,25 @@ export type Database = {
         Args: { _campaign_id: string }
         Returns: undefined
       }
+      _campaign_eligibility_issues: {
+        Args: { _campaign_id: string; _user_id: string }
+        Returns: {
+          code: string
+          platform: Database["public"]["Enums"]["social_platform"]
+        }[]
+      }
       _ensure_user_wallet: { Args: { _user_id: string }; Returns: string }
+      _notify: {
+        Args: {
+          _body: string
+          _data?: Json
+          _link: string
+          _recipient: string
+          _title: string
+          _type: Database["public"]["Enums"]["notification_type"]
+        }
+        Returns: undefined
+      }
       _system_account: {
         Args: {
           _campaign_id?: string
@@ -876,6 +1222,28 @@ export type Database = {
           _provider?: string
         }
         Returns: string
+      }
+      application_transition_allowed: {
+        Args: {
+          _from: Database["public"]["Enums"]["application_status"]
+          _to: Database["public"]["Enums"]["application_status"]
+        }
+        Returns: boolean
+      }
+      apply_to_campaign: {
+        Args: { p_campaign_id: string; p_pitch?: string }
+        Returns: string
+      }
+      campaign_advertiser_name: {
+        Args: { p_campaign_id: string }
+        Returns: string
+      }
+      campaign_application_counts: {
+        Args: { p_campaign_id: string }
+        Returns: {
+          status: Database["public"]["Enums"]["application_status"]
+          total: number
+        }[]
       }
       campaign_is_editable: {
         Args: { _status: Database["public"]["Enums"]["campaign_status"] }
@@ -889,10 +1257,51 @@ export type Database = {
         Returns: boolean
       }
       can_edit_campaign: { Args: { _campaign_id: string }; Returns: boolean }
+      can_view_application: {
+        Args: { _application_id: string }
+        Returns: boolean
+      }
       can_view_campaign: { Args: { _campaign_id: string }; Returns: boolean }
       cancel_campaign: {
         Args: { p_campaign_id: string; p_reason?: string }
         Returns: Database["public"]["Enums"]["campaign_status"]
+      }
+      close_campaign_applications: {
+        Args: { p_campaign_id: string }
+        Returns: Database["public"]["Enums"]["campaign_status"]
+      }
+      decide_application: {
+        Args: { p_action: string; p_application_id: string }
+        Returns: Database["public"]["Enums"]["application_status"]
+      }
+      discover_campaigns: {
+        Args: {
+          p_category?: string
+          p_eligible_only?: boolean
+          p_limit?: number
+          p_offset?: number
+          p_platform?: Database["public"]["Enums"]["social_platform"]
+          p_search?: string
+          p_sort?: string
+        }
+        Returns: {
+          advertiser_name: string
+          application_deadline: string
+          applied: boolean
+          campaign_type: Database["public"]["Enums"]["campaign_type"]
+          category_slug: string
+          creators_required: number
+          description: string
+          id: string
+          issues: string[]
+          min_followers: number
+          payment_per_creator_cents: number
+          platforms: Database["public"]["Enums"]["social_platform"][]
+          task_deadline: string
+          task_types: Database["public"]["Enums"]["campaign_task_type"][]
+          title: string
+          total_count: number
+        }[]
       }
       fund_and_publish_campaign: {
         Args: { p_campaign_id: string; p_idempotency_key: string }
@@ -903,12 +1312,24 @@ export type Database = {
           total_cents: number
         }[]
       }
+      has_applied_to_campaign: {
+        Args: { _campaign_id: string }
+        Returns: boolean
+      }
       has_platform_role: {
         Args: { _role: Database["public"]["Enums"]["platform_role"] }
         Returns: boolean
       }
       is_admin: { Args: never; Returns: boolean }
       is_campaign_owner: { Args: { _campaign_id: string }; Returns: boolean }
+      mark_notifications_read: { Args: { p_ids?: string[] }; Returns: number }
+      my_campaign_eligibility: {
+        Args: { p_campaign_id: string }
+        Returns: {
+          code: string
+          platform: Database["public"]["Enums"]["social_platform"]
+        }[]
+      }
       my_campaign_status_counts: {
         Args: never
         Returns: {
@@ -952,8 +1373,25 @@ export type Database = {
         }
         Returns: string
       }
+      save_creator_profile: {
+        Args: {
+          p_categories?: string[]
+          p_country_code?: string
+          p_date_of_birth?: string
+          p_gender?: Database["public"]["Enums"]["creator_gender"]
+        }
+        Returns: undefined
+      }
+      social_profile_url: {
+        Args: {
+          _handle: string
+          _platform: Database["public"]["Enums"]["social_platform"]
+        }
+        Returns: string
+      }
     }
     Enums: {
+      application_status: "pending" | "shortlisted" | "selected" | "rejected"
       campaign_funding_status: "succeeded"
       campaign_status:
         | "draft"
@@ -993,6 +1431,16 @@ export type Database = {
         | "campaign_funding_reserve"
         | "platform_fee"
       ledger_transaction_kind: "test_deposit" | "campaign_funding"
+      notification_email_status: "pending" | "sent" | "failed" | "skipped"
+      notification_type:
+        | "application_received"
+        | "application_selected"
+        | "campaign_published"
+        | "task_submitted"
+        | "task_approved"
+        | "task_rejected"
+        | "payout_ready"
+        | "payout_released"
       payment_transaction_status:
         | "pending"
         | "processing"
@@ -1001,7 +1449,10 @@ export type Database = {
         | "cancelled"
       platform_role: "admin"
       proof_url_requirement: "required" | "optional" | "none"
+      social_account_status: "connected" | "disconnected"
+      social_connection_method: "manual" | "oauth"
       social_platform: "instagram" | "tiktok" | "facebook" | "youtube"
+      social_verification_status: "unverified" | "verified"
       wallet_account_kind:
         | "user_wallet"
         | "campaign_reserve"
@@ -1138,6 +1589,7 @@ export const Constants = {
   },
   public: {
     Enums: {
+      application_status: ["pending", "shortlisted", "selected", "rejected"],
       campaign_funding_status: ["succeeded"],
       campaign_status: [
         "draft",
@@ -1181,6 +1633,17 @@ export const Constants = {
         "platform_fee",
       ],
       ledger_transaction_kind: ["test_deposit", "campaign_funding"],
+      notification_email_status: ["pending", "sent", "failed", "skipped"],
+      notification_type: [
+        "application_received",
+        "application_selected",
+        "campaign_published",
+        "task_submitted",
+        "task_approved",
+        "task_rejected",
+        "payout_ready",
+        "payout_released",
+      ],
       payment_transaction_status: [
         "pending",
         "processing",
@@ -1190,7 +1653,10 @@ export const Constants = {
       ],
       platform_role: ["admin"],
       proof_url_requirement: ["required", "optional", "none"],
+      social_account_status: ["connected", "disconnected"],
+      social_connection_method: ["manual", "oauth"],
       social_platform: ["instagram", "tiktok", "facebook", "youtube"],
+      social_verification_status: ["unverified", "verified"],
       wallet_account_kind: [
         "user_wallet",
         "campaign_reserve",

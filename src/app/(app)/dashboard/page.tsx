@@ -8,7 +8,10 @@ import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { firstNameOf } from "@/features/account/onboarding";
 import { requireOnboardedAccount } from "@/features/account/queries";
+import { listMyApplications } from "@/features/applications/queries";
 import { getMyCampaignTabCounts } from "@/features/campaigns/queries";
+import { getMyCreatorDetails } from "@/features/creators/queries";
+import { listMySocialAccounts } from "@/features/social/queries";
 import { GettingStarted, type ChecklistStep } from "@/features/dashboard/components/getting-started";
 import { PageHeader } from "@/features/shell/components/page-header";
 
@@ -19,7 +22,7 @@ const NOTICES: Record<string, string> = {
 };
 
 export default async function DashboardPage({ searchParams }: PageProps<"/dashboard">) {
-  const { profile } = await requireOnboardedAccount();
+  const { profile, userId } = await requireOnboardedAccount();
   const { notice } = await searchParams;
   const noticeMessage = typeof notice === "string" ? NOTICES[notice] : undefined;
 
@@ -29,6 +32,13 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
   const counts = isAdvertiser ? await getMyCampaignTabCounts() : null;
   const hasCampaigns = (counts?.all ?? 0) > 0;
   const hasFundedCampaign = counts ? counts.published + counts.applications_open + counts.in_progress + counts.completed > 0 : false;
+  const [socialAccounts, creatorDetails, myApplications] = isAdvertiser
+    ? [[], null, null]
+    : await Promise.all([listMySocialAccounts(userId), getMyCreatorDetails(userId), listMyApplications(userId, undefined, 1)]);
+  const hasCreatorDetails = Boolean(
+    creatorDetails && (creatorDetails.countryCode || creatorDetails.dateOfBirth || creatorDetails.categories.length),
+  );
+  const applicationCount = myApplications?.total ?? 0;
 
   const profileStep: ChecklistStep = {
     title: "Complete your profile",
@@ -49,13 +59,24 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
         },
       ]
     : [
-        { title: "Create your account", description: "No social accounts needed to sign up.", done: true },
         profileStep,
         {
+          title: "Add your creator details",
+          description: "Country, age, gender and categories — used only to check campaign requirements.",
+          done: hasCreatorDetails,
+          action: { href: "/settings/creator", label: "Add details" },
+        },
+        {
+          title: "Connect a social account",
+          description: "Only needed for campaigns that require that platform. Follower counts are self-reported.",
+          done: socialAccounts.length > 0,
+          action: { href: "/settings/social", label: "Connect" },
+        },
+        {
           title: "Apply to a campaign you qualify for",
-          description: "Connect a social account only when a campaign requires that platform.",
-          done: false,
-          comingSoon: true,
+          description: "Advertisers review every applicant by hand.",
+          done: applicationCount > 0,
+          action: { href: "/discover", label: "Find campaigns" },
         },
       ];
 
@@ -92,8 +113,19 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
           ) : (
             <EmptyState
               icon={FileText}
-              title="No applications yet"
-              description="Campaigns you apply to will appear here with their status, tasks in progress and payments released after approval."
+              title={applicationCount > 0 ? `${applicationCount} ${applicationCount === 1 ? "application" : "applications"}` : "No applications yet"}
+              description={
+                applicationCount > 0
+                  ? "Track where each application stands. You'll be notified when an advertiser selects you."
+                  : "Campaigns you apply to will appear here with their status. Browse the open campaigns to get started."
+              }
+              action={
+                <Button asChild>
+                  <Link href={applicationCount > 0 ? "/applications" : "/discover"}>
+                    {applicationCount > 0 ? "My applications" : "Find campaigns"}
+                  </Link>
+                </Button>
+              }
             />
           )}
         </Card>

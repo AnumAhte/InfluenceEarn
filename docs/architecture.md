@@ -1,6 +1,6 @@
 # InfluencEarn — Architecture
 
-Status: **Phase 2 complete** (campaigns + wallet foundation). Phase 1: design system, landing, auth, profiles, role switching, app shell.
+Status: **Phase 3 complete** (social accounts, eligibility, discovery, applications, manual selection, notifications). Phase 2: campaigns + wallet. Phase 1: foundation.
 
 ---
 
@@ -16,7 +16,7 @@ exported HTML is used at runtime.
 | Auth | Sign up, role setup, login, reset, profile setup, role switcher, social gate, social settings | `/signup`, `/login`, `/forgot-password`, `/reset-password`, `/onboarding/*`, header switcher |
 | Advertiser Dashboard | Sidebar + top bar shell, KPIs, campaign table | App shell layout |
 | Campaigns, Create Campaign | List/detail, 4-step wizard | `/campaigns`, `/campaigns/new`, `/campaigns/[id]`, `/edit`, `/fund` (phase 2) |
-| Influencer | Marketplace, applications, tasks, submissions, wallet, social accounts | Phase 3 |
+| Influencer | Marketplace, applications, tasks, submissions, wallet, social accounts | `/discover`, `/discover/[id]`, `/applications`, `/settings/social`, `/settings/creator` (phase 3); tasks/submissions phase 4 |
 | Admin | Users, campaigns, task reviews, payouts, transactions, reports | Phase 4 (shell + guard now) |
 | Wallet | Balance, top-up, history, withdrawals, rules | `/wallet` balance + history (phase 2); top-ups/withdrawals need a real provider |
 
@@ -58,6 +58,9 @@ Defined once in `src/app/globals.css` (`@theme`), consumed as Tailwind utilities
 | 15 | Create Campaign | "X" platform; card/bank/PayPal funding sources | 4 platforms only; wallet is the only funding source |
 | 16 | Campaigns list | Applications / Selected columns, Pause, Duplicate, Delete | No application data yet → columns omitted; only Edit / Fund / Cancel (pre-funding) exist |
 | 17 | Wallet | Cards on file, withdrawals, "held/reserved" copy, receipts | Not built; balance described as derived from transaction history, never as custody/escrow |
+| 18 | Campaign detail | "Remove selection" on selected applicants | Selection is final in phase 3 (spec: Pending → Shortlist → Select or Reject) |
+| 19 | Sidebar | Global "Applicants" item | Applicants are reviewed per campaign (`/campaigns/[id]/applicants`); the global item was removed |
+| 20 | Influencer | Media kit upload, portfolio links, payment range / task type filters | Not built in phase 3 |
 
 ### Accessibility adjustments
 
@@ -260,3 +263,63 @@ UPDATE/DELETE for everyone). Entry types in use: `mock_deposit`, `campaign_fundi
   onboarding → campaign draft → funding → wallet → role switch → sign out; cross-user and admin checks):
   40/40. It found a real bug (the balanced-journal trigger ran under RLS at commit), fixed in the migration and
   now covered by pgTAP.
+
+---
+
+## 7. Phase 3 — social accounts, eligibility, applications, notifications
+
+### Decisions
+
+- **Manual social linking only.** Creators enter a handle (or a profile link on the platform's own domain) and a
+  follower count. Stored as `connection_method = manual`, `verification_status = unverified`; clients have no
+  grant on the verification columns. The profile URL is always derived from the handle
+  (`social_profile_url`), so links shown to advertisers point only at instagram.com / tiktok.com /
+  facebook.com / youtube.com. `SocialAccountProvider` exists for future OAuth; nothing simulates it.
+- **One eligibility implementation**: `_campaign_eligibility_issues(campaign, user)` in Postgres. The apply
+  function enforces it; discovery (badges + "Eligible only") and the campaign page display it. TypeScript only
+  maps issue codes to copy (`src/domain/creators/eligibility.ts`).
+- **Private creator details.** Country, date of birth, gender and categories live in `creator_profiles`
+  (owner/admin only). Each application stores a snapshot (name, city, country, age, gender, categories, social
+  handles + follower counts at apply time) — advertisers see the snapshot, never the date of birth.
+- **Manual selection.** `decide_application` (owner-only) handles shortlist / unshortlist / select / reject /
+  reconsider; selecting locks the campaign row and refuses beyond `creators_required`. Selection is final.
+- **Notifications** are rows created inside the same transaction as the event (`_notify`), with
+  `email_status` so an email worker can deliver them later.
+
+### Eligibility rules
+
+| Requirement | Rule | Issue codes |
+| --- | --- | --- |
+| Platforms | A connected account on every campaign platform | `missing_platform:<platform>` |
+| Minimum followers | Each required account's self-reported count ≥ minimum | `followers_below_minimum:<platform>` |
+| Gender | Creator's gender in the allowed list | `gender_not_set`, `gender_mismatch` |
+| Age | Age from date of birth within range | `age_not_set`, `age_out_of_range` |
+| Categories | At least one shared category | `category_not_set`, `category_mismatch` |
+| Location | Same country; city must match when the campaign sets one | `location_not_set`, `location_mismatch` |
+
+Also enforced on apply: campaign is `applications_open` and before its deadline, not the creator's own
+campaign, one application per creator.
+
+### Tables and functions (added)
+
+`creator_profiles`, `creator_profile_categories`, `social_accounts`, `campaign_applications`,
+`application_social_accounts`, `campaign_application_events`, `notifications`. Functions:
+`save_creator_profile`, `my_campaign_eligibility`, `discover_campaigns`, `campaign_advertiser_name`,
+`apply_to_campaign`, `decide_application`, `close_campaign_applications`, `campaign_application_counts`,
+`mark_notifications_read`. Indexes cover applicants by (campaign, status, date), by followers, by creator, and
+trigram search on name + handles.
+
+### RLS (added)
+
+- `creator_profiles` / categories: owner reads and writes; admin reads. Advertisers: nothing.
+- `social_accounts`: owner reads, links, updates handle/followers/status; no delete (disconnect keeps history).
+- `campaign_applications` (+ social snapshots, events): creator reads own; campaign owner reads applications to
+  their campaigns; admin reads all. **No client writes** — only the functions above.
+- `campaigns`: applicants keep read access to campaigns they applied to after applications close.
+- `notifications`: recipient reads own; marked read only through `mark_notifications_read`.
+
+### Verification (phase 3)
+
+- pgTAP: 99 assertions total (39 new).
+- Vitest: 100 unit tests.
+- End-to-end (production build + local Supabase): 40/40 for phase 3 and the phase 2 suite re-run 40/40.
