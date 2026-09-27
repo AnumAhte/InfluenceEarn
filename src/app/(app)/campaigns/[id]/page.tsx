@@ -29,6 +29,8 @@ import { CampaignStatusBadge, CostBreakdown, formatDate, PlatformTile } from "@/
 import { CancelCampaignButton } from "@/features/campaigns/components/cancel-campaign-button";
 import { describeDbError } from "@/features/campaigns/errors";
 import { getMyCampaign } from "@/features/campaigns/queries";
+import { completeCampaign, startCampaignWork } from "@/features/tasks/actions";
+import { getAssignmentCounts } from "@/features/tasks/queries";
 import { CAMPAIGN_STATUS_META } from "@/features/campaigns/status";
 
 export const metadata: Metadata = { title: "Campaign" };
@@ -36,6 +38,8 @@ export const metadata: Metadata = { title: "Campaign" };
 const ERROR_COPY: Record<string, string> = {
   campaign_incomplete: "This draft isn't complete yet. Edit it and fill in every step before funding.",
   invalid_campaign_state: "That action isn't available for this campaign right now.",
+  work_outstanding: "Some work is still waiting for review or can still be submitted before the deadline.",
+  no_selected_creators: "Select at least one creator before starting the work.",
 };
 
 export default async function CampaignDetailPage({ params, searchParams }: PageProps<"/campaigns/[id]">) {
@@ -47,7 +51,10 @@ export default async function CampaignDetailPage({ params, searchParams }: PageP
 
   const editable = isEditable(campaign.status);
   const acceptsApplications = !editable && campaign.status !== "cancelled";
-  const applicationCounts = acceptsApplications ? await getApplicationCounts(campaign.id) : null;
+  const [applicationCounts, workCounts] = acceptsApplications
+    ? await Promise.all([getApplicationCounts(campaign.id), getAssignmentCounts(campaign.id)])
+    : [null, null];
+  const workStarted = campaign.status === "in_progress" || campaign.status === "review_pending";
   const funding =
     campaign.payment_per_creator_cents !== null && campaign.creators_required !== null
       ? calculateCampaignFunding(cents(campaign.payment_per_creator_cents), campaign.creators_required)
@@ -112,6 +119,25 @@ export default async function CampaignDetailPage({ params, searchParams }: PageP
               <Link href={`/campaigns/${campaign.id}/applicants`}>Review applicants</Link>
             </Button>
           ) : null}
+          {workCounts && workCounts.all > 0 ? (
+            <Button asChild variant="secondary">
+              <Link href={`/campaigns/${campaign.id}/submissions${workCounts.submitted ? "?status=submitted" : ""}`}>
+                Review submissions{workCounts.submitted ? ` (${workCounts.submitted})` : ""}
+              </Link>
+            </Button>
+          ) : null}
+          {campaign.status === "selection_in_progress" && workCounts && workCounts.all > 0 ? (
+            <form action={startCampaignWork}>
+              <input type="hidden" name="campaignId" value={campaign.id} />
+              <SubmitButton variant="secondary" pendingLabel="Starting…">Start campaign work</SubmitButton>
+            </form>
+          ) : null}
+          {workStarted ? (
+            <form action={completeCampaign}>
+              <input type="hidden" name="campaignId" value={campaign.id} />
+              <SubmitButton variant="secondary" pendingLabel="Completing…">Mark campaign complete</SubmitButton>
+            </form>
+          ) : null}
           {campaign.status === "applications_open" ? (
             <form action={closeApplications}>
               <input type="hidden" name="campaignId" value={campaign.id} />
@@ -121,6 +147,15 @@ export default async function CampaignDetailPage({ params, searchParams }: PageP
           {canCancel(campaign.status) ? <CancelCampaignButton campaignId={campaign.id} title={campaign.title} /> : null}
         </div>
       </header>
+
+      {workCounts && workCounts.all > 0 ? (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <MetricCard label="Working on it" value={String(workCounts.in_progress + workCounts.revision_requested)} hint={`${workCounts.revision_requested} with changes requested`} />
+          <MetricCard label="Pending reviews" value={String(workCounts.submitted)} hint="Waiting on your approval" tone={workCounts.submitted ? "attention" : "default"} />
+          <MetricCard label="Approved" value={String(workCounts.approved + workCounts.payout_pending + workCounts.paid)} hint="Ready for payout by the agency" />
+          <MetricCard label="Rejected or expired" value={String(workCounts.rejected + workCounts.expired)} hint="No payment released" />
+        </div>
+      ) : null}
 
       {applicationCounts ? (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

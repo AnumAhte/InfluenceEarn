@@ -23,7 +23,7 @@ const TRANSITIONS: Readonly<Record<CampaignStatus, readonly CampaignStatus[]>> =
   published: ["applications_open"],
   applications_open: ["selection_in_progress"],
   selection_in_progress: ["in_progress"],
-  in_progress: ["review_pending"],
+  in_progress: ["review_pending", "completed"],
   review_pending: ["in_progress", "completed"],
   completed: [],
   cancelled: [],

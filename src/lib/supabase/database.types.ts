@@ -199,6 +199,76 @@ export type Database = {
           },
         ]
       }
+      campaign_assignments: {
+        Row: {
+          application_id: string
+          attempt_count: number
+          campaign_id: string
+          created_at: string
+          creator_id: string
+          decided_at: string | null
+          due_at: string
+          id: string
+          max_attempts: number
+          reward_cents: number
+          status: Database["public"]["Enums"]["assignment_status"]
+          submitted_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          application_id: string
+          attempt_count?: number
+          campaign_id: string
+          created_at?: string
+          creator_id: string
+          decided_at?: string | null
+          due_at: string
+          id?: string
+          max_attempts?: number
+          reward_cents: number
+          status?: Database["public"]["Enums"]["assignment_status"]
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          application_id?: string
+          attempt_count?: number
+          campaign_id?: string
+          created_at?: string
+          creator_id?: string
+          decided_at?: string | null
+          due_at?: string
+          id?: string
+          max_attempts?: number
+          reward_cents?: number
+          status?: Database["public"]["Enums"]["assignment_status"]
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_assignments_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: true
+            referencedRelation: "campaign_applications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_assignments_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_assignments_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       campaign_creator_categories: {
         Row: {
           campaign_id: string
@@ -981,6 +1051,119 @@ export type Database = {
           },
         ]
       }
+      task_reviews: {
+        Row: {
+          allow_resubmission: boolean
+          created_at: string
+          decision: Database["public"]["Enums"]["review_decision"]
+          id: string
+          reason: string | null
+          reviewer_id: string
+          submission_id: string
+        }
+        Insert: {
+          allow_resubmission?: boolean
+          created_at?: string
+          decision: Database["public"]["Enums"]["review_decision"]
+          id?: string
+          reason?: string | null
+          reviewer_id: string
+          submission_id: string
+        }
+        Update: {
+          allow_resubmission?: boolean
+          created_at?: string
+          decision?: Database["public"]["Enums"]["review_decision"]
+          id?: string
+          reason?: string | null
+          reviewer_id?: string
+          submission_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_reviews_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "task_reviews_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: true
+            referencedRelation: "task_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      task_submission_items: {
+        Row: {
+          campaign_task_id: string
+          comment_text: string | null
+          proof_url: string | null
+          submission_id: string
+        }
+        Insert: {
+          campaign_task_id: string
+          comment_text?: string | null
+          proof_url?: string | null
+          submission_id: string
+        }
+        Update: {
+          campaign_task_id?: string
+          comment_text?: string | null
+          proof_url?: string | null
+          submission_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_submission_items_campaign_task_id_fkey"
+            columns: ["campaign_task_id"]
+            isOneToOne: false
+            referencedRelation: "campaign_tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "task_submission_items_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "task_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      task_submissions: {
+        Row: {
+          assignment_id: string
+          attempt: number
+          id: string
+          note: string | null
+          submitted_at: string
+        }
+        Insert: {
+          assignment_id: string
+          attempt: number
+          id?: string
+          note?: string | null
+          submitted_at?: string
+        }
+        Update: {
+          assignment_id?: string
+          attempt?: number
+          id?: string
+          note?: string | null
+          submitted_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_submissions_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "campaign_assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           granted_at: string
@@ -1215,6 +1398,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      _sync_campaign_review_state: {
+        Args: { _campaign_id: string }
+        Returns: undefined
+      }
       _system_account: {
         Args: {
           _campaign_id?: string
@@ -1245,6 +1432,13 @@ export type Database = {
           total: number
         }[]
       }
+      campaign_assignment_counts: {
+        Args: { p_campaign_id: string }
+        Returns: {
+          status: Database["public"]["Enums"]["assignment_status"]
+          total: number
+        }[]
+      }
       campaign_is_editable: {
         Args: { _status: Database["public"]["Enums"]["campaign_status"] }
         Returns: boolean
@@ -1261,12 +1455,24 @@ export type Database = {
         Args: { _application_id: string }
         Returns: boolean
       }
+      can_view_assignment: {
+        Args: { _assignment_id: string }
+        Returns: boolean
+      }
       can_view_campaign: { Args: { _campaign_id: string }; Returns: boolean }
+      can_view_submission: {
+        Args: { _submission_id: string }
+        Returns: boolean
+      }
       cancel_campaign: {
         Args: { p_campaign_id: string; p_reason?: string }
         Returns: Database["public"]["Enums"]["campaign_status"]
       }
       close_campaign_applications: {
+        Args: { p_campaign_id: string }
+        Returns: Database["public"]["Enums"]["campaign_status"]
+      }
+      complete_campaign: {
         Args: { p_campaign_id: string }
         Returns: Database["public"]["Enums"]["campaign_status"]
       }
@@ -1342,6 +1548,13 @@ export type Database = {
         Args: { _creator_budget_cents: number }
         Returns: number
       }
+      proof_url_matches_platform: {
+        Args: {
+          _platform: Database["public"]["Enums"]["social_platform"]
+          _url: string
+        }
+        Returns: boolean
+      }
       record_test_deposit: {
         Args: {
           p_amount_cents: number
@@ -1360,6 +1573,15 @@ export type Database = {
       request_campaign_funding: {
         Args: { p_campaign_id: string }
         Returns: Database["public"]["Enums"]["campaign_status"]
+      }
+      review_task_submission: {
+        Args: {
+          p_allow_resubmission?: boolean
+          p_decision: Database["public"]["Enums"]["review_decision"]
+          p_reason?: string
+          p_submission_id: string
+        }
+        Returns: Database["public"]["Enums"]["assignment_status"]
       }
       save_campaign_draft: {
         Args: {
@@ -1389,9 +1611,26 @@ export type Database = {
         }
         Returns: string
       }
+      start_campaign_work: {
+        Args: { p_campaign_id: string }
+        Returns: Database["public"]["Enums"]["campaign_status"]
+      }
+      submit_task_completion: {
+        Args: { p_assignment_id: string; p_items: Json; p_note?: string }
+        Returns: string
+      }
     }
     Enums: {
       application_status: "pending" | "shortlisted" | "selected" | "rejected"
+      assignment_status:
+        | "in_progress"
+        | "submitted"
+        | "revision_requested"
+        | "approved"
+        | "rejected"
+        | "expired"
+        | "payout_pending"
+        | "paid"
       campaign_funding_status: "succeeded"
       campaign_status:
         | "draft"
@@ -1449,6 +1688,7 @@ export type Database = {
         | "cancelled"
       platform_role: "admin"
       proof_url_requirement: "required" | "optional" | "none"
+      review_decision: "approved" | "rejected"
       social_account_status: "connected" | "disconnected"
       social_connection_method: "manual" | "oauth"
       social_platform: "instagram" | "tiktok" | "facebook" | "youtube"
@@ -1590,6 +1830,16 @@ export const Constants = {
   public: {
     Enums: {
       application_status: ["pending", "shortlisted", "selected", "rejected"],
+      assignment_status: [
+        "in_progress",
+        "submitted",
+        "revision_requested",
+        "approved",
+        "rejected",
+        "expired",
+        "payout_pending",
+        "paid",
+      ],
       campaign_funding_status: ["succeeded"],
       campaign_status: [
         "draft",
@@ -1653,6 +1903,7 @@ export const Constants = {
       ],
       platform_role: ["admin"],
       proof_url_requirement: ["required", "optional", "none"],
+      review_decision: ["approved", "rejected"],
       social_account_status: ["connected", "disconnected"],
       social_connection_method: ["manual", "oauth"],
       social_platform: ["instagram", "tiktok", "facebook", "youtube"],
