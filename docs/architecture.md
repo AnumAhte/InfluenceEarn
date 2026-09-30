@@ -371,3 +371,57 @@ advertisers see nothing.
 - pgTAP: 136 assertions total (37 new).
 - Vitest: 108 unit tests.
 - End-to-end (production build + local Supabase): phase 4 flow 34/34; phase 2 and phase 3 suites re-run 40/40 each.
+
+## 9. Phase 5 — payouts, activity log, unused-budget refunds
+
+### Flow
+
+Advertiser approves → assignment `approved` → **Ready for payout** in `/admin/payouts`. An admin either
+**puts it on hold** (reason required) or **releases the payment**:
+
+1. `start_payout` (admin only) locks the row, checks the campaign reserve covers the reward, creates or
+   updates the `payouts` row to `processing` with `attempt + 1`, and moves the assignment to `payout_pending`.
+2. The server action calls `PayoutProvider.createPayout` with the idempotency key `payout:<id>:<attempt>`.
+3. `record_payout_result` stores the outcome. `failed` → the admin can retry or hold. `paid` → one balanced
+   ledger transaction (`payout:<id>`): reserve → creator wallet (`creator_earning`), then creator wallet →
+   provider clearing (`payout_debit`); assignment `paid`; creator notified (`payout_released`).
+
+Payout statuses: Ready for payout (no row yet), On hold, Processing, Failed, Paid. A result for an old
+attempt is rejected (`stale_payout_attempt`); a paid payout is never paid again.
+
+### Payout provider
+
+`getPayoutProvider()` returns `null` in production — there is no real payout provider yet, so production
+shows the queue read-only and the release action refuses. Locally the `MockPayoutProvider` is used
+(refuses to construct or run with `NODE_ENV=production`; amounts ending in .13 fail, to test retries).
+As a second gate, the database only accepts mock results while `platform_settings.test_funds_enabled`
+is on (set by `supabase/seed.sql` only). No real money moves anywhere in this phase.
+
+### Refunds
+
+`complete_campaign` now calls `_refund_unused_budget`: the reserve balance minus what approved-but-unpaid
+work is still owed goes back to the advertiser's wallet (`campaign_refund`, idempotent per campaign), with a
+`campaign_refunded` notification. **The 20% platform fee is kept**; switch `platform_fee_refundable()` if
+that policy changes.
+
+### Admin activity log
+
+`admin_activity_logs` is append-only (a trigger blocks update/delete). Holds, releases, paid and failed
+results are logged with the actor and details; admins read it at `/admin/activity`.
+
+### RLS (added)
+
+`payouts`: the creator, the campaign owner and admins can read; nobody writes directly. `admin_activity_logs`:
+admins read only. Every payout function re-checks the admin role server-side (`_require_admin`).
+
+### Not in this phase
+
+Creator withdrawals, cancelling funded campaigns, any real payout/payment provider.
+
+### Verification (phase 5)
+
+- pgTAP: 168 assertions total (32 new).
+- Vitest: 112 unit tests.
+- End-to-end: production build 25/25 (release refused, hold, activity log, refund); `next dev` with the mock
+  provider 31/31 (full release, double-release refused, single ledger transaction, creator wallet and
+  notification); phase 2/3/4 suites re-run 40/40, 40/40, 33/33.

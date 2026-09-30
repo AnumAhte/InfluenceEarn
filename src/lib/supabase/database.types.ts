@@ -36,6 +36,44 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_activity_logs: {
+        Row: {
+          action: string
+          actor_id: string
+          created_at: string
+          details: Json
+          id: number
+          target_id: string | null
+          target_type: string
+        }
+        Insert: {
+          action: string
+          actor_id: string
+          created_at?: string
+          details?: Json
+          id?: never
+          target_id?: string | null
+          target_type: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string
+          created_at?: string
+          details?: Json
+          id?: never
+          target_id?: string | null
+          target_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_activity_logs_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       application_social_accounts: {
         Row: {
           application_id: string
@@ -938,6 +976,102 @@ export type Database = {
           },
         ]
       }
+      payouts: {
+        Row: {
+          amount_cents: number
+          assignment_id: string
+          attempt_count: number
+          campaign_id: string
+          created_at: string
+          creator_id: string
+          currency: string
+          failure_reason: string | null
+          hold_reason: string | null
+          id: string
+          last_actor_id: string | null
+          ledger_transaction_id: string | null
+          paid_at: string | null
+          provider: string | null
+          provider_reference: string | null
+          status: Database["public"]["Enums"]["payout_status"]
+          updated_at: string
+        }
+        Insert: {
+          amount_cents: number
+          assignment_id: string
+          attempt_count?: number
+          campaign_id: string
+          created_at?: string
+          creator_id: string
+          currency?: string
+          failure_reason?: string | null
+          hold_reason?: string | null
+          id?: string
+          last_actor_id?: string | null
+          ledger_transaction_id?: string | null
+          paid_at?: string | null
+          provider?: string | null
+          provider_reference?: string | null
+          status: Database["public"]["Enums"]["payout_status"]
+          updated_at?: string
+        }
+        Update: {
+          amount_cents?: number
+          assignment_id?: string
+          attempt_count?: number
+          campaign_id?: string
+          created_at?: string
+          creator_id?: string
+          currency?: string
+          failure_reason?: string | null
+          hold_reason?: string | null
+          id?: string
+          last_actor_id?: string | null
+          ledger_transaction_id?: string | null
+          paid_at?: string | null
+          provider?: string | null
+          provider_reference?: string | null
+          status?: Database["public"]["Enums"]["payout_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payouts_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: true
+            referencedRelation: "campaign_assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payouts_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payouts_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payouts_last_actor_id_fkey"
+            columns: ["last_actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payouts_ledger_transaction_id_fkey"
+            columns: ["ledger_transaction_id"]
+            isOneToOne: true
+            referencedRelation: "ledger_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       platform_settings: {
         Row: {
           id: boolean
@@ -1387,6 +1521,15 @@ export type Database = {
         }[]
       }
       _ensure_user_wallet: { Args: { _user_id: string }; Returns: string }
+      _log_admin: {
+        Args: {
+          _action: string
+          _details?: Json
+          _target_id: string
+          _target_type: string
+        }
+        Returns: undefined
+      }
       _notify: {
         Args: {
           _body: string
@@ -1398,6 +1541,8 @@ export type Database = {
         }
         Returns: undefined
       }
+      _refund_unused_budget: { Args: { _campaign_id: string }; Returns: number }
+      _require_admin: { Args: never; Returns: undefined }
       _sync_campaign_review_state: {
         Args: { _campaign_id: string }
         Returns: undefined
@@ -1526,6 +1671,10 @@ export type Database = {
         Args: { _role: Database["public"]["Enums"]["platform_role"] }
         Returns: boolean
       }
+      hold_payout: {
+        Args: { p_assignment_id: string; p_reason: string }
+        Returns: Database["public"]["Enums"]["payout_status"]
+      }
       is_admin: { Args: never; Returns: boolean }
       is_campaign_owner: { Args: { _campaign_id: string }; Returns: boolean }
       mark_notifications_read: { Args: { p_ids?: string[] }; Returns: number }
@@ -1548,12 +1697,23 @@ export type Database = {
         Args: { _creator_budget_cents: number }
         Returns: number
       }
+      platform_fee_refundable: { Args: never; Returns: boolean }
       proof_url_matches_platform: {
         Args: {
           _platform: Database["public"]["Enums"]["social_platform"]
           _url: string
         }
         Returns: boolean
+      }
+      record_payout_result: {
+        Args: {
+          p_attempt: number
+          p_failure_reason?: string
+          p_payout_id: string
+          p_provider_reference?: string
+          p_status: Database["public"]["Enums"]["payout_status"]
+        }
+        Returns: Database["public"]["Enums"]["payout_status"]
       }
       record_test_deposit: {
         Args: {
@@ -1615,6 +1775,15 @@ export type Database = {
         Args: { p_campaign_id: string }
         Returns: Database["public"]["Enums"]["campaign_status"]
       }
+      start_payout: {
+        Args: { p_assignment_id: string; p_provider: string }
+        Returns: {
+          already_processing: boolean
+          amount_cents: number
+          attempt: number
+          payout_id: string
+        }[]
+      }
       submit_task_completion: {
         Args: { p_assignment_id: string; p_items: Json; p_note?: string }
         Returns: string
@@ -1669,7 +1838,14 @@ export type Database = {
         | "campaign_funding_debit"
         | "campaign_funding_reserve"
         | "platform_fee"
-      ledger_transaction_kind: "test_deposit" | "campaign_funding"
+        | "creator_earning"
+        | "payout_debit"
+        | "campaign_refund"
+      ledger_transaction_kind:
+        | "test_deposit"
+        | "campaign_funding"
+        | "creator_payout"
+        | "campaign_refund"
       notification_email_status: "pending" | "sent" | "failed" | "skipped"
       notification_type:
         | "application_received"
@@ -1680,12 +1856,14 @@ export type Database = {
         | "task_rejected"
         | "payout_ready"
         | "payout_released"
+        | "campaign_refunded"
       payment_transaction_status:
         | "pending"
         | "processing"
         | "succeeded"
         | "failed"
         | "cancelled"
+      payout_status: "on_hold" | "processing" | "paid" | "failed"
       platform_role: "admin"
       proof_url_requirement: "required" | "optional" | "none"
       review_decision: "approved" | "rejected"
@@ -1881,8 +2059,16 @@ export const Constants = {
         "campaign_funding_debit",
         "campaign_funding_reserve",
         "platform_fee",
+        "creator_earning",
+        "payout_debit",
+        "campaign_refund",
       ],
-      ledger_transaction_kind: ["test_deposit", "campaign_funding"],
+      ledger_transaction_kind: [
+        "test_deposit",
+        "campaign_funding",
+        "creator_payout",
+        "campaign_refund",
+      ],
       notification_email_status: ["pending", "sent", "failed", "skipped"],
       notification_type: [
         "application_received",
@@ -1893,6 +2079,7 @@ export const Constants = {
         "task_rejected",
         "payout_ready",
         "payout_released",
+        "campaign_refunded",
       ],
       payment_transaction_status: [
         "pending",
@@ -1901,6 +2088,7 @@ export const Constants = {
         "failed",
         "cancelled",
       ],
+      payout_status: ["on_hold", "processing", "paid", "failed"],
       platform_role: ["admin"],
       proof_url_requirement: ["required", "optional", "none"],
       review_decision: ["approved", "rejected"],

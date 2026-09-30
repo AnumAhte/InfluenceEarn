@@ -19,6 +19,9 @@ type StatementRow = {
 const ENTRY_LABEL: Record<string, string> = {
   mock_deposit: "Test funds added",
   campaign_funding_debit: "Campaign funded",
+  creator_earning: "Campaign earning",
+  payout_debit: "Paid out",
+  campaign_refund: "Unused budget refunded",
 };
 
 function when(value: string | null) {
@@ -92,7 +95,7 @@ function Description({ row }: { row: StatementRow }) {
         </span>
         {row.campaign_id ? (
           <Link href={`/campaigns/${row.campaign_id}`} className="truncate text-xs text-primary-strong hover:text-primary-hover">
-            {row.description?.replace(/^Campaign funding · /, "") ?? "View campaign"}
+            {row.description?.replace(/^(Campaign funding|Payout|Unused budget refund) · /, "") ?? "View campaign"}
           </Link>
         ) : null}
       </span>

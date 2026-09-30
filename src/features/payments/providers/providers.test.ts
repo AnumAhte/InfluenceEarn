@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { cents } from "@/domain/money";
 
-import { getWalletFundingProvider, requireWalletFundingProvider } from "./index";
+import { getPayoutProvider, getWalletFundingProvider, requirePayoutProvider, requireWalletFundingProvider } from "./index";
+import { MockPayoutProvider } from "./mock-payout-provider";
 import { MockWalletFundingProvider } from "./mock-wallet-funding-provider";
 import { MockProviderInProductionError, ProviderNotConfiguredError } from "./types";
 
@@ -53,5 +54,36 @@ describe("provider registry", () => {
 
   it("uses the mock outside production", () => {
     expect(getWalletFundingProvider("development")?.isTestMode).toBe(true);
+  });
+});
+
+describe("MockPayoutProvider", () => {
+  const payout = { payoutId: "p1", recipientUserId: "user-a", amountCents: cents(4_000), currency: "USD" as const, idempotencyKey: "payout:p1:1" };
+
+  it("refuses to initialise in production", () => {
+    expect(() => new MockPayoutProvider("production")).toThrow(MockProviderInProductionError);
+  });
+
+  it("is deterministic per idempotency key and fails amounts ending in .13", async () => {
+    const provider = new MockPayoutProvider("test");
+    const a = await provider.createPayout(payout);
+    const b = await provider.createPayout(payout);
+    const retry = await provider.createPayout({ ...payout, idempotencyKey: "payout:p1:2" });
+    expect(a).toEqual(b);
+    expect(a.status).toBe("succeeded");
+    expect(retry.providerReference).not.toBe(a.providerReference);
+    expect((await provider.createPayout({ ...payout, amountCents: cents(4_013) })).status).toBe("failed");
+  });
+
+  it("rejects invalid amounts and currency", async () => {
+    const provider = new MockPayoutProvider("test");
+    await expect(provider.createPayout({ ...payout, amountCents: cents(0) })).rejects.toThrow(RangeError);
+    await expect(provider.createPayout({ ...payout, currency: "EUR" as "USD" })).rejects.toThrow(/Unsupported currency/);
+  });
+
+  it("is never handed out in production", () => {
+    expect(getPayoutProvider("production")).toBeNull();
+    expect(() => requirePayoutProvider("production")).toThrow(ProviderNotConfiguredError);
+    expect(getPayoutProvider("development")?.isTestMode).toBe(true);
   });
 });

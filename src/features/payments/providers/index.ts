@@ -1,7 +1,8 @@
 import "server-only";
 
+import { MockPayoutProvider } from "./mock-payout-provider";
 import { MockWalletFundingProvider } from "./mock-wallet-funding-provider";
-import { ProviderNotConfiguredError, type WalletFundingProvider } from "./types";
+import { ProviderNotConfiguredError, type PayoutProvider, type WalletFundingProvider } from "./types";
 
 /**
  * Resolves the wallet funding provider for this environment.
@@ -23,4 +24,19 @@ export function requireWalletFundingProvider(nodeEnv?: string): WalletFundingPro
   return provider;
 }
 
-export type { WalletFundingProvider } from "./types";
+/**
+ * Resolves the payout provider. Development/test: the mock. Production: none yet, so
+ * payouts cannot be released until a real provider is integrated here.
+ */
+export function getPayoutProvider(nodeEnv: string | undefined = process.env.NODE_ENV): PayoutProvider | null {
+  if (nodeEnv === "production") return null;
+  return new MockPayoutProvider(nodeEnv);
+}
+
+export function requirePayoutProvider(nodeEnv?: string): PayoutProvider {
+  const provider = getPayoutProvider(nodeEnv);
+  if (!provider) throw new ProviderNotConfiguredError("payout");
+  return provider;
+}
+
+export type { PayoutProvider, WalletFundingProvider } from "./types";

@@ -25,6 +25,7 @@ import { requireOnboardedAccount } from "@/features/account/queries";
 import { closeApplications } from "@/features/applications/actions";
 import { getApplicationCounts } from "@/features/applications/queries";
 import { requestFunding } from "@/features/campaigns/actions";
+import { getCampaignRefund } from "@/features/wallet/queries";
 import { CampaignStatusBadge, CostBreakdown, formatDate, PlatformTile } from "@/features/campaigns/components/campaign-bits";
 import { CancelCampaignButton } from "@/features/campaigns/components/cancel-campaign-button";
 import { describeDbError } from "@/features/campaigns/errors";
@@ -60,6 +61,7 @@ export default async function CampaignDetailPage({ params, searchParams }: PageP
       ? calculateCampaignFunding(cents(campaign.payment_per_creator_cents), campaign.creators_required)
       : null;
   const funded = campaign.funding;
+  const refund = funded && campaign.status === "completed" ? await getCampaignRefund(userId, campaign.id) : null;
   const errorMessage = typeof query.error === "string" ? (ERROR_COPY[query.error] ?? describeDbError({ message: query.error }).message) : null;
   const money = (value: number | null | undefined) => (value === null || value === undefined ? "—" : formatMoney(cents(value)));
 
@@ -286,7 +288,14 @@ export default async function CampaignDetailPage({ params, searchParams }: PageP
                   <CheckCircle2 aria-hidden className="size-4" />
                   Funded {formatDate(funded.created_at)} from your wallet
                 </p>
-              ) : campaign.status === "cancelled" ? (
+              ) : null}
+              {refund ? (
+                <p className="text-[13.5px] text-ink-muted">
+                  <span className="font-[550] text-ink">{formatMoney(refund.amountCents)}</span> of unused creator budget was returned to
+                  your wallet on {formatDate(refund.createdAt)}. The platform fee isn&apos;t refunded.
+                </p>
+              ) : null}
+              {funded ? null : campaign.status === "cancelled" ? (
                 <p className="text-[13.5px] text-ink-muted">This campaign was cancelled before funding. Nothing was charged.</p>
               ) : (
                 <Callout tone="warning">
