@@ -31,6 +31,8 @@ const FILTERS: { id: StatementFilter; label: string }[] = [
   { id: "all", label: "All" },
   { id: "deposits", label: "Funds added" },
   { id: "campaign_funding", label: "Campaign funding" },
+  { id: "refunds", label: "Refunds" },
+  { id: "earnings", label: "Earnings & payouts" },
 ];
 
 function hrefFor(filter: StatementFilter, page: number) {

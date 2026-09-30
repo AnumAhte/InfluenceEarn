@@ -118,22 +118,3 @@ export async function listMyPendingReviews(userId: string, page: number) {
   if (error) throw new Error("Reviews could not be loaded.", { cause: error });
   return { rows: data ?? [], total: count ?? 0 };
 }
-
-// ----------------------------------------------------------------------------
-// Admin (read-only in this phase)
-// ----------------------------------------------------------------------------
-export async function listReadyForPayout(page: number) {
-  const supabase = await createClient();
-  const offset = (page - 1) * TASKS_PAGE_SIZE;
-  const { data, count, error } = await supabase
-    .from("campaign_assignments")
-    .select(
-      "id, reward_cents, decided_at, application:campaign_applications(creator_name), campaign:campaigns(id, title), submissions:task_submissions(id, attempt, items:task_submission_items(proof_url))",
-      { count: "exact" },
-    )
-    .eq("status", "approved")
-    .order("decided_at", { ascending: true })
-    .range(offset, offset + TASKS_PAGE_SIZE - 1);
-  if (error) throw new Error("Payout queue could not be loaded.", { cause: error });
-  return { rows: data ?? [], total: count ?? 0 };
-}

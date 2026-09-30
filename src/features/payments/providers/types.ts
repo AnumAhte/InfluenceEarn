@@ -45,17 +45,26 @@ export type PayoutRequest = {
   recipientUserId: string;
   amountCents: Cents;
   currency: Currency;
+  /** 1 for the first try, incremented on each admin retry. */
+  attempt: number;
   idempotencyKey: string;
 };
 
 export type PayoutResult = {
   providerReference: string;
-  status: ProviderPaymentStatus;
+  /** Final outcome, or "processing" when the provider settles asynchronously (webhook later). */
+  status: Extract<ProviderPaymentStatus, "succeeded" | "failed" | "processing">;
+  failureReason?: string;
 };
 
-/** Sends creator payouts. Not implemented until a provider is selected (later phase). */
+/**
+ * Sends a creator payout. Only a development mock exists until a real provider is
+ * selected; production has no PayoutProvider and payouts cannot be released.
+ */
 export interface PayoutProvider {
   readonly id: string;
+  /** True for providers that never move real money. */
+  readonly isTestMode: boolean;
   createPayout(request: PayoutRequest): Promise<PayoutResult>;
   getPayoutStatus(providerReference: string): Promise<ProviderPaymentStatus>;
 }

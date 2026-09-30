@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export const WALLET_PAGE_SIZE = 15;
 
-export type StatementFilter = "all" | "deposits" | "campaign_funding";
+export type StatementFilter = "all" | "deposits" | "campaign_funding" | "refunds" | "earnings";
 
 /** Available balance, derived from ledger entries (0 if no wallet exists yet). */
 export async function getMyWalletBalance(userId: string): Promise<{ walletId: string | null; availableCents: Cents }> {
@@ -33,6 +33,8 @@ export async function listMyStatement(userId: string, filter: StatementFilter, p
 
   if (filter === "deposits") query = query.eq("entry_type", "mock_deposit");
   if (filter === "campaign_funding") query = query.eq("entry_type", "campaign_funding_debit");
+  if (filter === "refunds") query = query.eq("entry_type", "campaign_refund");
+  if (filter === "earnings") query = query.in("entry_type", ["creator_earning", "payout_debit"]);
 
   const offset = (page - 1) * WALLET_PAGE_SIZE;
   const { data, count, error } = await query
@@ -63,4 +65,19 @@ export async function areTestFundsEnabled(): Promise<boolean> {
   const supabase = await createClient();
   const { data } = await supabase.from("platform_settings").select("test_funds_enabled").maybeSingle();
   return data?.test_funds_enabled === true;
+}
+
+/** Unused creator budget returned to this user's wallet when the campaign completed, if any. */
+export async function getCampaignRefund(userId: string, campaignId: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("wallet_statement")
+    .select("amount_cents, created_at")
+    .eq("owner_id", userId)
+    .eq("campaign_id", campaignId)
+    .eq("entry_type", "campaign_refund")
+    .maybeSingle();
+
+  if (error) throw new Error("Refund could not be loaded.", { cause: error });
+  return data?.amount_cents ? { amountCents: cents(data.amount_cents), createdAt: data.created_at } : null;
 }

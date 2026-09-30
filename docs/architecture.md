@@ -371,3 +371,73 @@ advertisers see nothing.
 - pgTAP: 136 assertions total (37 new).
 - Vitest: 108 unit tests.
 - End-to-end (production build + local Supabase): phase 4 flow 34/34; phase 2 and phase 3 suites re-run 40/40 each.
+
+## 9. Phase 5 — payouts, activity log, unused-budget refunds
+
+### Flow
+
+Advertiser approves → assignment `approved` → **Ready for payout** in `/admin/payouts`. An admin either
+**puts it on hold** (reason required) or **releases the payment**:
+
+1. `start_payout` (admin only) locks the row, checks the campaign reserve covers the reward, creates or
+   updates the `payouts` row to `processing` with `attempt + 1`, and moves the assignment to `payout_pending`.
+2. The server action calls `PayoutProvider.createPayout` with the idempotency key `payout:<id>:<attempt>`.
+3. `record_payout_result` stores the outcome. `failed` → the admin can retry or hold. `paid` → one balanced
+   ledger transaction (`payout:<id>`): reserve → creator wallet (`creator_earning`), then creator wallet →
+   provider clearing (`payout_debit`); assignment `paid`; creator notified (`payout_released`).
+
+Payout statuses: Ready for payout (no row yet), On hold, Processing, Failed, Paid. A result for an old
+attempt is rejected (`stale_payout_attempt`); a paid payout is never paid again.
+
+### Payout provider
+
+`getPayoutProvider()` returns `null` in production — there is no real payout provider yet, so production
+shows the queue read-only and the release action refuses. Locally the `MockPayoutProvider` is used
+(refuses to construct or run with `NODE_ENV=production`; amounts ending in .13 fail, to test retries).
+As a second gate, the database only accepts mock results while `platform_settings.test_funds_enabled`
+is on (set by `supabase/seed.sql` only). No real money moves anywhere in this phase.
+
+### Refunds
+
+`complete_campaign` now calls `_refund_unused_budget`: the reserve balance minus what approved-but-unpaid
+work is still owed goes back to the advertiser's wallet (`campaign_refund`), with a `campaign_refunded`
+notification. Settlement is idempotent: the campaign reserve is locked, the refund's ledger key is
+`refund:<campaign>`, and completing or settling a second time never refunds again.
+
+> **Business-policy decision — requires client confirmation.**
+> Current behaviour: the **unused creator budget is refunded**; the **original 20% platform fee is retained**
+> (it stays in `platform_revenue`). Example: $80 budget + $16 fee funded, one of two $40 slots used →
+> $40 refunded, $16 fee kept.
+>
+> The policy lives in one place, `public.platform_fee_refundable()` (returns `false`). Flipping it to `true`
+> is deliberately **not** enough on its own: refunding the fee also needs a reversal out of
+> `platform_revenue` and a rounding rule (e.g. fee refunded proportionally to the unused budget, rounded
+> half-up to the cent). Until that is built, `_refund_unused_budget` raises `fee_refund_not_implemented` if the
+> switch is on, so the policy can never change silently. pgTAP covers both states.
+
+### Admin activity log
+
+`admin_activity_logs` is append-only (a trigger blocks update/delete). Holds, releases, paid and failed
+results are logged with the actor and details; admins read it at `/admin/activity`.
+
+### RLS (added)
+
+`payouts`: the creator, the campaign owner and admins can read; nobody writes directly. `admin_activity_logs`:
+admins read only. Every payout function re-checks the admin role server-side (`_require_admin`).
+
+### Not in this phase
+
+Creator withdrawals, cancelling funded campaigns, any real payout/payment provider.
+
+### Verification (phase 5)
+
+- pgTAP: 174 assertions total (38 in `payouts_rls.test.sql`), including settlement idempotency and both
+  states of the platform-fee policy switch.
+- Vitest: 113 unit tests.
+- End-to-end (`scripts/e2e/`, local Supabase):
+  - `payouts-refunds.mjs` — production build 30/30 (release refused, hold, activity log, $40 refund with fee
+    kept, second completion/settlement refunds nothing); `next dev` + mock provider 36/36 (full release,
+    double release refused, one ledger transaction, creator wallet and notification).
+  - `payout-retry.mjs` — `next dev` only, 25/25: failed attempt books nothing → two concurrent retries, exactly
+    one pays → creator credited once ($40.14) → further release/hold/direct re-record cannot double-pay.
+  - Phase 2/3/4 suites (kept locally) re-run 40/40, 40/40, 33/33.
