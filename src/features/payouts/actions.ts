@@ -69,6 +69,7 @@ export async function releasePayout(_previous: PayoutActionState, formData: Form
       recipientUserId: payoutRow?.creator_id ?? "",
       amountCents: cents(payout.amount_cents),
       currency: BASE_CURRENCY,
+      attempt: payout.attempt,
       idempotencyKey: `payout:${payout.payout_id}:${payout.attempt}`,
     });
   } catch {

@@ -313,8 +313,13 @@ grant execute on function public.record_payout_result(uuid, smallint, public.pay
 -- -----------------------------------------------------------------------------
 -- Refund of unused budget when a campaign completes
 -- -----------------------------------------------------------------------------
--- Policy switch: whether the platform fee on the unused part is refunded too.
--- Current policy: the fee is charged once and not refunded (see landing page copy).
+-- BUSINESS POLICY — PENDING CLIENT SIGN-OFF.
+-- Whether the 20% platform fee on the unused part of a campaign is refunded too.
+-- Current behaviour: only the unused creator budget is refunded; the platform fee stays
+-- in platform revenue. This function is the single switch for that policy. Turning it on
+-- is NOT a one-line change: refunding the fee needs a reversal out of platform_revenue and
+-- a rounding rule, which are not implemented yet, so _refund_unused_budget refuses to run
+-- (fee_refund_not_implemented) rather than silently ignoring the switch.
 create or replace function public.platform_fee_refundable()
 returns boolean
 language sql
@@ -337,10 +342,14 @@ declare
   v_tx uuid;
 begin
   select * into c from public.campaigns where id = _campaign_id;
+  -- Lock the reserve first so concurrent settlements of one campaign run one at a time.
+  select id into v_reserve from public.wallet_accounts where kind = 'campaign_reserve' and campaign_id = _campaign_id for update;
   if exists (select 1 from public.ledger_transactions where idempotency_key = 'refund:' || _campaign_id::text) then
     return 0; -- already refunded
   end if;
-  select id into v_reserve from public.wallet_accounts where kind = 'campaign_reserve' and campaign_id = _campaign_id for update;
+  if public.platform_fee_refundable() then
+    raise exception 'fee_refund_not_implemented' using errcode = 'P0001';
+  end if;
   if v_reserve is null then
     return 0;
   end if;

@@ -58,7 +58,7 @@ describe("provider registry", () => {
 });
 
 describe("MockPayoutProvider", () => {
-  const payout = { payoutId: "p1", recipientUserId: "user-a", amountCents: cents(4_000), currency: "USD" as const, idempotencyKey: "payout:p1:1" };
+  const payout = { payoutId: "p1", recipientUserId: "user-a", amountCents: cents(4_000), currency: "USD" as const, attempt: 1, idempotencyKey: "payout:p1:1" };
 
   it("refuses to initialise in production", () => {
     expect(() => new MockPayoutProvider("production")).toThrow(MockProviderInProductionError);
@@ -73,6 +73,16 @@ describe("MockPayoutProvider", () => {
     expect(a.status).toBe("succeeded");
     expect(retry.providerReference).not.toBe(a.providerReference);
     expect((await provider.createPayout({ ...payout, amountCents: cents(4_013) })).status).toBe("failed");
+    expect((await provider.createPayout({ ...payout, amountCents: cents(4_013), attempt: 2 })).status).toBe("failed");
+  });
+
+  it("fails amounts ending in .14 on the first attempt only (failed → retry → paid)", async () => {
+    const provider = new MockPayoutProvider("test");
+    const first = await provider.createPayout({ ...payout, amountCents: cents(4_014) });
+    const second = await provider.createPayout({ ...payout, amountCents: cents(4_014), attempt: 2, idempotencyKey: "payout:p1:2" });
+    expect(first.status).toBe("failed");
+    expect(first.failureReason).toMatch(/first attempt/);
+    expect(second.status).toBe("succeeded");
   });
 
   it("rejects invalid amounts and currency", async () => {

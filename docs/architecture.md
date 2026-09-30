@@ -400,9 +400,20 @@ is on (set by `supabase/seed.sql` only). No real money moves anywhere in this ph
 ### Refunds
 
 `complete_campaign` now calls `_refund_unused_budget`: the reserve balance minus what approved-but-unpaid
-work is still owed goes back to the advertiser's wallet (`campaign_refund`, idempotent per campaign), with a
-`campaign_refunded` notification. **The 20% platform fee is kept**; switch `platform_fee_refundable()` if
-that policy changes.
+work is still owed goes back to the advertiser's wallet (`campaign_refund`), with a `campaign_refunded`
+notification. Settlement is idempotent: the campaign reserve is locked, the refund's ledger key is
+`refund:<campaign>`, and completing or settling a second time never refunds again.
+
+> **Business-policy decision — requires client confirmation.**
+> Current behaviour: the **unused creator budget is refunded**; the **original 20% platform fee is retained**
+> (it stays in `platform_revenue`). Example: $80 budget + $16 fee funded, one of two $40 slots used →
+> $40 refunded, $16 fee kept.
+>
+> The policy lives in one place, `public.platform_fee_refundable()` (returns `false`). Flipping it to `true`
+> is deliberately **not** enough on its own: refunding the fee also needs a reversal out of
+> `platform_revenue` and a rounding rule (e.g. fee refunded proportionally to the unused budget, rounded
+> half-up to the cent). Until that is built, `_refund_unused_budget` raises `fee_refund_not_implemented` if the
+> switch is on, so the policy can never change silently. pgTAP covers both states.
 
 ### Admin activity log
 
@@ -420,8 +431,13 @@ Creator withdrawals, cancelling funded campaigns, any real payout/payment provid
 
 ### Verification (phase 5)
 
-- pgTAP: 168 assertions total (32 new).
-- Vitest: 112 unit tests.
-- End-to-end: production build 25/25 (release refused, hold, activity log, refund); `next dev` with the mock
-  provider 31/31 (full release, double-release refused, single ledger transaction, creator wallet and
-  notification); phase 2/3/4 suites re-run 40/40, 40/40, 33/33.
+- pgTAP: 174 assertions total (38 in `payouts_rls.test.sql`), including settlement idempotency and both
+  states of the platform-fee policy switch.
+- Vitest: 113 unit tests.
+- End-to-end (`scripts/e2e/`, local Supabase):
+  - `payouts-refunds.mjs` — production build 30/30 (release refused, hold, activity log, $40 refund with fee
+    kept, second completion/settlement refunds nothing); `next dev` + mock provider 36/36 (full release,
+    double release refused, one ledger transaction, creator wallet and notification).
+  - `payout-retry.mjs` — `next dev` only, 25/25: failed attempt books nothing → two concurrent retries, exactly
+    one pays → creator credited once ($40.14) → further release/hold/direct re-record cannot double-pay.
+  - Phase 2/3/4 suites (kept locally) re-run 40/40, 40/40, 33/33.

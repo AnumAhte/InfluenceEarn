@@ -3,7 +3,7 @@ begin;
 
 create extension if not exists pgtap with schema extensions;
 
-select plan(32);
+select plan(38);
 
 -- Fixtures ----------------------------------------------------------------------------------
 insert into auth.users (id, email, raw_user_meta_data, aud, role) values
@@ -140,6 +140,26 @@ select is((select balance_cents from public.wallet_account_balances where kind =
   0::bigint, 'the campaign reserve is fully settled');
 select lives_ok($$ set constraints public.wallet_ledger_entries_balanced immediate $$,
   'every journal balances after payouts and refund');
+
+-- Settlement idempotency ---------------------------------------------------------------------------
+select is((select count(*)::int from public.ledger_transactions where kind = 'campaign_refund' and campaign_id = (select v from ids where k = 'campaign')),
+  1, 'exactly one refund transaction exists');
+set local role authenticated;
+select set_config('request.jwt.claims', '{"sub":"a5000000-0000-0000-0000-00000000000a","role":"authenticated"}', true);
+select is(public.complete_campaign((select v from ids where k = 'campaign'))::text, 'completed',
+  'completing an already-completed campaign again is a no-op');
+reset role;
+select is((select count(*)::int from public.ledger_transactions where kind = 'campaign_refund' and campaign_id = (select v from ids where k = 'campaign')),
+  1, 'still exactly one refund transaction after a second completion attempt');
+select is((select balance_cents from public.wallet_account_balances where kind = 'user_wallet' and owner_id = 'a5000000-0000-0000-0000-00000000000a'),
+  1000::bigint, 'the advertiser is refunded only once');
+
+-- Platform-fee policy switch (flipped only inside this rolled-back test) ---------------------------
+create or replace function public.platform_fee_refundable() returns boolean language sql immutable set search_path = '' as $$ select true $$;
+select is(public._refund_unused_budget((select v from ids where k = 'campaign')), 0::bigint,
+  'an already-settled campaign is never refunded again, whatever the policy');
+select throws_ok(format('select public._refund_unused_budget(%L)', gen_random_uuid()), 'P0001', 'fee_refund_not_implemented',
+  'turning on fee refunds fails loudly until the fee reversal is implemented');
 
 select * from finish();
 rollback;

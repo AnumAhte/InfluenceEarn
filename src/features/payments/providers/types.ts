@@ -45,6 +45,8 @@ export type PayoutRequest = {
   recipientUserId: string;
   amountCents: Cents;
   currency: Currency;
+  /** 1 for the first try, incremented on each admin retry. */
+  attempt: number;
   idempotencyKey: string;
 };
 
