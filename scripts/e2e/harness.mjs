@@ -12,6 +12,7 @@
 // the last passed/failed check and the last HTTP request, and exits with code 2. A run that
 // finishes prints "N passed, M failed" and exits 0 or 1. Anything else is not a valid result.
 import { execFileSync } from "node:child_process";
+import { randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { resolve } from "node:path";
@@ -169,4 +170,24 @@ export function requireMode(mode, why) {
     console.log(`This suite needs MODE=${mode}: ${why}`);
     process.exit(1);
   }
+}
+
+/**
+ * Funds and publishes a campaign for test setup.
+ *
+ * MODE=dev: through the real "Fund & publish" action (the mock funding provider exists).
+ * MODE=prod: the action must be refused (no verified funding provider in production), so after
+ * checking that, the campaign is funded through the database function as the signed-in owner.
+ * That works only because the local database is in test mode (seed.sql), never on a hosted project.
+ * `sb` is a Supabase client signed in as the campaign owner.
+ */
+export async function fundForTest(session, sb, campaignId) {
+  if (MODE === "dev") {
+    const r = await session.action(`/campaigns/${campaignId}/fund`, "fundCampaign", [{ status: "idle" }, form({ campaignId, idempotencyKey: randomUUID() })]);
+    return Boolean(r.redirect?.includes("funded=1"));
+  }
+  const r = await session.action(`/campaigns/${campaignId}/fund`, "fundCampaign", [{ status: "idle" }, form({ campaignId, idempotencyKey: randomUUID() })]);
+  check("production refuses Fund & publish (no verified payment provider)", !r.redirect && r.text.includes("funding_unavailable"), `${r.redirect} ${r.text.slice(0, 200)}`);
+  const { data, error } = await sb.rpc("fund_and_publish_campaign", { p_campaign_id: campaignId, p_idempotency_key: randomUUID() });
+  return !error && data?.[0]?.already_funded === false;
 }

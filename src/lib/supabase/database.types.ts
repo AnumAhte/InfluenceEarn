@@ -1584,6 +1584,7 @@ export type Database = {
           total: number
         }[]
       }
+      campaign_funding_available: { Args: never; Returns: boolean }
       campaign_is_editable: {
         Args: { _status: Database["public"]["Enums"]["campaign_status"] }
         Returns: boolean

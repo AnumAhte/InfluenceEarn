@@ -5,9 +5,10 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { campaignDraftSchema, fundingReadinessIssues, toSaveDraftArgs } from "@/domain/campaigns/schemas";
+import { getWalletFundingProvider } from "@/features/payments/providers";
 import { createClient } from "@/lib/supabase/server";
 
-import { describeDbError, type FundingFailure } from "./errors";
+import { describeDbError, FUNDING_UNAVAILABLE_MESSAGE, type FundingFailure } from "./errors";
 
 export type SaveCampaignResult =
   | { status: "saved"; campaignId: string; savedAt: string }
@@ -135,6 +136,11 @@ export async function fundCampaign(_previous: CampaignActionState, formData: For
     .safeParse({ campaignId: formData.get("campaignId"), idempotencyKey: formData.get("idempotencyKey") });
   if (!input.success) {
     return { status: "error", failure: { code: "unknown", message: "Invalid request. Refresh the page and try again." } };
+  }
+
+  // Production has no verified funding provider yet; the database refuses too (campaign_funding_guard).
+  if (!getWalletFundingProvider()) {
+    return { status: "error", failure: { code: "funding_unavailable", message: FUNDING_UNAVAILABLE_MESSAGE } };
   }
 
   const { supabase } = await requireUserId();

@@ -13,6 +13,7 @@ import { assessFunding } from "@/domain/wallet/ledger";
 import { requireOnboardedAccount } from "@/features/account/queries";
 import { CostBreakdown, formatDate, PlatformList } from "@/features/campaigns/components/campaign-bits";
 import { FundCampaignForm } from "@/features/campaigns/components/fund-campaign-form";
+import { FUNDING_UNAVAILABLE_MESSAGE } from "@/features/campaigns/errors";
 import { getMyCampaign } from "@/features/campaigns/queries";
 import { getWalletFundingProvider } from "@/features/payments/providers";
 import { AddTestFundsForm } from "@/features/wallet/components/add-test-funds-form";
@@ -96,7 +97,9 @@ export default async function FundCampaignPage({ params }: PageProps<"/campaigns
               )}
             </dl>
 
-            {assessment.sufficient ? (
+            {!provider ? (
+              <Callout tone="warning"><strong className="font-[650]">Publishing unavailable.</strong> {FUNDING_UNAVAILABLE_MESSAGE}</Callout>
+            ) : assessment.sufficient ? (
               <FundCampaignForm campaignId={campaign.id} idempotencyKey={randomUUID()} totalCents={funding.totalFunding} />
             ) : (
               <Callout tone="warning">

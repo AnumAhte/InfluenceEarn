@@ -4,7 +4,7 @@
 // Run from the repo root against the production build: MODE=prod node scripts/e2e/submissions-reviews.mjs
 import { randomUUID } from "node:crypto";
 
-import { createClient, SUPABASE_URL, PUBLISHABLE_KEY, PASSWORD, check, finish, form, newUser, psql, sameCampaign } from "./harness.mjs";
+import { createClient, SUPABASE_URL, PUBLISHABLE_KEY, PASSWORD, check, finish, form, newUser, psql, sameCampaign, fundForTest } from "./harness.mjs";
 
 // ── Setup: funded campaign with Reel + Comment + Follow, one selected creator ──
 const adv = await newUser("adv4", "advertiser", "Brand Owner");
@@ -31,8 +31,7 @@ const sb = createClient(SUPABASE_URL, PUBLISHABLE_KEY, { auth: { persistSession:
 await sb.auth.signInWithPassword({ email: adv.email, password: PASSWORD });
 const key = randomUUID();
 await sb.rpc("record_test_deposit", { p_amount_cents: 4800, p_currency: "USD", p_provider_reference: `mock_${key.slice(0, 12)}`, p_status: "succeeded", p_idempotency_key: key });
-r = await adv.action(`/campaigns/${campaignId}/fund`, "fundCampaign", [{ status: "idle" }, form({ campaignId, idempotencyKey: randomUUID() })]);
-check("campaign funded", r.redirect?.includes("funded=1"), r.text);
+check("campaign funded", await fundForTest(adv, sb, campaignId));
 
 const cre = await newUser("cre4", "influencer", "Ayesha Creator");
 await cre.action("/settings/social", "connectSocialAccount", [{ status: "idle" }, form({ platform: "instagram", handle: "ayesha.four", followerCount: "12000" })]);

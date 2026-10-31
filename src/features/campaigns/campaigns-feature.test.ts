@@ -52,6 +52,7 @@ describe("describeDbError", () => {
   it("maps state, lock and permission errors, and hides unknown errors", () => {
     expect(describeDbError({ message: "invalid_campaign_state: draft" }).code).toBe("invalid_campaign_state");
     expect(describeDbError({ message: "campaign_locked" }).code).toBe("campaign_locked");
+    expect(describeDbError({ message: "funding_unavailable" }).code).toBe("funding_unavailable");
     expect(describeDbError({ message: "cancel_requires_refund_flow" }).code).toBe("cancel_requires_refund_flow");
     expect(describeDbError({ message: "test_funds_disabled" }).code).toBe("test_funds_disabled");
     expect(describeDbError({ message: 'relation "x" does not exist' })).toEqual({

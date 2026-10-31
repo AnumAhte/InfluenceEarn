@@ -7,7 +7,10 @@ export type DbErrorLike = { message?: string; details?: string | null; code?: st
 export type FundingFailure =
   | { code: "insufficient_funds"; requiredCents: number | null; availableCents: number | null; message: string }
   | { code: "campaign_incomplete"; field: string; message: string }
-  | { code: "invalid_campaign_state" | "campaign_not_found" | "cancel_requires_refund_flow" | "campaign_locked" | "test_funds_disabled" | "unknown"; message: string };
+  | { code: "invalid_campaign_state" | "campaign_not_found" | "cancel_requires_refund_flow" | "campaign_locked" | "test_funds_disabled" | "funding_unavailable" | "unknown"; message: string };
+
+export const FUNDING_UNAVAILABLE_MESSAGE =
+  "Campaigns can't be funded or published yet — a payment provider has not been connected. Your draft is saved.";
 
 const INCOMPLETE_COPY: Record<string, string> = {
   description: "Add a description of at least 40 characters.",
@@ -67,6 +70,9 @@ export function describeDbError(error: DbErrorLike): FundingFailure {
   }
   if (message.startsWith("test_funds_disabled")) {
     return { code: "test_funds_disabled", message: "Test funds are disabled in this environment." };
+  }
+  if (message.startsWith("funding_unavailable")) {
+    return { code: "funding_unavailable", message: FUNDING_UNAVAILABLE_MESSAGE };
   }
   return { code: "unknown", message: "Something went wrong. Please try again." };
 }
