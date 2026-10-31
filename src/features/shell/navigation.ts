@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   Link2,
   ListChecks,
+  Mail,
   Megaphone,
   Receipt,
   Search,
@@ -39,7 +40,10 @@ export const NAVIGATION: Record<ShellArea, readonly NavGroup[]> = {
       { label: "Wallet", href: "/wallet", icon: Wallet },
       { label: "Notifications", href: "/notifications", icon: Bell },
     ],
-    [{ label: "My profile", href: "/settings/profile", icon: UserRound }],
+    [
+      { label: "My profile", href: "/settings/profile", icon: UserRound },
+      { label: "Email preferences", href: "/settings/notifications", icon: Mail },
+    ],
   ],
   influencer: [
     [
@@ -55,6 +59,7 @@ export const NAVIGATION: Record<ShellArea, readonly NavGroup[]> = {
       { label: "Social accounts", href: "/settings/social", icon: Link2 },
       { label: "Creator details", href: "/settings/creator", icon: IdCard },
       { label: "My profile", href: "/settings/profile", icon: UserRound },
+      { label: "Email preferences", href: "/settings/notifications", icon: Mail },
     ],
   ],
   admin: [
@@ -69,6 +74,7 @@ export const NAVIGATION: Record<ShellArea, readonly NavGroup[]> = {
     ],
     [
       { label: "Notifications", href: "/notifications", icon: Bell },
+      { label: "Email preferences", href: "/settings/notifications", icon: Mail },
       { label: "Settings", href: null, icon: Settings },
     ],
   ],

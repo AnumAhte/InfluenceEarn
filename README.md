@@ -33,6 +33,21 @@ Lighter local stack (skips Studio, storage, realtime, analytics):
 works only when `NODE_ENV` is not `production` **and** the local database flag set by `supabase/seed.sql` is on.
 Amounts ending in `.13` are declined, to exercise failures. No real payment provider is integrated.
 
+## Notification emails
+
+In-app notifications are queued for email by the database. `POST /api/internal/notification-emails`
+(header `Authorization: Bearer $EMAIL_WORKER_SECRET`) sends up to 20 queued emails over SMTP and records
+each result. It only processes queued notification rows — it can't send arbitrary email.
+
+- Statuses: `pending` → `sent` (the SMTP server **accepted** it — not proof of inbox delivery), `failed`
+  (5 attempts, backoff 1/2/4/8 min) or `skipped` (opted out, unconfirmed email, or suspended).
+- Delivery is at-least-once: a crash between SMTP acceptance and recording can resend after the 2-minute lease.
+- Locally, `.env.local` points SMTP at Mailpit (`127.0.0.1:54325`, view at http://127.0.0.1:54324). Trigger a run:
+  `curl -X POST -H "Authorization: Bearer $EMAIL_WORKER_SECRET" http://localhost:3000/api/internal/notification-emails`
+- Production: set `SUPABASE_SECRET_KEY`, the `SMTP_*` variables, `EMAIL_FROM` and `EMAIL_WORKER_SECRET` (see
+  `.env.example`), and call the endpoint from a scheduler every minute (e.g. Vercel Cron, or Supabase `pg_cron` +
+  `pg_net`). Without SMTP configured the endpoint returns 503 and emails stay `pending`.
+
 ## Scripts
 
 | Script | What it does |

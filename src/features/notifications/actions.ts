@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+import type { ActionState } from "@/lib/forms/action-state";
 import { createClient } from "@/lib/supabase/server";
 import { safeRedirectPath } from "@/lib/utils/safe-redirect";
 
@@ -24,4 +25,30 @@ export async function markAllNotificationsRead() {
   const supabase = await createClient();
   await supabase.rpc("mark_notifications_read", {});
   revalidatePath("/", "layout");
+}
+
+const checkbox = z.preprocess((v) => v === "on", z.boolean());
+
+/** Saves the signed-in user's email opt-outs. In-app notifications are unaffected. */
+export async function saveEmailPreferences(_previous: ActionState, formData: FormData): Promise<ActionState> {
+  const parsed = z
+    .object({ applications: checkbox, work: checkbox, payments: checkbox })
+    .parse({ applications: formData.get("applications"), work: formData.get("work"), payments: formData.get("payments") });
+
+  const supabase = await createClient();
+  const { data: claims } = await supabase.auth.getClaims();
+  const userId = claims?.claims?.sub;
+  if (!userId) redirect("/login");
+
+  const { error } = await supabase.from("notification_preferences").upsert({
+    user_id: userId,
+    email_applications: parsed.applications,
+    email_work: parsed.work,
+    email_payments: parsed.payments,
+    updated_at: new Date().toISOString(),
+  });
+  if (error) return { status: "error", message: "Your preferences could not be saved. Please try again." };
+
+  revalidatePath("/settings/notifications");
+  return { status: "success", message: "Email preferences saved." };
 }

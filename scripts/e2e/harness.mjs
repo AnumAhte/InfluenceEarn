@@ -191,3 +191,61 @@ export async function fundForTest(session, sb, campaignId) {
   const { data, error } = await sb.rpc("fund_and_publish_campaign", { p_campaign_id: campaignId, p_idempotency_key: randomUUID() });
   return !error && data?.[0]?.already_funded === false;
 }
+
+/** Creates a complete Instagram campaign draft and funds it (see fundForTest). Returns ids and the owner's client. */
+export async function createFundedCampaign(session, title, { paymentPerCreator = "25", creatorsRequired = 1, minFollowers = null } = {}) {
+  const draft = {
+    title,
+    description: "Promote our summer drop with one Instagram Reel showing two outfits from the collection.",
+    categorySlug: "fashion", campaignType: "product_launch",
+    eligibility: { minFollowers, genders: [], ageMin: null, ageMax: null, creatorCategories: [], locations: [] },
+    platforms: ["instagram"], tasks: [{ platform: "instagram", taskType: "instagram_reel", quantity: 1 }],
+    instructions: "", captionInstructions: "", hashtags: [], mentions: [], referenceUrl: "",
+    applicationDeadline: new Date(Date.now() + 10 * 864e5).toISOString().slice(0, 10),
+    taskDeadline: new Date(Date.now() + 20 * 864e5).toISOString().slice(0, 10),
+    paymentPerCreator, creatorsRequired,
+  };
+  const r = await session.action("/campaigns/new", "saveCampaignDraft", [{ campaignId: null, intent: "save", draft }]);
+  const campaignId = (r.text.match(/"campaignId":"([0-9a-f-]{36})"/) ?? [])[1];
+  await session.action(`/campaigns/${campaignId}/edit`, "saveCampaignDraft", [{ campaignId, intent: "continue", draft }]);
+  const sb = createClient(SUPABASE_URL, PUBLISHABLE_KEY, { auth: { persistSession: false } });
+  await sb.auth.signInWithPassword({ email: session.email, password: PASSWORD });
+  const total = Math.round(Number(paymentPerCreator) * creatorsRequired * 120);
+  const key = randomUUID();
+  await sb.rpc("record_test_deposit", { p_amount_cents: total, p_currency: "USD", p_provider_reference: `mock_${key.slice(0, 12)}`, p_status: "succeeded", p_idempotency_key: key });
+  const funded = await fundForTest(session, sb, campaignId);
+  return { campaignId, sb, funded };
+}
+
+/** Reads a value from .env.local (the app's local configuration). */
+export function envLocal(name) {
+  try {
+    const line = readFileSync(resolve(ROOT, ".env.local"), "utf8").split(/\r?\n/).find((l) => l.startsWith(`${name}=`));
+    return line ? line.slice(name.length + 1).replace(/^"|"$/g, "") : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/** Calls the notification email worker until the queue is drained; returns the summed summary. */
+export async function runEmailWorker(secret = envLocal("EMAIL_WORKER_SECRET")) {
+  const total = { claimed: 0, sent: 0, retrying: 0, failed: 0, errors: 0, status: 200 };
+  for (let i = 0; i < 20; i++) {
+    const { res, text } = await http("POST", "/api/internal/notification-emails", { headers: { authorization: `Bearer ${secret}` } });
+    total.status = res.status;
+    if (res.status !== 200) return { ...total, body: text };
+    const s = JSON.parse(text);
+    for (const k of ["claimed", "sent", "retrying", "failed", "errors"]) total[k] += s[k];
+    if (s.claimed === 0) break;
+  }
+  return total;
+}
+
+/** Mailpit messages addressed to `email` (newest first). */
+export async function mailpitMessages(email) {
+  const search = await (await fetch(`${MAILPIT}/api/v1/search?query=${encodeURIComponent("to:" + email)}`)).json();
+  return search.messages ?? [];
+}
+export async function mailpitMessage(id) {
+  return (await fetch(`${MAILPIT}/api/v1/message/${id}`)).json();
+}

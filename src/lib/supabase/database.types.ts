@@ -856,11 +856,49 @@ export type Database = {
           },
         ]
       }
+      notification_preferences: {
+        Row: {
+          email_applications: boolean
+          email_payments: boolean
+          email_work: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          email_applications?: boolean
+          email_payments?: boolean
+          email_work?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          email_applications?: boolean
+          email_payments?: boolean
+          email_work?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_preferences_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           body: string
           created_at: string
           data: Json
+          email_attempts: number
+          email_error: string | null
+          email_locked_until: string | null
+          email_message_id: string | null
+          email_next_attempt_at: string | null
+          email_sent_at: string | null
           email_status: Database["public"]["Enums"]["notification_email_status"]
           id: string
           link_path: string | null
@@ -873,6 +911,12 @@ export type Database = {
           body: string
           created_at?: string
           data?: Json
+          email_attempts?: number
+          email_error?: string | null
+          email_locked_until?: string | null
+          email_message_id?: string | null
+          email_next_attempt_at?: string | null
+          email_sent_at?: string | null
           email_status?: Database["public"]["Enums"]["notification_email_status"]
           id?: string
           link_path?: string | null
@@ -885,6 +929,12 @@ export type Database = {
           body?: string
           created_at?: string
           data?: Json
+          email_attempts?: number
+          email_error?: string | null
+          email_locked_until?: string | null
+          email_message_id?: string | null
+          email_next_attempt_at?: string | null
+          email_sent_at?: string | null
           email_status?: Database["public"]["Enums"]["notification_email_status"]
           id?: string
           link_path?: string | null
@@ -1520,6 +1570,13 @@ export type Database = {
           platform: Database["public"]["Enums"]["social_platform"]
         }[]
       }
+      _email_skip_reason: {
+        Args: {
+          _type: Database["public"]["Enums"]["notification_type"]
+          _user_id: string
+        }
+        Returns: string
+      }
       _ensure_user_wallet: { Args: { _user_id: string }; Returns: string }
       _log_admin: {
         Args: {
@@ -1614,6 +1671,19 @@ export type Database = {
         Args: { p_campaign_id: string; p_reason?: string }
         Returns: Database["public"]["Enums"]["campaign_status"]
       }
+      claim_notification_emails: {
+        Args: { p_lease_seconds?: number; p_limit?: number }
+        Returns: {
+          attempt: number
+          body: string
+          link_path: string
+          notification_id: string
+          recipient_email: string
+          recipient_name: string
+          title: string
+          type: Database["public"]["Enums"]["notification_type"]
+        }[]
+      }
       close_campaign_applications: {
         Args: { p_campaign_id: string }
         Returns: Database["public"]["Enums"]["campaign_status"]
@@ -1693,6 +1763,10 @@ export type Database = {
           total: number
         }[]
       }
+      notification_email_category: {
+        Args: { _type: Database["public"]["Enums"]["notification_type"] }
+        Returns: string
+      }
       platform_fee_bps: { Args: never; Returns: number }
       platform_fee_cents: {
         Args: { _creator_budget_cents: number }
@@ -1705,6 +1779,16 @@ export type Database = {
           _url: string
         }
         Returns: boolean
+      }
+      record_notification_email_result: {
+        Args: {
+          p_attempt: number
+          p_error?: string
+          p_message_id?: string
+          p_notification_id: string
+          p_sent: boolean
+        }
+        Returns: Database["public"]["Enums"]["notification_email_status"]
       }
       record_payout_result: {
         Args: {
