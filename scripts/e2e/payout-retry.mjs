@@ -6,91 +6,11 @@
 // Needs: `next dev -p 3100`, local Supabase with seed.sql applied, Mailpit on :54324.
 // Run from the repo root: MODE=dev node scripts/e2e/payout-retry.mjs
 import { randomUUID } from "node:crypto";
-import { readFileSync } from "node:fs";
-import { createRequire } from "node:module";
-import { resolve } from "node:path";
 
-const ROOT = resolve(process.cwd());
-
-const require = createRequire(resolve(ROOT, "package.json"));
-const { createClient } = require("@supabase/supabase-js");
-const APP = "http://localhost:3100";
-const MAILPIT = "http://127.0.0.1:54324";
-const SUPABASE_URL = "http://127.0.0.1:54321";
-const KEY = "sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH";
-const PASSWORD = "correct-horse-9";
-const MODE = process.env.MODE ?? "prod";
-const MANIFEST = MODE === "dev" ? resolve(ROOT, ".next/dev/server/server-reference-manifest.json") : resolve(ROOT, ".next/server/server-reference-manifest.json");
-let ACTION = {};
-const loadActions = () => { try { const m = JSON.parse(readFileSync(MANIFEST, "utf8")); ACTION = Object.fromEntries(Object.entries(m.node).map(([id, v]) => [v.exportedName, id])); } catch {} };
-loadActions();
-
-let passed = 0, failed = 0;
-const check = (name, ok, detail = "") => {
-  if (ok) { passed++; console.log(`PASS  ${name}`); } else { failed++; console.log(`FAIL  ${name}  ${String(detail).slice(0, 300)}`); }
-};
-
-class Session {
-  jar = new Map();
-  store(res) {
-    for (const c of res.headers.getSetCookie()) {
-      const [pair] = c.split(";");
-      const i = pair.indexOf("=");
-      const name = pair.slice(0, i), value = pair.slice(i + 1);
-      if (value === "" || /max-age=0/i.test(c)) this.jar.delete(name); else this.jar.set(name, value);
-    }
-  }
-  cookie() { return [...this.jar].map(([k, v]) => `${k}=${v}`).join("; "); }
-  async get(path) {
-    const res = await fetch(APP + path, { redirect: "manual", headers: { cookie: this.cookie() } });
-    this.store(res);
-    return { status: res.status, location: res.headers.get("location"), text: await res.text() };
-  }
-  async action(page, name, args) {
-    if (!ACTION[name]) { await this.get(page); loadActions(); }
-    const id = ACTION[name];
-    if (!id) throw new Error(`No action ${name}`);
-    let body; const headers = { "Next-Action": id, cookie: this.cookie(), Accept: "text/x-component" };
-    const formIndex = args.findIndex((a) => a instanceof FormData);
-    if (formIndex === -1) { body = JSON.stringify(args); headers["Content-Type"] = "text/plain;charset=UTF-8"; }
-    else {
-      body = new FormData();
-      for (const [k, v] of args[formIndex].entries()) body.append(`_1_${k}`, v);
-      body.append("0", JSON.stringify(args.map((a, i) => (i === formIndex ? "$K1" : a))));
-    }
-    const res = await fetch(APP + page, { method: "POST", redirect: "manual", headers, body });
-    this.store(res);
-    return { status: res.status, redirect: res.headers.get("x-action-redirect"), text: await res.text() };
-  }
-}
-const form = (obj) => { const f = new FormData(); for (const [k, v] of Object.entries(obj)) { if (Array.isArray(v)) v.forEach((x) => f.append(k, x)); else f.append(k, v); } return f; };
-
-async function newUser(label, workspace, fullName) {
-  const s = new Session();
-  s.email = `p5-${label}-${Date.now()}@test.local`;
-  await s.action("/signup", "signUp", [{ status: "idle" }, form({ fullName, email: s.email, password: PASSWORD, confirmPassword: PASSWORD })]);
-  let link;
-  for (let i = 0; i < 20 && !link; i++) {
-    const search = await (await fetch(`${MAILPIT}/api/v1/search?query=${encodeURIComponent("to:" + s.email)}`)).json();
-    const id = search.messages?.[0]?.ID;
-    if (id) link = ((await (await fetch(`${MAILPIT}/api/v1/message/${id}`)).json()).HTML.match(/href="([^"]*auth\/confirm[^"]*)"/) ?? [])[1];
-    if (!link) await new Promise((r) => setTimeout(r, 500));
-  }
-  const url = new URL(link.replace(/&amp;/g, "&"));
-  await s.get(url.pathname + url.search);
-  await s.action("/onboarding/role", "chooseInitialWorkspace", [form({ workspace })]);
-  await s.action("/onboarding/profile", "skipProfileSetup", []);
-  const r = await s.get("/dashboard");
-  check(`[${label}] signed up, confirmed and onboarded as ${workspace}`, r.status === 200, r.status);
-  return s;
-}
-
-
-import { execFileSync } from "node:child_process";
-const psql = (sql) => execFileSync("docker", ["exec", "supabase_db_influencearn", "psql", "-U", "postgres", "-tAc", sql], { encoding: "utf8" }).trim();
+import { createClient, SUPABASE_URL, PUBLISHABLE_KEY, PASSWORD, check, finish, form, newUser, psql, requireMode } from "./harness.mjs";
 
 // ── Phase 5b (dev only): failed payout → retry → paid, and no double pay ──
-if (MODE !== "dev") { console.log("payout-retry.mjs needs MODE=dev (the mock payout provider is refused in production)"); process.exit(1); }
+requireMode("dev", "the mock payout provider is refused in production");
 
 const adv = await newUser("adv5b", "advertiser", "Brand Owner");
 const draft = {
@@ -109,7 +29,7 @@ const draft = {
 let r = await adv.action("/campaigns/new", "saveCampaignDraft", [{ campaignId: null, intent: "save", draft }]);
 const campaignId = (r.text.match(/"campaignId":"([0-9a-f-]{36})"/) ?? [])[1];
 await adv.action(`/campaigns/${campaignId}/edit`, "saveCampaignDraft", [{ campaignId, intent: "continue", draft }]);
-const sb = createClient(SUPABASE_URL, KEY, { auth: { persistSession: false } });
+const sb = createClient(SUPABASE_URL, PUBLISHABLE_KEY, { auth: { persistSession: false } });
 await sb.auth.signInWithPassword({ email: adv.email, password: PASSWORD });
 const key = randomUUID();
 await sb.rpc("record_test_deposit", { p_amount_cents: 6000, p_currency: "USD", p_provider_reference: `mock_${key.slice(0, 12)}`, p_status: "succeeded", p_idempotency_key: key });
@@ -189,5 +109,4 @@ check("creator wallet shows one earning row and one paid-out row", earningRows =
 r = await admin.get("/admin/activity");
 check("activity log shows the failed attempt and the paid retry", r.text.includes("Payout failed") && r.text.includes("Payout paid"));
 
-console.log(`\n${passed} passed, ${failed} failed`);
-process.exit(failed ? 1 : 0);
+finish();
