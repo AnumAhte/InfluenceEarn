@@ -4,14 +4,15 @@ import { Card } from "@/components/ui/card";
 import { latestAllowedBirthDate } from "@/domain/creators/schemas";
 import { requireOnboardedAccount } from "@/features/account/queries";
 import { CreatorDetailsForm } from "@/features/creators/components/creator-details-form";
-import { getMyCreatorDetails } from "@/features/creators/queries";
+import { MediaKitForm } from "@/features/creators/components/media-kit-form";
+import { getMyCreatorDetails, getMyMediaKit } from "@/features/creators/queries";
 import { PageHeader } from "@/features/shell/components/page-header";
 
 export const metadata: Metadata = { title: "Creator details" };
 
 export default async function CreatorDetailsPage() {
   const { userId } = await requireOnboardedAccount();
-  const details = await getMyCreatorDetails(userId);
+  const [details, mediaKit] = await Promise.all([getMyCreatorDetails(userId), getMyMediaKit(userId)]);
   const today = new Date().toISOString().slice(0, 10);
 
   return (
@@ -22,6 +23,15 @@ export default async function CreatorDetailsPage() {
       />
       <Card className="px-5 py-6 sm:px-8 sm:py-8">
         <CreatorDetailsForm details={details} maxBirthDate={latestAllowedBirthDate(today)} />
+      </Card>
+      <Card className="flex flex-col gap-4 px-5 py-6 sm:px-8 sm:py-8">
+        <div className="flex flex-col gap-1">
+          <h2 className="text-[17px] font-[650] tracking-[-0.01em]">Media kit</h2>
+          <p className="text-[13.5px] leading-relaxed text-ink-secondary">
+            Optional. Advertisers can open it for campaigns you have applied to.
+          </p>
+        </div>
+        <MediaKitForm mediaKit={mediaKit} />
       </Card>
       <p className="px-1 text-[13px] leading-relaxed text-ink-muted">
         These details stay private. When you apply, the advertiser sees a snapshot: your name, city, country, age (not your

@@ -733,6 +733,38 @@ export type Database = {
         }
         Relationships: []
       }
+      creator_media_kits: {
+        Row: {
+          file_name: string
+          path: string
+          size_bytes: number
+          uploaded_at: string
+          user_id: string
+        }
+        Insert: {
+          file_name: string
+          path: string
+          size_bytes: number
+          uploaded_at?: string
+          user_id: string
+        }
+        Update: {
+          file_name?: string
+          path?: string
+          size_bytes?: number
+          uploaded_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "creator_media_kits_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       creator_profile_categories: {
         Row: {
           category_slug: string
@@ -1663,6 +1695,8 @@ export type Database = {
         Returns: boolean
       }
       can_view_campaign: { Args: { _campaign_id: string }; Returns: boolean }
+      can_view_media_kit: { Args: { _creator_id: string }; Returns: boolean }
+      can_view_media_kit_folder: { Args: { _folder: string }; Returns: boolean }
       can_view_submission: {
         Args: { _submission_id: string }
         Returns: boolean

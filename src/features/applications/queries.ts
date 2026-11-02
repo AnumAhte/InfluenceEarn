@@ -49,7 +49,7 @@ export function applicantsHref(campaignId: string, params: Partial<ApplicantPara
 }
 
 const APPLICANT_COLUMNS =
-  "id, status, pitch, creator_name, creator_city, creator_country_code, creator_age, creator_gender, creator_categories, max_follower_count, created_at, status_changed_at, accounts:application_social_accounts(platform, handle, profile_url, follower_count)";
+  "id, creator_id, status, pitch, creator_name, creator_city, creator_country_code, creator_age, creator_gender, creator_categories, max_follower_count, created_at, status_changed_at, accounts:application_social_accounts(platform, handle, profile_url, follower_count)";
 
 /** Paginated, filtered applicants (RLS: only the campaign owner or an admin gets rows). */
 export async function listApplicants(campaignId: string, params: ApplicantParams) {
@@ -82,6 +82,7 @@ export async function listApplicants(campaignId: string, params: ApplicantParams
 
 export type ApplicantRow = {
   id: string;
+  creator_id: string;
   status: ApplicationStatus;
   pitch: string | null;
   creator_name: string;

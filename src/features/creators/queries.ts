@@ -28,3 +28,33 @@ export async function getMyCreatorDetails(userId: string): Promise<CreatorDetail
     categories: (categories.data ?? []).map((row) => row.category_slug as CategorySlug),
   };
 }
+
+export const MEDIA_KIT_URL_TTL_SECONDS = 600;
+
+export type MediaKit = { fileName: string; sizeBytes: number; uploadedAt: string; url: string | null };
+
+export async function getMyMediaKit(userId: string): Promise<MediaKit | null> {
+  const supabase = await createClient();
+  const { data } = await supabase.from("creator_media_kits").select("path, file_name, size_bytes, uploaded_at").eq("user_id", userId).maybeSingle();
+  if (!data) return null;
+  const { data: signed } = await supabase.storage.from("media-kits").createSignedUrl(data.path, MEDIA_KIT_URL_TTL_SECONDS);
+  return { fileName: data.file_name, sizeBytes: data.size_bytes, uploadedAt: data.uploaded_at, url: signed?.signedUrl ?? null };
+}
+
+/**
+ * Signed media kit links for creators the signed-in user may see (RLS: themselves, admins, and
+ * advertisers the creator applied to). Creators without a kit are absent from the map.
+ */
+export async function getMediaKitLinks(creatorIds: string[]): Promise<Map<string, string>> {
+  const links = new Map<string, string>();
+  if (creatorIds.length === 0) return links;
+  const supabase = await createClient();
+  const { data } = await supabase.from("creator_media_kits").select("user_id, path").in("user_id", [...new Set(creatorIds)]);
+  if (!data?.length) return links;
+  const { data: signed } = await supabase.storage.from("media-kits").createSignedUrls(data.map((k) => k.path), MEDIA_KIT_URL_TTL_SECONDS);
+  for (const kit of data) {
+    const url = signed?.find((s) => s.path === kit.path)?.signedUrl;
+    if (url) links.set(kit.user_id, url);
+  }
+  return links;
+}

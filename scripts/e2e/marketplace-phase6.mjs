@@ -2,7 +2,7 @@
 // account settings and rate limits, through the real app.
 //
 // Runs in both modes. Run from the repo root: MODE=prod node scripts/e2e/marketplace-phase6.mjs
-import { APP, Session, check, createFundedCampaign, envLocal, finish, form, mailpitMessage, mailpitMessages, newUser, psql, runEmailWorker } from "./harness.mjs";
+import { APP, PASSWORD, PUBLISHABLE_KEY, SUPABASE_URL, Session, check, createClient, createFundedCampaign, envLocal, finish, form, mailpitMessage, mailpitMessages, newUser, psql, runEmailWorker } from "./harness.mjs";
 
 // ── Legal pages (drafts) ──
 const guest = new Session();
@@ -57,5 +57,46 @@ mails = (await mailpitMessages(adv.email)).filter((m) => m.Subject === "Campaign
 check("no email was sent for the opted-out category", mails.length === 1, mails.length);
 r = await adv.get("/notifications");
 check("the in-app notification still appears", (r.text.match(/Campaign funded and published/g) ?? []).length >= 2);
+
+// ── Media kits ──
+const kitCreator = await newUser("kit6", "influencer", "Kit Creator");
+const pdfForm = (bytes, name, type = "application/pdf") => { const f = new FormData(); f.append("mediaKit", new File([bytes], name, { type })); return f; };
+r = await kitCreator.action("/settings/creator", "uploadMediaKit", [{ status: "idle" }, pdfForm("<html>not a pdf</html>", "fake.pdf")]);
+check("a file that is not really a PDF is rejected", r.text.includes("Media kit must be a PDF file"), r.text.slice(0, 200));
+r = await kitCreator.action("/settings/creator", "uploadMediaKit", [{ status: "idle" }, pdfForm(new Uint8Array(4 * 1024 * 1024 + 10).fill(37), "big.pdf")]);
+check("a PDF over 4 MB is rejected", r.text.includes("4 MB or smaller"), r.text.slice(0, 200));
+const PDF_BYTES = "%PDF-1.4\n1 0 obj <<>> endobj\ntrailer <<>>\n%%EOF\n";
+r = await kitCreator.action("/settings/creator", "uploadMediaKit", [{ status: "idle" }, pdfForm(PDF_BYTES, "My Media Kit.pdf")]);
+check("a valid PDF is uploaded", r.text.includes("Media kit uploaded"), r.text.slice(0, 200));
+r = await kitCreator.get("/settings/creator");
+check("the creator sees their media kit", r.text.includes("My Media Kit.pdf"));
+r = await kitCreator.action("/settings/creator", "uploadMediaKit", [{ status: "idle" }, pdfForm(PDF_BYTES, "Updated Kit.pdf")]);
+check("uploading again replaces the media kit", r.text.includes("Media kit uploaded"));
+check("the replaced file is deleted from storage (one file per creator)", psql(`select count(*) from storage.objects o join auth.users u on o.name like u.id::text || '/%' where o.bucket_id = 'media-kits' and u.email = '${kitCreator.email}'`) === "1");
+
+const kitAdv = await newUser("kitadv6", "advertiser", "Kit Advertiser");
+const kitCampaign = await createFundedCampaign(kitAdv, "Phase6 Media Kit Campaign");
+r = await kitCreator.action("/settings/social", "connectSocialAccount", [{ status: "idle" }, form({ platform: "instagram", handle: `kit_${Date.now()}`, followerCount: "5000" })]);
+r = await kitCreator.action(`/discover/${kitCampaign.campaignId}`, "applyToCampaign", [{ status: "idle" }, form({ campaignId: kitCampaign.campaignId, pitch: "" })]);
+check("the creator applied to the campaign", r.text.includes('"status":"success"') || r.redirect !== null, r.text.slice(0, 200));
+r = await kitAdv.get(`/campaigns/${kitCampaign.campaignId}/applicants`);
+const kitLink = (r.text.match(/href="([^"]*\/storage\/v1\/object\/sign\/media-kits\/[^"]+)"/) ?? [])[1]?.replace(/&amp;/g, "&");
+check("the advertiser sees a media kit link on the applicant", Boolean(kitLink) && r.text.includes("Media kit (PDF)"));
+const download = kitLink ? await fetch(kitLink) : null;
+check("the signed link downloads the PDF", download?.status === 200 && (await download.text()).startsWith("%PDF-"), download?.status);
+
+const otherAdv = await newUser("kitother6", "advertiser", "Other Advertiser");
+const sbOther = createClient(SUPABASE_URL, PUBLISHABLE_KEY, { auth: { persistSession: false } });
+await sbOther.auth.signInWithPassword({ email: otherAdv.email, password: PASSWORD });
+const { data: otherRows } = await sbOther.from("creator_media_kits").select("path");
+check("an unrelated advertiser cannot see any media kit record", (otherRows ?? []).length === 0, JSON.stringify(otherRows));
+const kitPath = psql(`select path from creator_media_kits k join auth.users u on u.id = k.user_id where u.email = '${kitCreator.email}'`);
+const { error: signError } = await sbOther.storage.from("media-kits").createSignedUrl(kitPath, 60);
+check("an unrelated advertiser cannot create a link to the file", Boolean(signError));
+
+r = await kitCreator.action("/settings/creator", "removeMediaKit", [{ status: "idle" }, new FormData()]);
+check("the creator can remove the media kit", r.text.includes("Media kit removed"), r.text.slice(0, 200));
+check("removing deletes the record and the file", psql(`select count(*) from creator_media_kits k join auth.users u on u.id = k.user_id where u.email = '${kitCreator.email}'`) === "0"
+  && psql(`select count(*) from storage.objects where bucket_id = 'media-kits' and name = '${kitPath}'`) === "0");
 
 finish();
