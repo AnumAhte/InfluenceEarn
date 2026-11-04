@@ -13,6 +13,7 @@ import {
   Megaphone,
   Receipt,
   Search,
+  ShieldCheck,
   Settings,
   UserRound,
   Users,
@@ -43,6 +44,7 @@ export const NAVIGATION: Record<ShellArea, readonly NavGroup[]> = {
     [
       { label: "My profile", href: "/settings/profile", icon: UserRound },
       { label: "Email preferences", href: "/settings/notifications", icon: Mail },
+      { label: "Account & security", href: "/settings/account", icon: ShieldCheck },
     ],
   ],
   influencer: [
@@ -60,6 +62,7 @@ export const NAVIGATION: Record<ShellArea, readonly NavGroup[]> = {
       { label: "Creator details", href: "/settings/creator", icon: IdCard },
       { label: "My profile", href: "/settings/profile", icon: UserRound },
       { label: "Email preferences", href: "/settings/notifications", icon: Mail },
+      { label: "Account & security", href: "/settings/account", icon: ShieldCheck },
     ],
   ],
   admin: [
@@ -75,6 +78,7 @@ export const NAVIGATION: Record<ShellArea, readonly NavGroup[]> = {
     [
       { label: "Notifications", href: "/notifications", icon: Bell },
       { label: "Email preferences", href: "/settings/notifications", icon: Mail },
+      { label: "Account & security", href: "/settings/account", icon: ShieldCheck },
       { label: "Settings", href: null, icon: Settings },
     ],
   ],

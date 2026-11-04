@@ -256,10 +256,20 @@ content_path = "./supabase/templates/recovery.html"
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"
 
-# Uncomment to customize notification email template
-# [auth.email.notification.password_changed]
-# enabled = true
-# subject = "Your password has been changed"
+[auth.email.template.email_change]
+subject = "Confirm your new InfluencEarn email address"
+content_path = "./supabase/templates/email-change.html"
+
+# Security notices (always sent; not affected by notification email preferences).
+[auth.email.notification.password_changed]
+enabled = true
+subject = "Your InfluencEarn password was changed"
+content_path = "./supabase/templates/password-changed.html"
+
+[auth.email.notification.email_changed]
+enabled = true
+subject = "Your InfluencEarn email address was changed"
+content_path = "./supabase/templates/email-changed.html"
 # content_path = "./supabase/templates/password_changed_notification.html"
 
 [auth.sms]

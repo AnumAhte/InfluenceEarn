@@ -99,4 +99,41 @@ check("the creator can remove the media kit", r.text.includes("Media kit removed
 check("removing deletes the record and the file", psql(`select count(*) from creator_media_kits k join auth.users u on u.id = k.user_id where u.email = '${kitCreator.email}'`) === "0"
   && psql(`select count(*) from storage.objects where bucket_id = 'media-kits' and name = '${kitPath}'`) === "0");
 
+// ── Account & security ──
+const acct = await newUser("acct6", "influencer", "Account Owner");
+r = await acct.get("/settings/account");
+check("account page shows the signed-in email", r.status === 200 && r.text.includes(acct.email));
+r = await acct.action("/settings/account", "changePassword", [{ status: "idle" }, form({ currentPassword: "wrong-password-1", password: "new-horse-battery-9", confirmPassword: "new-horse-battery-9" })]);
+check("a wrong current password is refused", r.text.includes("Your current password is incorrect"), r.text.slice(0, 200));
+r = await acct.action("/settings/account", "changePassword", [{ status: "idle" }, form({ currentPassword: PASSWORD, password: "new-horse-battery-9", confirmPassword: "new-horse-battery-9" })]);
+check("the password is changed with the current password", r.text.includes("Password changed"), r.text.slice(0, 200));
+r = await acct.get("/settings/account");
+check("the browser session stays signed in after the change", r.status === 200 && r.text.includes(acct.email), `${r.status} ${r.location}`);
+const signer = createClient(SUPABASE_URL, PUBLISHABLE_KEY, { auth: { persistSession: false } });
+check("the old password no longer works", Boolean((await signer.auth.signInWithPassword({ email: acct.email, password: PASSWORD })).error));
+check("the new password works", !(await signer.auth.signInWithPassword({ email: acct.email, password: "new-horse-battery-9" })).error);
+await new Promise((res) => setTimeout(res, 1500));
+check("a 'password changed' security email is sent", (await mailpitMessages(acct.email)).some((m) => m.Subject === "Your InfluencEarn password was changed"));
+
+const newEmail = `e2e-acct6-new-${Date.now()}@test.local`;
+r = await acct.action("/settings/account", "changeEmail", [{ status: "idle" }, form({ email: acct.email })]);
+check("changing to the same email is refused", r.text.includes("already your email address"));
+r = await acct.action("/settings/account", "changeEmail", [{ status: "idle" }, form({ email: newEmail })]);
+check("an email change is started", r.text.includes("Check both inboxes"), r.text.slice(0, 200));
+r = await acct.get("/settings/account");
+check("the pending address is shown until confirmed", r.text.includes("Waiting for confirmation of") && r.text.includes(newEmail));
+const changeLink = async (to) => {
+  for (let i = 0; i < 40; i++) {
+    const m = (await mailpitMessages(to)).find((x) => x.Subject === "Confirm your new InfluencEarn email address");
+    if (m) return ((await mailpitMessage(m.ID)).HTML.match(/href="([^"]*auth\/confirm[^"]*)"/) ?? [])[1]?.replace(/&amp;/g, "&");
+    await new Promise((res) => setTimeout(res, 500));
+  }
+  return undefined;
+};
+const [oldLink, newLink] = [await changeLink(acct.email), await changeLink(newEmail)];
+check("confirmation links go to both the current and the new address", Boolean(oldLink && newLink));
+for (const link of [oldLink, newLink].filter(Boolean)) { const u = new URL(link); await acct.get(u.pathname + u.search); }
+check("after both confirmations the account uses the new email", psql(`select count(*) from auth.users where email = '${newEmail}'`) === "1");
+check("the new email signs in", !(await signer.auth.signInWithPassword({ email: newEmail, password: "new-horse-battery-9" })).error);
+
 finish();

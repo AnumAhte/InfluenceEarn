@@ -9,10 +9,14 @@ import { safeRedirectPath } from "@/lib/utils/safe-redirect";
 
 import { authErrorMessage } from "./errors";
 import {
+  changeEmailSchema,
+  changePasswordSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
   signInSchema,
   signUpSchema,
+  type ChangeEmailField,
+  type ChangePasswordField,
   type ForgotPasswordField,
   type ResetPasswordField,
   type SignInField,
@@ -161,4 +165,66 @@ export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect("/login");
+}
+
+/** Starts an email change. Supabase sends confirmation links to both the current and the new address. */
+export async function changeEmail(
+  _previous: ActionState<ChangeEmailField>,
+  formData: FormData,
+): Promise<ActionState<ChangeEmailField>> {
+  const parsed = changeEmailSchema.safeParse({ email: formString(formData, "email") });
+  if (!parsed.success) {
+    return { status: "error", message: "Check the highlighted fields.", fieldErrors: firstFieldErrors<ChangeEmailField>(parsed.error) };
+  }
+
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getUser();
+  if (!data.user) redirect("/login");
+  if (data.user.email?.toLowerCase() === parsed.data.email) {
+    return { status: "error", message: "Check the highlighted fields.", fieldErrors: { email: "That is already your email address" } };
+  }
+
+  const { error } = await supabase.auth.updateUser(
+    { email: parsed.data.email },
+    { emailRedirectTo: `${getPublicEnv().siteUrl}/auth/confirm?next=/settings/account` },
+  );
+  // Don't reveal whether another account already uses the address.
+  if (error && error.code !== "email_exists") return { status: "error", message: authErrorMessage(error.code) };
+
+  return {
+    status: "success",
+    message: "Check both inboxes. The change takes effect after you confirm it from your current and your new address.",
+  };
+}
+
+/** Changes the password after re-checking the current one. */
+export async function changePassword(
+  _previous: ActionState<ChangePasswordField>,
+  formData: FormData,
+): Promise<ActionState<ChangePasswordField>> {
+  const parsed = changePasswordSchema.safeParse({
+    currentPassword: formString(formData, "currentPassword"),
+    password: formString(formData, "password"),
+    confirmPassword: formString(formData, "confirmPassword"),
+  });
+  if (!parsed.success) {
+    return { status: "error", message: "Check the highlighted fields.", fieldErrors: firstFieldErrors<ChangePasswordField>(parsed.error) };
+  }
+
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getUser();
+  if (!data.user?.email) redirect("/login");
+
+  // Re-checking the current password on this session also refreshes it, which satisfies "secure
+  // password change" (recent sign-in). Supabase then signs out every other session, not this one.
+  const check = await supabase.auth.signInWithPassword({ email: data.user.email, password: parsed.data.currentPassword });
+  if (check.error || check.data.user?.id !== data.user.id) {
+    if (check.error?.code === "over_request_rate_limit") return { status: "error", message: authErrorMessage(check.error.code) };
+    return { status: "error", message: "Check the highlighted fields.", fieldErrors: { currentPassword: "Your current password is incorrect" } };
+  }
+
+  const { error } = await supabase.auth.updateUser({ password: parsed.data.password });
+  if (error) return { status: "error", message: authErrorMessage(error.code) };
+
+  return { status: "success", message: "Password changed. Other devices have been signed out, and we've emailed you a confirmation." };
 }
