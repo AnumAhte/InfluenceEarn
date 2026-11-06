@@ -211,4 +211,26 @@ check("the reinstated user can sign in and use the app", r.status === 200, `${r.
 r = await admin.get(`/admin/users/${victimId}`);
 check("suspension history shows who reinstated and why", r.text.includes("Reinstated") && r.text.includes("Appeal accepted"));
 
+// ── Rate limits ──
+const rl = await newUser("rl6", "advertiser", "Rate Limited");
+let lastLogin = "";
+for (let i = 0; i < 11; i++) {
+  // A fresh session (= a different client IP) each time: the per-email limit must still apply.
+  lastLogin = (await new Session().action("/login", "signIn", [{ status: "idle" }, form({ email: rl.email, password: `wrong-password-${i}` })])).text;
+}
+check("repeated failed sign-ins for one email are rate limited, even from different IPs", lastLogin.includes("Too many attempts"), lastLogin.slice(0, 200));
+let lastChange = "";
+for (let i = 0; i < 6; i++) {
+  lastChange = (await rl.action("/settings/account", "changePassword", [{ status: "idle" }, form({ currentPassword: `wrong-${i}-password`, password: "another-horse-7", confirmPassword: "another-horse-7" })])).text;
+}
+check("repeated password-change attempts are rate limited", lastChange.includes("Too many attempts"), lastChange.slice(0, 200));
+const sbRl = createClient(SUPABASE_URL, PUBLISHABLE_KEY, { auth: { persistSession: false } });
+await sbRl.auth.signInWithPassword({ email: rl.email, password: PASSWORD });
+let lastWrite;
+for (let i = 0; i < 31; i++) {
+  lastWrite = await sbRl.rpc("record_test_deposit", { p_amount_cents: 100, p_currency: "USD", p_provider_reference: `mock_rl_${i}`, p_status: "succeeded", p_idempotency_key: `rate-limit-key-${i}-${Date.now()}` });
+}
+check("direct Data API writes over the endpoint limit get 429 rate_limited", lastWrite.error?.message === "rate_limited" && lastWrite.status === 429, `${lastWrite.status} ${lastWrite.error?.message}`);
+check("writes within the limit were not affected", psql(`select count(*) from payment_transactions p join auth.users u on u.id = p.user_id where u.email = '${rl.email}'`) === "30");
+
 finish();

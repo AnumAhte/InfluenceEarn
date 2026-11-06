@@ -1214,6 +1214,45 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limit_counters: {
+        Row: {
+          action: string
+          hits: number
+          subject: string
+          window_start: string
+        }
+        Insert: {
+          action: string
+          hits?: number
+          subject: string
+          window_start: string
+        }
+        Update: {
+          action?: string
+          hits?: number
+          subject?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
+      rate_limit_rules: {
+        Row: {
+          max_hits: number
+          path: string
+          window_seconds: number
+        }
+        Insert: {
+          max_hits: number
+          path: string
+          window_seconds: number
+        }
+        Update: {
+          max_hits?: number
+          path?: string
+          window_seconds?: number
+        }
+        Relationships: []
+      }
       social_accounts: {
         Row: {
           connection_method: Database["public"]["Enums"]["social_connection_method"]
@@ -1665,6 +1704,15 @@ export type Database = {
         Returns: string
       }
       _ensure_user_wallet: { Args: { _user_id: string }; Returns: string }
+      _hit_rate_limit: {
+        Args: {
+          _action: string
+          _max: number
+          _subject: string
+          _window_seconds: number
+        }
+        Returns: boolean
+      }
       _log_admin: {
         Args: {
           _action: string
@@ -1780,6 +1828,15 @@ export type Database = {
       cancel_campaign: {
         Args: { p_campaign_id: string; p_reason?: string }
         Returns: Database["public"]["Enums"]["campaign_status"]
+      }
+      check_rate_limit: {
+        Args: {
+          p_action: string
+          p_max: number
+          p_subject: string
+          p_window_seconds: number
+        }
+        Returns: boolean
       }
       claim_notification_emails: {
         Args: { p_lease_seconds?: number; p_limit?: number }

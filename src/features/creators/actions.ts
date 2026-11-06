@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { creatorProfileSchema } from "@/domain/creators/schemas";
 import { firstFieldErrors, formString, type ActionState } from "@/lib/forms/action-state";
+import { hitRateLimit, RATE_LIMITED_MESSAGE } from "@/lib/rate-limit";
 import { createClient } from "@/lib/supabase/server";
 
 import { cleanFileName, validateMediaKit } from "./media-kit";
@@ -62,6 +63,7 @@ export async function uploadMediaKit(_previous: ActionState, formData: FormData)
   const { data: claims } = await supabase.auth.getClaims();
   const userId = claims?.claims?.sub;
   if (!userId) redirect("/login");
+  if (!(await hitRateLimit("uploadPerUser", userId))) return { status: "error", message: RATE_LIMITED_MESSAGE };
 
   const path = `${userId}/media-kit-${Date.now()}.pdf`;
   const upload = await supabase.storage.from("media-kits").upload(path, file, { contentType: "application/pdf", upsert: false });

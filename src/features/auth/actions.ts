@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 
 import { getPublicEnv } from "@/lib/env";
+import { clientIp, hitRateLimit, RATE_LIMITED_MESSAGE } from "@/lib/rate-limit";
 import { firstFieldErrors, formString, type ActionState } from "@/lib/forms/action-state";
 import { createClient } from "@/lib/supabase/server";
 import { safeRedirectPath } from "@/lib/utils/safe-redirect";
@@ -43,6 +44,11 @@ export async function signIn(
     };
   }
 
+  const ip = await clientIp();
+  if (!(await hitRateLimit("signInPerIp", ip)) || !(await hitRateLimit("signInPerEmail", parsed.data.email))) {
+    return { status: "error", message: RATE_LIMITED_MESSAGE, values };
+  }
+
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({
     email: parsed.data.email,
@@ -77,6 +83,10 @@ export async function signUp(
   }
 
   const { siteUrl } = getPublicEnv();
+  if (!(await hitRateLimit("signUpPerIp", await clientIp()))) {
+    return { status: "error", message: RATE_LIMITED_MESSAGE, values };
+  }
+
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signUp({
     email: parsed.data.email,
@@ -119,6 +129,9 @@ export async function requestPasswordReset(
   }
 
   const { siteUrl } = getPublicEnv();
+  if (!(await hitRateLimit("passwordResetPerIp", await clientIp())) || !(await hitRateLimit("passwordResetPerEmail", parsed.data.email))) {
+    return { status: "error", message: RATE_LIMITED_MESSAGE, values };
+  }
   const supabase = await createClient();
   const { error } = await supabase.auth.resetPasswordForEmail(parsed.data.email, {
     redirectTo: `${siteUrl}/auth/confirm?next=/reset-password`,
@@ -180,6 +193,7 @@ export async function changeEmail(
   const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
   if (!data.user) redirect("/login");
+  if (!(await hitRateLimit("changeEmailPerUser", data.user.id))) return { status: "error", message: RATE_LIMITED_MESSAGE };
   if (data.user.email?.toLowerCase() === parsed.data.email) {
     return { status: "error", message: "Check the highlighted fields.", fieldErrors: { email: "That is already your email address" } };
   }
@@ -214,6 +228,7 @@ export async function changePassword(
   const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
   if (!data.user?.email) redirect("/login");
+  if (!(await hitRateLimit("changePasswordPerUser", data.user.id))) return { status: "error", message: RATE_LIMITED_MESSAGE };
 
   // Re-checking the current password on this session also refreshes it, which satisfies "secure
   // password change" (recent sign-in). Supabase then signs out every other session, not this one.

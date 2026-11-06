@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 
 import { getPublicEnv } from "@/lib/env";
 import type { Database } from "./database.types";
+import { fetchWithTimeout } from "./fetch-with-timeout";
 
 /**
  * Service-role client. Bypasses RLS, so it is used only by trusted server-side jobs that call
@@ -15,5 +16,6 @@ export function createServiceClient() {
   if (!secretKey) return null;
   return createClient<Database>(getPublicEnv().supabaseUrl, secretKey, {
     auth: { persistSession: false, autoRefreshToken: false },
+    global: { fetch: fetchWithTimeout },
   });
 }

@@ -48,6 +48,17 @@ each result. It only processes queued notification rows — it can't send arbitr
   `.env.example`), and call the endpoint from a scheduler every minute (e.g. Vercel Cron, or Supabase `pg_cron` +
   `pg_net`). Without SMTP configured the endpoint returns 503 and emails stay `pending`.
 
+## Rate limits
+
+- **Data API writes** (every `POST`/`PATCH`/`DELETE` by a signed-in user, from server actions or directly) are
+  counted per user and endpoint in the database's PostgREST pre-request hook: 120/min by default, stricter
+  per-endpoint rules in `rate_limit_rules` (e.g. 30 applications/hour). Over the limit → HTTP 429 `rate_limited`.
+- **Sign-in / sign-up / password reset / password and email changes / uploads** are limited in the app
+  (`src/lib/rate-limit.ts`) by client IP, email or user, through `check_rate_limit` (service-role only).
+  These calls reach Supabase Auth from the server, so Supabase's own per-IP limits see the server's IP.
+- Requires `SUPABASE_SECRET_KEY`; without it the app-level limits are disabled (logged at startup).
+- Per-IP limits trust `TRUSTED_IP_HEADER` (default `x-forwarded-for`); deploy behind a proxy that sets it.
+
 ## Scripts
 
 | Script | What it does |

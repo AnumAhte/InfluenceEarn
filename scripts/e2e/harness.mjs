@@ -85,6 +85,8 @@ async function http(method, path, init, label = `${method} ${path}`) {
 
 export class Session {
   jar = new Map();
+  // Each session looks like a separate client to the app's per-IP rate limits (x-forwarded-for).
+  ip = `10.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}`;
   store(res) {
     for (const c of res.headers.getSetCookie()) {
       const [pair] = c.split(";");
@@ -95,7 +97,7 @@ export class Session {
   }
   cookie() { return [...this.jar].map(([k, v]) => `${k}=${v}`).join("; "); }
   async get(path) {
-    const { res, text } = await http("GET", path, { headers: { cookie: this.cookie() } });
+    const { res, text } = await http("GET", path, { headers: { cookie: this.cookie(), "x-forwarded-for": this.ip } });
     this.store(res);
     return { status: res.status, location: res.headers.get("location"), text };
   }
@@ -105,7 +107,7 @@ export class Session {
     const id = ACTION[name];
     if (!id) throw new Error(`No server action "${name}" in ${MANIFEST} (is the app built/compiled for MODE=${MODE}?)`);
     let body;
-    const headers = { "Next-Action": id, cookie: this.cookie(), Accept: "text/x-component" };
+    const headers = { "Next-Action": id, cookie: this.cookie(), Accept: "text/x-component", "x-forwarded-for": this.ip };
     const formIndex = args.findIndex((a) => a instanceof FormData);
     if (formIndex === -1) {
       body = JSON.stringify(args);

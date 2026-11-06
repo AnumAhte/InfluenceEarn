@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { firstFieldErrors, formString, type ActionState } from "@/lib/forms/action-state";
+import { hitRateLimit, RATE_LIMITED_MESSAGE } from "@/lib/rate-limit";
 import { createClient } from "@/lib/supabase/server";
 import { safeRedirectPath } from "@/lib/utils/safe-redirect";
 
@@ -93,6 +94,7 @@ export async function saveProfile(
   let newAvatarPath: string | undefined;
   const avatar = formData.get("avatar");
   if (avatar instanceof File && avatar.size > 0) {
+    if (!(await hitRateLimit("uploadPerUser", userId))) return { status: "error", message: RATE_LIMITED_MESSAGE, values };
     const check = validateAvatarFile(avatar);
     if (!check.ok) {
       return { status: "error", message: check.error, fieldErrors: { avatar: check.error }, values };

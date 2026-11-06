@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 
 import { getPublicEnv } from "@/lib/env";
 import type { Database } from "./database.types";
+import { fetchWithTimeout } from "./fetch-with-timeout";
 
 /**
  * Supabase client for Server Components, Server Actions and Route Handlers.
@@ -15,6 +16,7 @@ export async function createClient() {
   const { supabaseUrl, supabasePublishableKey } = getPublicEnv();
 
   return createServerClient<Database>(supabaseUrl, supabasePublishableKey, {
+    global: { fetch: fetchWithTimeout },
     cookies: {
       getAll() {
         return cookieStore.getAll();
