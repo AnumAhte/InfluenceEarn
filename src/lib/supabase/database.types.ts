@@ -1416,6 +1416,61 @@ export type Database = {
           },
         ]
       }
+      user_suspensions: {
+        Row: {
+          id: string
+          lift_reason: string | null
+          lifted_at: string | null
+          lifted_by: string | null
+          reason: string
+          suspended_at: string
+          suspended_by: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          lift_reason?: string | null
+          lifted_at?: string | null
+          lifted_by?: string | null
+          reason: string
+          suspended_at?: string
+          suspended_by: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          lift_reason?: string | null
+          lifted_at?: string | null
+          lifted_by?: string | null
+          reason?: string
+          suspended_at?: string
+          suspended_by?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_suspensions_lifted_by_fkey"
+            columns: ["lifted_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_suspensions_suspended_by_fkey"
+            columns: ["suspended_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_suspensions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       wallet_accounts: {
         Row: {
           campaign_id: string | null
@@ -1644,6 +1699,27 @@ export type Database = {
         }
         Returns: string
       }
+      admin_get_user_email: { Args: { p_user_id: string }; Returns: string }
+      admin_list_users: {
+        Args: {
+          p_filter?: string
+          p_limit?: number
+          p_offset?: number
+          p_search?: string
+        }
+        Returns: {
+          active_workspace: Database["public"]["Enums"]["workspace_role"]
+          applications_count: number
+          campaigns_count: number
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          is_admin: boolean
+          suspended_at: string
+          total_count: number
+        }[]
+      }
       application_transition_allowed: {
         Args: {
           _from: Database["public"]["Enums"]["application_status"]
@@ -1782,6 +1858,7 @@ export type Database = {
       }
       is_admin: { Args: never; Returns: boolean }
       is_campaign_owner: { Args: { _campaign_id: string }; Returns: boolean }
+      is_user_suspended: { Args: { _user_id: string }; Returns: boolean }
       mark_notifications_read: { Args: { p_ids?: string[] }; Returns: number }
       my_campaign_eligibility: {
         Args: { p_campaign_id: string }
@@ -1849,6 +1926,7 @@ export type Database = {
           status: Database["public"]["Enums"]["payment_transaction_status"]
         }[]
       }
+      reject_suspended_requests: { Args: never; Returns: undefined }
       request_campaign_funding: {
         Args: { p_campaign_id: string }
         Returns: Database["public"]["Enums"]["campaign_status"]
@@ -1905,6 +1983,14 @@ export type Database = {
       }
       submit_task_completion: {
         Args: { p_assignment_id: string; p_items: Json; p_note?: string }
+        Returns: string
+      }
+      suspend_user: {
+        Args: { p_reason: string; p_user_id: string }
+        Returns: string
+      }
+      unsuspend_user: {
+        Args: { p_reason?: string; p_user_id: string }
         Returns: string
       }
     }
@@ -1976,6 +2062,8 @@ export type Database = {
         | "payout_ready"
         | "payout_released"
         | "campaign_refunded"
+        | "account_suspended"
+        | "account_reinstated"
       payment_transaction_status:
         | "pending"
         | "processing"
@@ -2199,6 +2287,8 @@ export const Constants = {
         "payout_ready",
         "payout_released",
         "campaign_refunded",
+        "account_suspended",
+        "account_reinstated",
       ],
       payment_transaction_status: [
         "pending",

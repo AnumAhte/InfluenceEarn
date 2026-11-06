@@ -17,6 +17,8 @@ export function authErrorMessage(code: string | undefined, fallback = "Something
       return "Too many attempts. Please wait a minute and try again.";
     case "signup_disabled":
       return "New sign-ups are currently disabled.";
+    case "user_banned":
+      return "This account has been suspended. Contact the InfluencEarn team if you think this is a mistake.";
     case "reauthentication_needed":
       return "For security, please sign in again before changing your password.";
     default:
@@ -28,4 +30,5 @@ export function authErrorMessage(code: string | undefined, fallback = "Something
 export const LOGIN_NOTICE: Record<string, string> = {
   link_invalid: "That link is invalid or has expired. Request a new one and try again.",
   session_expired: "Your session has ended. Please sign in again.",
+  account_suspended: "This account has been suspended, so you have been signed out. Contact the InfluencEarn team if you think this is a mistake.",
 };

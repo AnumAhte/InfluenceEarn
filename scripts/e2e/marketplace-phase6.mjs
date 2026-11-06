@@ -2,7 +2,7 @@
 // account settings and rate limits, through the real app.
 //
 // Runs in both modes. Run from the repo root: MODE=prod node scripts/e2e/marketplace-phase6.mjs
-import { APP, PASSWORD, PUBLISHABLE_KEY, SUPABASE_URL, Session, check, createClient, createFundedCampaign, envLocal, finish, form, mailpitMessage, mailpitMessages, newUser, psql, runEmailWorker } from "./harness.mjs";
+import { APP, MODE, PASSWORD, PUBLISHABLE_KEY, SUPABASE_URL, Session, check, createClient, createFundedCampaign, envLocal, finish, form, isNotFound, mailpitMessage, mailpitMessages, newUser, psql, runEmailWorker } from "./harness.mjs";
 
 // ── Legal pages (drafts) ──
 const guest = new Session();
@@ -135,5 +135,80 @@ check("confirmation links go to both the current and the new address", Boolean(o
 for (const link of [oldLink, newLink].filter(Boolean)) { const u = new URL(link); await acct.get(u.pathname + u.search); }
 check("after both confirmations the account uses the new email", psql(`select count(*) from auth.users where email = '${newEmail}'`) === "1");
 check("the new email signs in", !(await signer.auth.signInWithPassword({ email: newEmail, password: "new-horse-battery-9" })).error);
+
+// ── Admin pages ──
+const admin = await newUser("admin6", "advertiser", "Ops Admin");
+psql(`insert into user_roles (user_id, role) select id, 'admin' from auth.users where email = '${admin.email}'`);
+for (const [path, text] of [
+  ["/admin/users", "Every account on the platform"],
+  ["/admin/campaigns", "Phase6 Email Campaign"],
+  ["/admin/reviews", "Task reviews"],
+  ["/admin/transactions", "Campaign funding"],
+  ["/admin/settings", "Campaign funding"],
+]) {
+  r = await admin.get(path);
+  check(`admin can open ${path}`, r.status === 200 && r.text.includes(text), r.status);
+}
+r = await admin.get(`/admin/users?q=${encodeURIComponent(adv.email)}`);
+check("admin user search finds a user by email", r.text.includes(adv.email) && !r.text.includes(kitCreator.email));
+r = await admin.get("/admin/settings");
+check(`system status reports funding as ${MODE === "prod" ? "unavailable" : "development mock"}`, r.text.includes(MODE === "prod" ? "Unavailable" : "Development mock"));
+r = await adv.get("/admin/users");
+check("non-admins get a 404 for admin pages", isNotFound(r), r.status);
+
+// ── Suspension ──
+const victim = await newUser("victim6", "advertiser", "Suspended Advertiser");
+const victimCampaign = await createFundedCampaign(victim, "Phase6 Suspended Owner Campaign");
+const victimId = psql(`select id from auth.users where email = '${victim.email}'`);
+const adminId = psql(`select id from auth.users where email = '${admin.email}'`);
+const sbVictim = createClient(SUPABASE_URL, PUBLISHABLE_KEY, { auth: { persistSession: false } });
+await sbVictim.auth.signInWithPassword({ email: victim.email, password: PASSWORD });
+const walletBefore = psql(`select coalesce(sum(balance_cents), 0) from wallet_account_balances b join wallet_accounts a on a.id = b.account_id where a.owner_id = '${victimId}'`);
+
+r = await admin.get(`/admin/users/${victimId}`);
+check("user detail shows the email and the suspend form", r.text.includes(victim.email) && r.text.includes("Suspend account"));
+r = await admin.action(`/admin/users/${victimId}`, "suspendUser", [{ status: "idle" }, form({ userId: victimId, reason: "" })]);
+check("suspending without a reason is refused", r.text.includes("at least 5 characters"), r.text.slice(0, 200));
+r = await admin.action(`/admin/users/${adminId}`, "suspendUser", [{ status: "idle" }, form({ userId: adminId, reason: "Testing self suspension" })]);
+check("an admin cannot suspend themselves", r.text.includes("can't suspend your own account"), r.text.slice(0, 200));
+r = await victim.action(`/admin/users/${adminId}`, "suspendUser", [{ status: "idle" }, form({ userId: adminId, reason: "Not an admin trying" })]);
+check("a non-admin cannot call the suspend action", r.text.includes("Only an active admin"), r.text.slice(0, 200));
+r = await admin.action(`/admin/users/${victimId}`, "suspendUser", [{ status: "idle" }, form({ userId: victimId, reason: "Fake proof links on several campaigns" })]);
+check("an admin suspends the user with a reason", r.text.includes("Account suspended"), r.text.slice(0, 200));
+
+r = await victim.get("/dashboard");
+check("the suspended user's open session is sent to sign-out", r.status === 307 && r.location?.includes("/auth/suspended") || r.text.includes("/auth/suspended"), `${r.status} ${r.location}`);
+r = await victim.get("/auth/suspended");
+check("sign-out explains the suspension", r.location?.includes("/login?error=account_suspended"), `${r.status} ${r.location}`);
+r = await victim.get("/login?error=account_suspended");
+check("the login page shows the suspension notice", r.text.includes("This account has been suspended"));
+r = await victim.get("/dashboard");
+check("after sign-out the dashboard requires login", r.status === 307 && r.location?.startsWith("/login"), `${r.status} ${r.location}`);
+r = await new Session().action("/login", "signIn", [{ status: "idle" }, form({ email: victim.email, password: PASSWORD })]);
+check("signing in again is refused with a suspension message", r.text.includes("This account has been suspended"), r.text.slice(0, 200));
+let api = await sbVictim.from("campaigns").select("id");
+check("a still-valid access token is rejected by the API", api.error?.message === "account_suspended", JSON.stringify(api.error ?? api.data));
+api = await sbVictim.rpc("record_test_deposit", { p_amount_cents: 100, p_currency: "USD", p_provider_reference: "mock_susp", p_status: "succeeded", p_idempotency_key: "susp-key-0001" });
+check("a suspended user cannot call database functions", api.error?.message === "account_suspended", JSON.stringify(api.error));
+api = await sbVictim.storage.from("media-kits").upload(`${victimId}/x.pdf`, new Blob(["%PDF-1.4"], { type: "application/pdf" }));
+check("a suspended user cannot upload files", Boolean(api.error));
+
+check("the user's campaign is left as it was", psql(`select status from campaigns where id = '${victimCampaign.campaignId}'`) === "applications_open");
+check("the user's wallet balance is unchanged", psql(`select coalesce(sum(balance_cents), 0) from wallet_account_balances b join wallet_accounts a on a.id = b.account_id where a.owner_id = '${victimId}'`) === walletBefore);
+r = await admin.get("/admin/users?filter=suspended");
+check("the user is listed under Suspended", r.text.includes(victim.email));
+r = await admin.get("/admin/activity");
+check("the activity log shows the suspension and reason", r.text.includes("Suspended account") && r.text.includes("Fake proof links on several campaigns"));
+worker = await runEmailWorker();
+check("the account notice is emailed even though the account is suspended", (await mailpitMessages(victim.email)).some((m) => m.Subject === "Your InfluencEarn account has been suspended"));
+
+r = await admin.action(`/admin/users/${victimId}`, "unsuspendUser", [{ status: "idle" }, form({ userId: victimId, reason: "Appeal accepted" })]);
+check("an admin reinstates the user", r.text.includes("Account reinstated"), r.text.slice(0, 200));
+const again = new Session();
+r = await again.action("/login", "signIn", [{ status: "idle" }, form({ email: victim.email, password: PASSWORD })]);
+r = await again.get("/dashboard");
+check("the reinstated user can sign in and use the app", r.status === 200, `${r.status} ${r.location}`);
+r = await admin.get(`/admin/users/${victimId}`);
+check("suspension history shows who reinstated and why", r.text.includes("Reinstated") && r.text.includes("Appeal accepted"));
 
 finish();

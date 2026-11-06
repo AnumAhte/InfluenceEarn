@@ -68,18 +68,18 @@ export const NAVIGATION: Record<ShellArea, readonly NavGroup[]> = {
   admin: [
     [
       { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
-      { label: "Users", href: null, icon: Users },
-      { label: "Campaigns", href: null, icon: BriefcaseBusiness },
-      { label: "Task reviews", href: null, icon: ClipboardCheck },
+      { label: "Users", href: "/admin/users", icon: Users },
+      { label: "Campaigns", href: "/admin/campaigns", icon: BriefcaseBusiness },
+      { label: "Task reviews", href: "/admin/reviews", icon: ClipboardCheck },
       { label: "Payouts", href: "/admin/payouts", icon: HandCoins },
       { label: "Activity log", href: "/admin/activity", icon: History },
-      { label: "Transactions", href: null, icon: Receipt },
+      { label: "Transactions", href: "/admin/transactions", icon: Receipt },
     ],
     [
       { label: "Notifications", href: "/notifications", icon: Bell },
       { label: "Email preferences", href: "/settings/notifications", icon: Mail },
       { label: "Account & security", href: "/settings/account", icon: ShieldCheck },
-      { label: "Settings", href: null, icon: Settings },
+      { label: "System status", href: "/admin/settings", icon: Settings },
     ],
   ],
 };
