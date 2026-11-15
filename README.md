@@ -79,6 +79,8 @@ rendered dynamically so the nonce can be applied. Styles allow `'unsafe-inline'`
 | `npm run db:test` | pgTAP RLS tests in `supabase/tests` |
 | `npm run db:types` | Regenerate `src/lib/supabase/database.types.ts` |
 | `npm run check` | lint + typecheck + unit tests |
+| `npm run e2e:prod` / `e2e:dev` | End-to-end suites over HTTP (app on :3100, local Supabase; see `scripts/e2e/harness.mjs`) |
+| `npm run qa:seed` / `qa:pages` / `qa:flows` | Browser QA in Chrome against the production build (see `scripts/qa/`) |
 
 ## Granting the admin role
 
