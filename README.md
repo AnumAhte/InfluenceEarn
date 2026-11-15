@@ -59,6 +59,14 @@ each result. It only processes queued notification rows — it can't send arbitr
 - Requires `SUPABASE_SECRET_KEY`; without it the app-level limits are disabled (logged at startup).
 - Per-IP limits trust `TRUSTED_IP_HEADER` (default `x-forwarded-for`); deploy behind a proxy that sets it.
 
+## Security headers
+
+`src/proxy.ts` sends a per-request Content-Security-Policy (`src/lib/security/csp.ts`): scripts only with the
+request's nonce (`'strict-dynamic'`, no inline or injected scripts; `'unsafe-eval'` in development only), images
+and requests only to this site and the Supabase project, no framing, plugins or foreign form targets. Every page is
+rendered dynamically so the nonce can be applied. Styles allow `'unsafe-inline'` (style attributes can't carry a nonce).
+`next.config.ts` adds nosniff, `X-Frame-Options: DENY`, a referrer policy and a permissions policy.
+
 ## Scripts
 
 | Script | What it does |

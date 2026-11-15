@@ -15,6 +15,17 @@ for (const [path, title] of [["/terms", "Terms of Service"], ["/privacy", "Priva
 }
 let r = await guest.get("/");
 check("landing footer links to Terms and Privacy", r.text.includes('href="/terms"') && r.text.includes('href="/privacy"'));
+{
+  const res = await fetch(`${APP}/`);
+  const csp = res.headers.get("content-security-policy") ?? "";
+  const nonce = (csp.match(/'nonce-([^']+)'/) ?? [])[1];
+  const html = await res.text();
+  check("pages send a Content-Security-Policy with a script nonce", Boolean(nonce) && csp.includes("'strict-dynamic'") && csp.includes("frame-ancestors 'none'"), csp);
+  check("Next.js scripts carry the request's nonce", Boolean(nonce) && html.includes(`nonce="${nonce}"`));
+  check(`production CSP has no unsafe-eval (MODE=${MODE})`, MODE === "dev" ? csp.includes("'unsafe-eval'") : !csp.includes("unsafe-eval"));
+  const again = (await fetch(`${APP}/`)).headers.get("content-security-policy") ?? "";
+  check("the nonce changes on every request", Boolean(nonce) && !again.includes(nonce));
+}
 r = await guest.get("/signup");
 check("sign-up links to the draft documents without 'you agree' wording", r.text.includes('href="/terms"') && !/you agree/i.test(r.text));
 
@@ -228,7 +239,7 @@ const sbRl = createClient(SUPABASE_URL, PUBLISHABLE_KEY, { auth: { persistSessio
 await sbRl.auth.signInWithPassword({ email: rl.email, password: PASSWORD });
 let lastWrite;
 for (let i = 0; i < 31; i++) {
-  lastWrite = await sbRl.rpc("record_test_deposit", { p_amount_cents: 100, p_currency: "USD", p_provider_reference: `mock_rl_${i}`, p_status: "succeeded", p_idempotency_key: `rate-limit-key-${i}-${Date.now()}` });
+  lastWrite = await sbRl.rpc("record_test_deposit", { p_amount_cents: 100, p_currency: "USD", p_provider_reference: `mock_rl_${Date.now()}_${i}`, p_status: "succeeded", p_idempotency_key: `rate-limit-key-${i}-${Date.now()}` });
 }
 check("direct Data API writes over the endpoint limit get 429 rate_limited", lastWrite.error?.message === "rate_limited" && lastWrite.status === 429, `${lastWrite.status} ${lastWrite.error?.message}`);
 check("writes within the limit were not affected", psql(`select count(*) from payment_transactions p join auth.users u on u.id = p.user_id where u.email = '${rl.email}'`) === "30");
