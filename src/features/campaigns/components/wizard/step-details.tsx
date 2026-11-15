@@ -15,23 +15,23 @@ import {
   type CreatorGender,
 } from "@/domain/campaigns/catalog";
 import type { CampaignDraftInput } from "@/domain/campaigns/schemas";
-import { countryOptions } from "@/domain/geo/countries";
+import type { CountryOption } from "@/domain/geo/countries";
 import { cn } from "@/lib/utils/cn";
 
 import { ChipGroup, FieldError, WizardSection } from "./fields";
 
 const FOLLOWER_OPTIONS = [1_000, 5_000, 10_000, 25_000, 50_000, 100_000, 250_000, 500_000, 1_000_000];
-const COUNTRIES = countryOptions();
 
 type Errors = Record<string, string | undefined>;
 
-function toNumberOrNull(value: string) {
-  if (value.trim() === "") return null;
+// react-hook-form also passes the default value (a number or null), not only input strings.
+function toNumberOrNull(value: unknown) {
+  if (value === null || value === undefined || String(value).trim() === "") return null;
   const parsed = Number(value);
   return Number.isFinite(parsed) ? Math.trunc(parsed) : null;
 }
 
-export function StepDetails({ errors }: { errors: Errors }) {
+export function StepDetails({ errors, countries }: { errors: Errors; countries: CountryOption[] }) {
   const { register, control, setValue } = useFormContext<CampaignDraftInput>();
   const [description, categorySlug, campaignType, genders, creatorCategories] = useWatch({
     control,
@@ -105,7 +105,7 @@ export function StepDetails({ errors }: { errors: Errors }) {
             <label htmlFor="minFollowers" className="text-[13px] font-semibold">Minimum followers</label>
             <Select
               id="minFollowers"
-              {...register("eligibility.minFollowers", { setValueAs: (v: string) => toNumberOrNull(v) })}
+              {...register("eligibility.minFollowers", { setValueAs: toNumberOrNull })}
             >
               <option value="">No minimum</option>
               {FOLLOWER_OPTIONS.map((n) => (
@@ -117,9 +117,9 @@ export function StepDetails({ errors }: { errors: Errors }) {
           <div className="flex flex-col gap-[7px]">
             <span className="text-[13px] font-semibold" id="age-label">Age range</span>
             <div className="flex items-center gap-2" role="group" aria-labelledby="age-label">
-              <Input type="number" inputMode="numeric" min={13} max={100} placeholder="Min" aria-label="Minimum age" {...register("eligibility.ageMin", { setValueAs: (v: string) => toNumberOrNull(v) })} />
+              <Input type="number" inputMode="numeric" min={13} max={100} placeholder="Min" aria-label="Minimum age" {...register("eligibility.ageMin", { setValueAs: toNumberOrNull })} />
               <span aria-hidden className="text-ink-muted">–</span>
-              <Input type="number" inputMode="numeric" min={13} max={100} placeholder="Max" aria-label="Maximum age" {...register("eligibility.ageMax", { setValueAs: (v: string) => toNumberOrNull(v) })} />
+              <Input type="number" inputMode="numeric" min={13} max={100} placeholder="Max" aria-label="Maximum age" {...register("eligibility.ageMax", { setValueAs: toNumberOrNull })} />
             </div>
             <FieldError message={errors["eligibility.ageMin"] ?? errors["eligibility.ageMax"]} />
           </div>
@@ -160,7 +160,7 @@ export function StepDetails({ errors }: { errors: Errors }) {
               {locations.fields.map((field, index) => (
                 <li key={field.id} className="grid grid-cols-[1fr_auto] gap-2 sm:grid-cols-[1.2fr_1fr_auto]">
                   <Select aria-label={`Country ${index + 1}`} {...register(`eligibility.locations.${index}.countryCode`)}>
-                    {COUNTRIES.map((c) => (
+                    {countries.map((c) => (
                       <option key={c.code} value={c.code}>{c.name}</option>
                     ))}
                   </Select>

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import type { ActionState } from "@/lib/forms/action-state";
@@ -36,7 +37,8 @@ export async function suspendUser(_previous: ActionState, formData: FormData): P
   if (error) return { status: "error", message: describe(error.message) };
 
   revalidatePath("/admin/users", "layout");
-  return { status: "success", message: "Account suspended. The user has been signed out everywhere." };
+  // The page switches to the reinstate form, so the confirmation travels in the URL.
+  redirect(`/admin/users/${parsed.data.userId}?notice=suspended`);
 }
 
 const unsuspendSchema = z.object({ userId: z.uuid(), reason: z.string().trim().max(500).optional() });
@@ -50,5 +52,5 @@ export async function unsuspendUser(_previous: ActionState, formData: FormData):
   if (error) return { status: "error", message: describe(error.message) };
 
   revalidatePath("/admin/users", "layout");
-  return { status: "success", message: "Account reinstated. The user can sign in again." };
+  redirect(`/admin/users/${parsed.data.userId}?notice=reinstated`);
 }

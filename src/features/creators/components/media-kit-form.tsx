@@ -33,7 +33,7 @@ export function MediaKitForm({ mediaKit }: { mediaKit: MediaKit | null }) {
             ) : (
               <span className="truncate text-sm font-[550]">{mediaKit.fileName}</span>
             )}
-            <span className="text-xs text-ink-muted">{formatSize(mediaKit.sizeBytes)} · uploaded {new Date(mediaKit.uploadedAt).toLocaleDateString("en-US", { dateStyle: "medium" })}</span>
+            <span className="text-xs text-ink-muted">{formatSize(mediaKit.sizeBytes)} · uploaded {new Date(mediaKit.uploadedAt).toLocaleDateString("en-US", { dateStyle: "medium", timeZone: "UTC" })}</span>
           </div>
           <form action={remove}>
             <SubmitButton variant="secondary" size="sm" pendingLabel="Removing…">Remove</SubmitButton>

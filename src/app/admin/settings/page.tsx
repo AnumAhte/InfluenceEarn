@@ -74,7 +74,7 @@ export default async function AdminSettingsPage() {
                 <span className="text-sm font-[650]">{row.label}</span>
                 <span className="text-[13px] leading-relaxed text-ink-muted">{row.detail}</span>
               </span>
-              <StatusBadge tone={row.tone}>{row.value}</StatusBadge>
+              <StatusBadge tone={row.tone} className="self-start">{row.value}</StatusBadge>
             </li>
           ))}
         </ul>

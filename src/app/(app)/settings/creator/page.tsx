@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { Card } from "@/components/ui/card";
 import { latestAllowedBirthDate } from "@/domain/creators/schemas";
+import { countryOptions } from "@/domain/geo/countries";
 import { requireOnboardedAccount } from "@/features/account/queries";
 import { CreatorDetailsForm } from "@/features/creators/components/creator-details-form";
 import { MediaKitForm } from "@/features/creators/components/media-kit-form";
@@ -22,7 +23,7 @@ export default async function CreatorDetailsPage() {
         description="Some campaigns target a location, age, gender or category. Fill in what applies to you — it's all optional."
       />
       <Card className="px-5 py-6 sm:px-8 sm:py-8">
-        <CreatorDetailsForm details={details} maxBirthDate={latestAllowedBirthDate(today)} />
+        <CreatorDetailsForm details={details} maxBirthDate={latestAllowedBirthDate(today)} countries={countryOptions()} />
       </Card>
       <Card className="flex flex-col gap-4 px-5 py-6 sm:px-8 sm:py-8">
         <div className="flex flex-col gap-1">

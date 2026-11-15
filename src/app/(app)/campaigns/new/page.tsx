@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { emptyDraft } from "@/domain/campaigns/schemas";
+import { countryOptions } from "@/domain/geo/countries";
 import { CampaignWizard } from "@/features/campaigns/components/wizard/campaign-wizard";
 
 export const metadata: Metadata = { title: "New campaign" };
@@ -15,7 +16,7 @@ export default function NewCampaignPage() {
         <span aria-hidden> / </span>
         <span aria-current="page">New campaign</span>
       </nav>
-      <CampaignWizard initialValues={emptyDraft()} campaignId={null} today={today} />
+      <CampaignWizard initialValues={emptyDraft()} campaignId={null} today={today} countries={countryOptions()} />
     </div>
   );
 }

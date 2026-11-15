@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 
+import { Callout } from "@/components/ui/callout";
 import { Card } from "@/components/ui/card";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { requireAdmin } from "@/features/account/queries";
@@ -15,9 +16,16 @@ import type { AssignmentStatus } from "@/domain/tasks/assignment";
 
 export const metadata: Metadata = { title: "User" };
 
-export default async function AdminUserPage({ params }: PageProps<"/admin/users/[id]">) {
+const NOTICES: Record<string, string> = {
+  suspended: "Account suspended. The user has been signed out everywhere and can't sign in.",
+  reinstated: "Account reinstated. The user can sign in again.",
+};
+
+export default async function AdminUserPage({ params, searchParams }: PageProps<"/admin/users/[id]">) {
   const admin = await requireAdmin();
   const { id } = await params;
+  const { notice } = await searchParams;
+  const noticeText = typeof notice === "string" ? NOTICES[notice] : undefined;
   if (!z.uuid().safeParse(id).success) notFound();
   const user = await getUserDetail(id);
   if (!user) notFound();
@@ -32,6 +40,12 @@ export default async function AdminUserPage({ params }: PageProps<"/admin/users/
         <span aria-hidden> / </span>
         <span aria-current="page">{name}</span>
       </nav>
+
+      {noticeText ? (
+        <Callout tone="success">
+          <span role="status">{noticeText}</span>
+        </Callout>
+      ) : null}
 
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="text-2xl font-bold tracking-[-0.03em]">{name}</h1>

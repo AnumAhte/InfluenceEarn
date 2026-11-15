@@ -185,7 +185,7 @@ check("an admin cannot suspend themselves", r.text.includes("can't suspend your 
 r = await victim.action(`/admin/users/${adminId}`, "suspendUser", [{ status: "idle" }, form({ userId: adminId, reason: "Not an admin trying" })]);
 check("a non-admin cannot call the suspend action", r.text.includes("Only an active admin"), r.text.slice(0, 200));
 r = await admin.action(`/admin/users/${victimId}`, "suspendUser", [{ status: "idle" }, form({ userId: victimId, reason: "Fake proof links on several campaigns" })]);
-check("an admin suspends the user with a reason", r.text.includes("Account suspended"), r.text.slice(0, 200));
+check("an admin suspends the user with a reason", r.redirect?.includes(`/admin/users/${victimId}?notice=suspended`), `${r.redirect} ${r.text.slice(0, 200)}`);
 
 r = await victim.get("/dashboard");
 check("the suspended user's open session is sent to sign-out", r.status === 307 && r.location?.includes("/auth/suspended") || r.text.includes("/auth/suspended"), `${r.status} ${r.location}`);
@@ -214,7 +214,7 @@ worker = await runEmailWorker();
 check("the account notice is emailed even though the account is suspended", (await mailpitMessages(victim.email)).some((m) => m.Subject === "Your InfluencEarn account has been suspended"));
 
 r = await admin.action(`/admin/users/${victimId}`, "unsuspendUser", [{ status: "idle" }, form({ userId: victimId, reason: "Appeal accepted" })]);
-check("an admin reinstates the user", r.text.includes("Account reinstated"), r.text.slice(0, 200));
+check("an admin reinstates the user", r.redirect?.includes(`/admin/users/${victimId}?notice=reinstated`), `${r.redirect} ${r.text.slice(0, 200)}`);
 const again = new Session();
 r = await again.action("/login", "signIn", [{ status: "idle" }, form({ email: victim.email, password: PASSWORD })]);
 r = await again.get("/dashboard");
