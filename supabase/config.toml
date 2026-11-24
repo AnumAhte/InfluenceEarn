@@ -106,7 +106,7 @@ enabled = true
 # Port to use for the email testing server web interface.
 port = 54324
 # Uncomment to expose additional ports for testing user applications that send emails.
-# smtp_port = 54325
+smtp_port = 54325
 # pop3_port = 54326
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
@@ -256,10 +256,20 @@ content_path = "./supabase/templates/recovery.html"
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"
 
-# Uncomment to customize notification email template
-# [auth.email.notification.password_changed]
-# enabled = true
-# subject = "Your password has been changed"
+[auth.email.template.email_change]
+subject = "Confirm your new InfluencEarn email address"
+content_path = "./supabase/templates/email-change.html"
+
+# Security notices (always sent; not affected by notification email preferences).
+[auth.email.notification.password_changed]
+enabled = true
+subject = "Your InfluencEarn password was changed"
+content_path = "./supabase/templates/password-changed.html"
+
+[auth.email.notification.email_changed]
+enabled = true
+subject = "Your InfluencEarn email address was changed"
+content_path = "./supabase/templates/email-changed.html"
 # content_path = "./supabase/templates/password_changed_notification.html"
 
 [auth.sms]

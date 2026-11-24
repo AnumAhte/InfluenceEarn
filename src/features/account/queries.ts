@@ -31,6 +31,10 @@ export const getCurrentAccount = cache(async (): Promise<CurrentAccount | null> 
     supabase.rpc("is_admin"),
   ]);
 
+  // Suspended accounts are rejected by the database on every request (pre-request hook).
+  if (profileResult.error?.message === "account_suspended" || adminResult.error?.message === "account_suspended") {
+    redirect("/auth/suspended");
+  }
   if (profileResult.error || !profileResult.data) {
     throw new Error("Your profile could not be loaded.", { cause: profileResult.error });
   }

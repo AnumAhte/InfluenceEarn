@@ -33,6 +33,40 @@ Lighter local stack (skips Studio, storage, realtime, analytics):
 works only when `NODE_ENV` is not `production` **and** the local database flag set by `supabase/seed.sql` is on.
 Amounts ending in `.13` are declined, to exercise failures. No real payment provider is integrated.
 
+## Notification emails
+
+In-app notifications are queued for email by the database. `POST /api/internal/notification-emails`
+(header `Authorization: Bearer $EMAIL_WORKER_SECRET`) sends up to 20 queued emails over SMTP and records
+each result. It only processes queued notification rows — it can't send arbitrary email.
+
+- Statuses: `pending` → `sent` (the SMTP server **accepted** it — not proof of inbox delivery), `failed`
+  (5 attempts, backoff 1/2/4/8 min) or `skipped` (opted out, unconfirmed email, or suspended).
+- Delivery is at-least-once: a crash between SMTP acceptance and recording can resend after the 2-minute lease.
+- Locally, `.env.local` points SMTP at Mailpit (`127.0.0.1:54325`, view at http://127.0.0.1:54324). Trigger a run:
+  `curl -X POST -H "Authorization: Bearer $EMAIL_WORKER_SECRET" http://localhost:3000/api/internal/notification-emails`
+- Production: set `SUPABASE_SECRET_KEY`, the `SMTP_*` variables, `EMAIL_FROM` and `EMAIL_WORKER_SECRET` (see
+  `.env.example`), and call the endpoint from a scheduler every minute (e.g. Vercel Cron, or Supabase `pg_cron` +
+  `pg_net`). Without SMTP configured the endpoint returns 503 and emails stay `pending`.
+
+## Rate limits
+
+- **Data API writes** (every `POST`/`PATCH`/`DELETE` by a signed-in user, from server actions or directly) are
+  counted per user and endpoint in the database's PostgREST pre-request hook: 120/min by default, stricter
+  per-endpoint rules in `rate_limit_rules` (e.g. 30 applications/hour). Over the limit → HTTP 429 `rate_limited`.
+- **Sign-in / sign-up / password reset / password and email changes / uploads** are limited in the app
+  (`src/lib/rate-limit.ts`) by client IP, email or user, through `check_rate_limit` (service-role only).
+  These calls reach Supabase Auth from the server, so Supabase's own per-IP limits see the server's IP.
+- Requires `SUPABASE_SECRET_KEY`; without it the app-level limits are disabled (logged at startup).
+- Per-IP limits trust `TRUSTED_IP_HEADER` (default `x-forwarded-for`); deploy behind a proxy that sets it.
+
+## Security headers
+
+`src/proxy.ts` sends a per-request Content-Security-Policy (`src/lib/security/csp.ts`): scripts only with the
+request's nonce (`'strict-dynamic'`, no inline or injected scripts; `'unsafe-eval'` in development only), images
+and requests only to this site and the Supabase project, no framing, plugins or foreign form targets. Every page is
+rendered dynamically so the nonce can be applied. Styles allow `'unsafe-inline'` (style attributes can't carry a nonce).
+`next.config.ts` adds nosniff, `X-Frame-Options: DENY`, a referrer policy and a permissions policy.
+
 ## Scripts
 
 | Script | What it does |
@@ -45,6 +79,8 @@ Amounts ending in `.13` are declined, to exercise failures. No real payment prov
 | `npm run db:test` | pgTAP RLS tests in `supabase/tests` |
 | `npm run db:types` | Regenerate `src/lib/supabase/database.types.ts` |
 | `npm run check` | lint + typecheck + unit tests |
+| `npm run e2e:prod` / `e2e:dev` | End-to-end suites over HTTP (app on :3100, local Supabase; see `scripts/e2e/harness.mjs`) |
+| `npm run qa:seed` / `qa:pages` / `qa:flows` | Browser QA in Chrome against the production build (see `scripts/qa/`) |
 
 ## Granting the admin role
 

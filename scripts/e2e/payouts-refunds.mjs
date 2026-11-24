@@ -8,7 +8,7 @@
 // Run from the repo root: MODE=prod node scripts/e2e/payouts-refunds.mjs
 import { randomUUID } from "node:crypto";
 
-import { createClient, MODE, SUPABASE_URL, PUBLISHABLE_KEY, PASSWORD, check, finish, form, newUser, psql, sameCampaign, isNotFound } from "./harness.mjs";
+import { createClient, MODE, SUPABASE_URL, PUBLISHABLE_KEY, PASSWORD, check, finish, form, newUser, psql, sameCampaign, isNotFound, fundForTest } from "./harness.mjs";
 
 // ── Phase 5 end-to-end: payout queue, hold, release (dev only), activity log, refund ──
 console.log(`mode: ${MODE}`);
@@ -33,8 +33,7 @@ const sb = createClient(SUPABASE_URL, PUBLISHABLE_KEY, { auth: { persistSession:
 await sb.auth.signInWithPassword({ email: adv.email, password: PASSWORD });
 const key = randomUUID();
 await sb.rpc("record_test_deposit", { p_amount_cents: 9600, p_currency: "USD", p_provider_reference: `mock_${key.slice(0, 12)}`, p_status: "succeeded", p_idempotency_key: key });
-r = await adv.action(`/campaigns/${campaignId}/fund`, "fundCampaign", [{ status: "idle" }, form({ campaignId, idempotencyKey: randomUUID() })]);
-check("campaign funded ($80 budget + $16 fee)", r.redirect?.includes("funded=1"), r.text);
+check("campaign funded ($80 budget + $16 fee)", await fundForTest(adv, sb, campaignId));
 
 // Only one of the two creator slots is filled, so $40 of budget stays unused.
 const cre = await newUser("cre5", "influencer", "Bilal Creator");

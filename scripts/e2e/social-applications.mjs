@@ -4,7 +4,7 @@
 // Run from the repo root against the production build: MODE=prod node scripts/e2e/social-applications.mjs
 import { randomUUID } from "node:crypto";
 
-import { createClient, SUPABASE_URL, PUBLISHABLE_KEY, PASSWORD, check, finish, form, newUser } from "./harness.mjs";
+import { createClient, SUPABASE_URL, PUBLISHABLE_KEY, PASSWORD, check, finish, form, newUser, fundForTest } from "./harness.mjs";
 
 // ── Advertiser creates and funds a campaign (Instagram, 10k+ followers, 1 creator) ──
 const adv = await newUser("adv", "advertiser", "Brand Owner");
@@ -26,8 +26,7 @@ const sb = createClient(SUPABASE_URL, PUBLISHABLE_KEY, { auth: { persistSession:
 await sb.auth.signInWithPassword({ email: adv.email, password: PASSWORD });
 const key = randomUUID();
 await sb.rpc("record_test_deposit", { p_amount_cents: 3000, p_currency: "USD", p_provider_reference: `mock_${key.slice(0, 12)}`, p_status: "succeeded", p_idempotency_key: key });
-r = await adv.action(`/campaigns/${campaignId}/fund`, "fundCampaign", [{ status: "idle" }, form({ campaignId, idempotencyKey: randomUUID() })]);
-check("campaign funded and published", r.redirect?.includes("funded=1"), r.text);
+check("campaign funded and published", await fundForTest(adv, sb, campaignId));
 r = await adv.get("/notifications");
 check("advertiser notified: campaign funded and published", r.text.includes("Campaign funded and published"));
 

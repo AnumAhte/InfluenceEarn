@@ -733,6 +733,38 @@ export type Database = {
         }
         Relationships: []
       }
+      creator_media_kits: {
+        Row: {
+          file_name: string
+          path: string
+          size_bytes: number
+          uploaded_at: string
+          user_id: string
+        }
+        Insert: {
+          file_name: string
+          path: string
+          size_bytes: number
+          uploaded_at?: string
+          user_id: string
+        }
+        Update: {
+          file_name?: string
+          path?: string
+          size_bytes?: number
+          uploaded_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "creator_media_kits_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       creator_profile_categories: {
         Row: {
           category_slug: string
@@ -856,11 +888,49 @@ export type Database = {
           },
         ]
       }
+      notification_preferences: {
+        Row: {
+          email_applications: boolean
+          email_payments: boolean
+          email_work: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          email_applications?: boolean
+          email_payments?: boolean
+          email_work?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          email_applications?: boolean
+          email_payments?: boolean
+          email_work?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_preferences_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           body: string
           created_at: string
           data: Json
+          email_attempts: number
+          email_error: string | null
+          email_locked_until: string | null
+          email_message_id: string | null
+          email_next_attempt_at: string | null
+          email_sent_at: string | null
           email_status: Database["public"]["Enums"]["notification_email_status"]
           id: string
           link_path: string | null
@@ -873,6 +943,12 @@ export type Database = {
           body: string
           created_at?: string
           data?: Json
+          email_attempts?: number
+          email_error?: string | null
+          email_locked_until?: string | null
+          email_message_id?: string | null
+          email_next_attempt_at?: string | null
+          email_sent_at?: string | null
           email_status?: Database["public"]["Enums"]["notification_email_status"]
           id?: string
           link_path?: string | null
@@ -885,6 +961,12 @@ export type Database = {
           body?: string
           created_at?: string
           data?: Json
+          email_attempts?: number
+          email_error?: string | null
+          email_locked_until?: string | null
+          email_message_id?: string | null
+          email_next_attempt_at?: string | null
+          email_sent_at?: string | null
           email_status?: Database["public"]["Enums"]["notification_email_status"]
           id?: string
           link_path?: string | null
@@ -1132,6 +1214,45 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limit_counters: {
+        Row: {
+          action: string
+          hits: number
+          subject: string
+          window_start: string
+        }
+        Insert: {
+          action: string
+          hits?: number
+          subject: string
+          window_start: string
+        }
+        Update: {
+          action?: string
+          hits?: number
+          subject?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
+      rate_limit_rules: {
+        Row: {
+          max_hits: number
+          path: string
+          window_seconds: number
+        }
+        Insert: {
+          max_hits: number
+          path: string
+          window_seconds: number
+        }
+        Update: {
+          max_hits?: number
+          path?: string
+          window_seconds?: number
+        }
+        Relationships: []
+      }
       social_accounts: {
         Row: {
           connection_method: Database["public"]["Enums"]["social_connection_method"]
@@ -1334,6 +1455,61 @@ export type Database = {
           },
         ]
       }
+      user_suspensions: {
+        Row: {
+          id: string
+          lift_reason: string | null
+          lifted_at: string | null
+          lifted_by: string | null
+          reason: string
+          suspended_at: string
+          suspended_by: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          lift_reason?: string | null
+          lifted_at?: string | null
+          lifted_by?: string | null
+          reason: string
+          suspended_at?: string
+          suspended_by: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          lift_reason?: string | null
+          lifted_at?: string | null
+          lifted_by?: string | null
+          reason?: string
+          suspended_at?: string
+          suspended_by?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_suspensions_lifted_by_fkey"
+            columns: ["lifted_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_suspensions_suspended_by_fkey"
+            columns: ["suspended_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_suspensions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       wallet_accounts: {
         Row: {
           campaign_id: string | null
@@ -1520,7 +1696,23 @@ export type Database = {
           platform: Database["public"]["Enums"]["social_platform"]
         }[]
       }
+      _email_skip_reason: {
+        Args: {
+          _type: Database["public"]["Enums"]["notification_type"]
+          _user_id: string
+        }
+        Returns: string
+      }
       _ensure_user_wallet: { Args: { _user_id: string }; Returns: string }
+      _hit_rate_limit: {
+        Args: {
+          _action: string
+          _max: number
+          _subject: string
+          _window_seconds: number
+        }
+        Returns: boolean
+      }
       _log_admin: {
         Args: {
           _action: string
@@ -1555,6 +1747,27 @@ export type Database = {
         }
         Returns: string
       }
+      admin_get_user_email: { Args: { p_user_id: string }; Returns: string }
+      admin_list_users: {
+        Args: {
+          p_filter?: string
+          p_limit?: number
+          p_offset?: number
+          p_search?: string
+        }
+        Returns: {
+          active_workspace: Database["public"]["Enums"]["workspace_role"]
+          applications_count: number
+          campaigns_count: number
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          is_admin: boolean
+          suspended_at: string
+          total_count: number
+        }[]
+      }
       application_transition_allowed: {
         Args: {
           _from: Database["public"]["Enums"]["application_status"]
@@ -1584,6 +1797,7 @@ export type Database = {
           total: number
         }[]
       }
+      campaign_funding_available: { Args: never; Returns: boolean }
       campaign_is_editable: {
         Args: { _status: Database["public"]["Enums"]["campaign_status"] }
         Returns: boolean
@@ -1605,6 +1819,8 @@ export type Database = {
         Returns: boolean
       }
       can_view_campaign: { Args: { _campaign_id: string }; Returns: boolean }
+      can_view_media_kit: { Args: { _creator_id: string }; Returns: boolean }
+      can_view_media_kit_folder: { Args: { _folder: string }; Returns: boolean }
       can_view_submission: {
         Args: { _submission_id: string }
         Returns: boolean
@@ -1612,6 +1828,28 @@ export type Database = {
       cancel_campaign: {
         Args: { p_campaign_id: string; p_reason?: string }
         Returns: Database["public"]["Enums"]["campaign_status"]
+      }
+      check_rate_limit: {
+        Args: {
+          p_action: string
+          p_max: number
+          p_subject: string
+          p_window_seconds: number
+        }
+        Returns: boolean
+      }
+      claim_notification_emails: {
+        Args: { p_lease_seconds?: number; p_limit?: number }
+        Returns: {
+          attempt: number
+          body: string
+          link_path: string
+          notification_id: string
+          recipient_email: string
+          recipient_name: string
+          title: string
+          type: Database["public"]["Enums"]["notification_type"]
+        }[]
       }
       close_campaign_applications: {
         Args: { p_campaign_id: string }
@@ -1677,6 +1915,7 @@ export type Database = {
       }
       is_admin: { Args: never; Returns: boolean }
       is_campaign_owner: { Args: { _campaign_id: string }; Returns: boolean }
+      is_user_suspended: { Args: { _user_id: string }; Returns: boolean }
       mark_notifications_read: { Args: { p_ids?: string[] }; Returns: number }
       my_campaign_eligibility: {
         Args: { p_campaign_id: string }
@@ -1692,6 +1931,10 @@ export type Database = {
           total: number
         }[]
       }
+      notification_email_category: {
+        Args: { _type: Database["public"]["Enums"]["notification_type"] }
+        Returns: string
+      }
       platform_fee_bps: { Args: never; Returns: number }
       platform_fee_cents: {
         Args: { _creator_budget_cents: number }
@@ -1704,6 +1947,16 @@ export type Database = {
           _url: string
         }
         Returns: boolean
+      }
+      record_notification_email_result: {
+        Args: {
+          p_attempt: number
+          p_error?: string
+          p_message_id?: string
+          p_notification_id: string
+          p_sent: boolean
+        }
+        Returns: Database["public"]["Enums"]["notification_email_status"]
       }
       record_payout_result: {
         Args: {
@@ -1730,6 +1983,7 @@ export type Database = {
           status: Database["public"]["Enums"]["payment_transaction_status"]
         }[]
       }
+      reject_suspended_requests: { Args: never; Returns: undefined }
       request_campaign_funding: {
         Args: { p_campaign_id: string }
         Returns: Database["public"]["Enums"]["campaign_status"]
@@ -1786,6 +2040,14 @@ export type Database = {
       }
       submit_task_completion: {
         Args: { p_assignment_id: string; p_items: Json; p_note?: string }
+        Returns: string
+      }
+      suspend_user: {
+        Args: { p_reason: string; p_user_id: string }
+        Returns: string
+      }
+      unsuspend_user: {
+        Args: { p_reason?: string; p_user_id: string }
         Returns: string
       }
     }
@@ -1857,6 +2119,8 @@ export type Database = {
         | "payout_ready"
         | "payout_released"
         | "campaign_refunded"
+        | "account_suspended"
+        | "account_reinstated"
       payment_transaction_status:
         | "pending"
         | "processing"
@@ -2080,6 +2344,8 @@ export const Constants = {
         "payout_ready",
         "payout_released",
         "campaign_refunded",
+        "account_suspended",
+        "account_reinstated",
       ],
       payment_transaction_status: [
         "pending",

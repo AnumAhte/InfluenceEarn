@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import { headers } from "next/headers";
 
 import "./globals.css";
 
@@ -23,7 +24,9 @@ export const viewport: Viewport = {
   themeColor: "#0B2523",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  // Reading request headers renders every page dynamically, which the per-request CSP nonce needs.
+  await headers();
   return (
     <html lang="en" className={jakarta.variable}>
       <body className="min-h-dvh bg-canvas text-ink antialiased">{children}</body>

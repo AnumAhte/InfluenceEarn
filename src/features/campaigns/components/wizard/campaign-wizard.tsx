@@ -5,6 +5,7 @@ import { useState, useTransition } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
+import type { CountryOption } from "@/domain/geo/countries";
 import { Callout } from "@/components/ui/callout";
 import {
   campaignDraftSchema,
@@ -47,10 +48,12 @@ export function CampaignWizard({
   initialValues,
   campaignId: initialCampaignId,
   today,
+  countries,
 }: {
   initialValues: CampaignDraftInput;
   campaignId: string | null;
   today: string;
+  countries: CountryOption[];
 }) {
   const form = useForm<CampaignDraftInput>({ defaultValues: initialValues });
   const [step, setStep] = useState<WizardStep>(1);
@@ -161,7 +164,7 @@ export function CampaignWizard({
               </Callout>
             ) : null}
 
-            {step === 1 ? <StepDetails errors={errors} /> : null}
+            {step === 1 ? <StepDetails errors={errors} countries={countries} /> : null}
             {step === 2 ? <StepPlatformsTasks errors={errors} /> : null}
             {step === 3 ? <StepInstructions errors={errors} today={today} /> : null}
             {step === 4 ? <StepBudget errors={errors} /> : null}

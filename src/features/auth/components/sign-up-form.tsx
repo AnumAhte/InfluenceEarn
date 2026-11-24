@@ -1,11 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
 import { Field, fieldProps } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { LEGAL_DOCUMENTS_APPROVED } from "@/features/legal/status";
 import { IDLE, type ActionState } from "@/lib/forms/action-state";
 
 import { signUp } from "../actions";
@@ -91,6 +93,13 @@ export function SignUpForm() {
           {pending ? "Creating account…" : "Create account"}
         </Button>
       </form>
+
+      {/* No "you agree to" wording until the legal documents are approved (LEGAL_DOCUMENTS_APPROVED). */}
+      <p className="text-center text-[12.5px] leading-normal text-ink-muted">
+        Read our <Link href="/terms" className="font-[550] text-primary-strong hover:text-primary-hover">Terms of Service</Link> and{" "}
+        <Link href="/privacy" className="font-[550] text-primary-strong hover:text-primary-hover">Privacy Policy</Link>
+        {LEGAL_DOCUMENTS_APPROVED ? "." : " (drafts)."}
+      </p>
 
       <AuthFooterLink prompt="Already have an account?" href="/login" label="Sign in" />
     </div>

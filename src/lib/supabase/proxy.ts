@@ -4,6 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getPublicEnv } from "@/lib/env";
 import { resolveRouteAccess } from "@/lib/auth/route-access";
 import type { Database } from "./database.types";
+import { fetchWithTimeout } from "./fetch-with-timeout";
 
 /**
  * Refreshes the Supabase session cookie and applies coarse route guards.
@@ -15,6 +16,7 @@ export async function updateSession(request: NextRequest) {
   const { supabaseUrl, supabasePublishableKey } = getPublicEnv();
 
   const supabase = createServerClient<Database>(supabaseUrl, supabasePublishableKey, {
+    global: { fetch: fetchWithTimeout },
     cookies: {
       getAll() {
         return request.cookies.getAll();

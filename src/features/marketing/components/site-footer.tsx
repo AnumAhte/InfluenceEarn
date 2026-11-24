@@ -61,6 +61,10 @@ export function SiteFooter() {
         <span className="text-[12.5px] text-ink-subtle">
           © {new Date().getFullYear()} InfluencEarn. All rights reserved.
         </span>
+        <nav aria-label="Legal" className="flex gap-5">
+          <Link href="/terms" className="text-[12.5px] text-line hover:text-white">Terms of Service</Link>
+          <Link href="/privacy" className="text-[12.5px] text-line hover:text-white">Privacy Policy</Link>
+        </nav>
       </Container>
     </footer>
   );

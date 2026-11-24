@@ -51,3 +51,23 @@ export type SignInField = "email" | "password";
 export type SignUpField = "fullName" | "email" | "password" | "confirmPassword";
 export type ForgotPasswordField = "email";
 export type ResetPasswordField = "password" | "confirmPassword";
+
+export const changeEmailSchema = z.object({ email: emailSchema });
+
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, { error: "Enter your current password" }),
+    password: newPasswordSchema,
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    error: "Passwords do not match",
+  })
+  .refine((data) => data.password !== data.currentPassword, {
+    path: ["password"],
+    error: "Choose a password different from your current one",
+  });
+
+export type ChangeEmailField = "email";
+export type ChangePasswordField = "currentPassword" | "password" | "confirmPassword";

@@ -95,13 +95,18 @@ const forged = await sb.from("wallet_ledger_entries").insert({ transaction_id: r
 check("REST API refuses a forged ledger credit", Boolean(forged.error), "insert unexpectedly succeeded");
 
 r = await a.get(`/campaigns/${campaignId}/fund`);
-check("funding page now offers Fund & publish", r.text.includes("Balance after funding") && r.text.includes("idempotencyKey") && !r.text.includes("Shortfall"));
+check("production funding page says publishing is unavailable (no payment provider)", r.text.includes("Publishing unavailable") && !r.text.includes("idempotencyKey"));
 
 const fundKey = randomUUID();
 r = await a.action(`/campaigns/${campaignId}/fund`, "fundCampaign", [{ status: "idle" }, form({ campaignId, idempotencyKey: fundKey })]);
-check("Fund & Publish succeeds", r.redirect?.includes(`/campaigns/${campaignId}?funded=1`), `${r.status} ${r.redirect} ${r.text.slice(0, 200)}`);
-r = await a.action(`/campaigns/${campaignId}/fund`, "fundCampaign", [{ status: "idle" }, form({ campaignId, idempotencyKey: fundKey })]);
-check("double-submit of Fund & Publish does not error or re-charge", r.redirect?.includes(`?funded=1`), `${r.status} ${r.redirect}`);
+check("production refuses Fund & publish", !r.redirect && r.text.includes("funding_unavailable"), `${r.status} ${r.redirect} ${r.text.slice(0, 200)}`);
+
+// The local database is in test mode (seed.sql), so the owner can fund through the database function;
+// this is the same call the dev-mode action makes. A hosted database refuses it (funding_gate.test.sql).
+let fund = await sb.rpc("fund_and_publish_campaign", { p_campaign_id: campaignId, p_idempotency_key: fundKey });
+check("local test mode: funding through the database succeeds", !fund.error && fund.data?.[0]?.already_funded === false, fund.error?.message);
+fund = await sb.rpc("fund_and_publish_campaign", { p_campaign_id: campaignId, p_idempotency_key: fundKey });
+check("double-submit does not error or re-charge", !fund.error && fund.data?.[0]?.already_funded === true, fund.error?.message);
 
 r = await a.get("/wallet");
 check("wallet shows $0.00 after one $1,200 debit (not charged twice)", r.status === 200 && r.text.includes("$0.00") && r.text.includes("Campaign funded"));
@@ -123,8 +128,10 @@ await b.action("/onboarding/role", "chooseInitialWorkspace", [form({ workspace: 
 await b.action("/onboarding/profile", "skipProfileSetup", []);
 r = await b.get(`/campaigns/${campaignId}`);
 check("another advertiser cannot open someone else's campaign page", !r.text.includes("Smoke Test Campaign") && r.text.includes("NEXT_HTTP_ERROR_FALLBACK;404"), String(r.status));
-r = await b.action(`/campaigns/${campaignId}/fund`, "fundCampaign", [{ status: "idle" }, form({ campaignId, idempotencyKey: randomUUID() })]);
-check("another advertiser cannot fund someone else's campaign", r.text.includes("Campaign not found"), r.text.slice(0, 200));
+const sbB = createClient(SUPABASE_URL, PUBLISHABLE_KEY, { auth: { persistSession: false } });
+await sbB.auth.signInWithPassword({ email: b.email, password: PASSWORD });
+fund = await sbB.rpc("fund_and_publish_campaign", { p_campaign_id: campaignId, p_idempotency_key: randomUUID() });
+check("another advertiser cannot fund someone else's campaign", fund.error?.message?.startsWith("campaign_not_found") || fund.error?.code === "P0002", fund.error?.message);
 
 // Role switching.
 r = await a.action("/dashboard", "switchWorkspace", [form({ workspace: "influencer" })]);

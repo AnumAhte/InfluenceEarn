@@ -1,6 +1,6 @@
 # InfluencEarn — Architecture
 
-Status: **Phase 4 complete** (work submissions, advertiser reviews, campaign lifecycle, read-only payout queue). Phase 3: social accounts, eligibility, applications. Phase 2: campaigns + wallet. Phase 1: foundation.
+Status: **Phase 6 complete** (marketplace without a payment provider: funding gate, notification emails, media kits, account settings, admin pages and suspension, rate limits, CSP, legal drafts). Phase 5: payouts, activity log, refunds. Phase 4: submissions and reviews. Phase 3: social accounts, eligibility, applications. Phase 2: campaigns + wallet. Phase 1: foundation.
 
 ---
 
@@ -441,3 +441,83 @@ Creator withdrawals, cancelling funded campaigns, any real payout/payment provid
   - `payout-retry.mjs` — `next dev` only, 25/25: failed attempt books nothing → two concurrent retries, exactly
     one pays → creator credited once ($40.14) → further release/hold/direct re-record cannot double-pay.
   - Phase 2/3/4 suites (kept locally) re-run 40/40, 40/40, 33/33.
+
+---
+
+## 10. Phase 6 — complete marketplace without a payment provider
+
+No payment or payout provider is integrated. Nothing in this phase moves money or simulates a
+successful real payment; the ledger, the 20% fee and the refund rules are unchanged.
+
+### Funding gate
+`campaign_funding_available()` + a `BEFORE INSERT` trigger on `campaign_funding` refuse funding (and therefore
+publishing) unless a verified funding source exists. Today that is only local test mode (`seed.sql`). The trigger also
+covers direct RPC calls. `fundCampaign` refuses when no `WalletFundingProvider` exists (production) and the fund page
+shows "Publishing unavailable". A real-provider migration must redefine `campaign_funding_available()`.
+
+### Notification emails
+`_notify` rows are queued (`email_status = pending`). `POST /api/internal/notification-emails` (bearer
+`EMAIL_WORKER_SECRET`, called by a scheduler) claims a batch through `claim_notification_emails` (service_role only,
+2-minute lease, attempt counter), sends over SMTP with Nodemailer and records the result with
+`record_notification_email_result` (attempt-matched; final states never change). `sent` = the SMTP server accepted the
+recipient. 5 attempts with 1/2/4/8-minute backoff, then `failed`. `skipped`: opted out, unconfirmed email, suspended, or
+created before email delivery existed. At-least-once delivery. Preferences: `notification_preferences`
+(applications / work / payments; account notices always sent), `/settings/notifications`.
+
+### Media kits
+`creator_media_kits` + private `media-kits` bucket (PDF, 4 MB). Readable by the creator, admins, and advertisers who own
+a campaign the creator applied to (`can_view_media_kit`). The server action checks size, MIME type and the `%PDF-`
+signature. Applicants list shows a signed link.
+
+### Account settings
+`/settings/account`: change email (Supabase double confirmation, token-hash `email_change` template) and password
+(current password re-checked on the user's own session; other sessions signed out). Supabase "password changed" and
+"email changed" notices are on.
+
+### Admin
+`/admin/users` (+ detail), `/admin/campaigns`, `/admin/reviews`, `/admin/transactions`, `/admin/settings` (system status,
+read-only). Admin reads use the existing admin RLS policies and `admin_list_users` / `admin_get_user_email`.
+
+**Suspension** (`suspend_user` / `unsuspend_user`, admin only, reason required, not self, not the last active admin):
+`user_suspensions` history + activity log; `auth.users.banned_until` (+100 years; GoTrue can't parse `infinity`) and the
+user's sessions deleted; the PostgREST `db_pre_request` hook (`reject_suspended_requests`) rejects every Data API request
+from a suspended user (covers still-valid tokens); restrictive storage policy; `_require_admin` refuses suspended
+admins. Open sessions are signed out with an explanation. No data is deleted; campaigns, work, wallets and payouts are
+left for review.
+
+### Rate limits
+The same pre-request hook counts every Data API write per user and endpoint (`rate_limit_rules`, default 120/min) →
+HTTP 429. App-level limits (`src/lib/rate-limit.ts`, `check_rate_limit`, service_role only) cover sign-in (per IP and
+per email), sign-up and password reset (per IP/email), password/email change and uploads (per user) — these reach
+Supabase Auth from the server, where Supabase sees only the server IP. A failed Data API write rolls back its own hit.
+
+### Security
+Next.js 16.4.6 (critical advisories in 16.0–16.4.0; moderate advisories in 16.0–16.4.4). Per-request nonce CSP from the proxy (`'strict-dynamic'`, no
+`unsafe-eval` in production, `frame-ancestors`/`object-src 'none'`); every page renders dynamically. Server-side
+Supabase requests time out after 15 s. Audit: RLS on every public table, `search_path` pinned on every
+`SECURITY DEFINER` function; client writes limited to editable columns.
+
+### Legal
+`/terms` and `/privacy` are drafts (`LEGAL_DOCUMENTS_APPROVED = false`): banner, `noindex`, highlighted
+`[To confirm: …]` placeholders, no consent wording at sign-up. Only behaviour the product has is described.
+
+### Verification (phase 6)
+- pgTAP: 265 assertions (91 new: funding gate 9, emails 27, media kits 14, suspension 30, rate limits 11).
+- Vitest: 132.
+- E2E (production build): wallet-campaigns 41, social-applications 41, submissions-reviews 34, payouts-refunds 31,
+  marketplace-phase6 103 — 250/250. Dev mode (mock providers): 36 + 25 + 99.
+- Browser QA in Chrome (production build, real CSP): 96/96 page checks across public, advertiser, influencer and admin
+  at 1366 px and 390 px (no console/hydration/CSP errors, no horizontal overflow, menus/drawers work) and 10/10
+  interactive flows. It found and fixed a wizard crash, a hydration mismatch, a missing admin confirmation and a
+  phone layout defect.
+
+### Launch blockers
+1. Payment provider (campaign funding) and payout provider — none integrated; production funding and payouts are blocked.
+2. Terms and Privacy need client and legal approval; then set `LEGAL_DOCUMENTS_APPROVED`.
+3. Platform-fee refund policy (`platform_fee_refundable()`) needs a business decision.
+4. Production SMTP with a verified sender domain, and a scheduler for the email endpoint.
+5. `SUPABASE_SECRET_KEY` and `EMAIL_WORKER_SECRET` set in production (rate limits and emails depend on them).
+6. A proxy that sets the client-IP header (`TRUSTED_IP_HEADER`), or per-IP limits can be spoofed.
+7. Hosted Supabase: apply migrations, auth templates (`supabase/templates/`, incl. email change and notices), keep
+   `test_funds_enabled` off, confirm Auth's own rate limits suit server-side sign-in traffic.
+8. Withdrawals and cancelling funded campaigns are not built (they need a provider).

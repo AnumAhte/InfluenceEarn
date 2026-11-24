@@ -11,8 +11,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   experimental: {
     serverActions: {
-      // Profile photos are capped at 2 MB; leave room for multipart overhead.
-      bodySizeLimit: "3mb",
+      // Profile photos (2 MB) and media kits (4 MB); leave room for multipart overhead.
+      bodySizeLimit: "5mb",
     },
   },
   async headers() {

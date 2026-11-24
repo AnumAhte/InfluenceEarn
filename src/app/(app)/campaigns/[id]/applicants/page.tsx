@@ -1,4 +1,4 @@
-import { ExternalLink, Users } from "lucide-react";
+import { ExternalLink, FileText, Users } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -28,6 +28,7 @@ import {
 import { APPLICATION_STATUS_META } from "@/features/applications/status";
 import { CampaignStatusBadge, formatDate, PlatformTile } from "@/features/campaigns/components/campaign-bits";
 import { getMyCampaign } from "@/features/campaigns/queries";
+import { getMediaKitLinks } from "@/features/creators/queries";
 import { cn } from "@/lib/utils/cn";
 
 export const metadata: Metadata = { title: "Applicants" };
@@ -44,6 +45,7 @@ export default async function ApplicantsPage({ params, searchParams }: PageProps
   const needed = campaign.creators_required ?? 0;
   const capacityReached = counts.selected >= needed;
   const platforms = campaign.platforms.map((p) => p.platform);
+  const mediaKits = await getMediaKitLinks(rows.map((row) => row.creator_id));
 
   return (
     <div className="mx-auto flex max-w-[1240px] flex-col gap-6">
@@ -123,6 +125,7 @@ export default async function ApplicantsPage({ params, searchParams }: PageProps
               <ApplicantItem
                 key={row.id}
                 row={row}
+                mediaKitUrl={mediaKits.get(row.creator_id) ?? null}
                 campaignId={id}
                 selectionOpen={selectionOpen}
                 capacityReached={capacityReached}
@@ -149,11 +152,13 @@ export default async function ApplicantsPage({ params, searchParams }: PageProps
 
 function ApplicantItem({
   row,
+  mediaKitUrl,
   campaignId,
   selectionOpen,
   capacityReached,
 }: {
   row: ApplicantRow;
+  mediaKitUrl: string | null;
   campaignId: string;
   selectionOpen: boolean;
   capacityReached: boolean;
@@ -192,6 +197,20 @@ function ApplicantItem({
               </a>
             </li>
           ))}
+          {mediaKitUrl ? (
+            <li>
+              <a
+                href={mediaKitUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-control border border-line px-2.5 py-1.5 text-[13px] font-[550] hover:bg-canvas"
+              >
+                <FileText aria-hidden className="size-4 text-primary" />
+                Media kit (PDF)
+                <span className="sr-only">(opens in a new tab)</span>
+              </a>
+            </li>
+          ) : null}
         </ul>
         {row.creator_categories.length ? (
           <p className="text-xs text-ink-muted">{row.creator_categories.map((c) => categoryLabel(c)).join(", ")}</p>

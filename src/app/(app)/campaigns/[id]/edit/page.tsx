@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 import { isEditable } from "@/domain/campaigns/state-machine";
+import { countryOptions } from "@/domain/geo/countries";
 import { requireOnboardedAccount } from "@/features/account/queries";
 import { CampaignWizard } from "@/features/campaigns/components/wizard/campaign-wizard";
 import { getMyCampaign, toDraftInput } from "@/features/campaigns/queries";
@@ -27,7 +28,7 @@ export default async function EditCampaignPage({ params }: PageProps<"/campaigns
         <span aria-hidden> / </span>
         <span aria-current="page">Edit</span>
       </nav>
-      <CampaignWizard initialValues={toDraftInput(campaign)} campaignId={campaign.id} today={today} />
+      <CampaignWizard initialValues={toDraftInput(campaign)} campaignId={campaign.id} today={today} countries={countryOptions()} />
     </div>
   );
 }

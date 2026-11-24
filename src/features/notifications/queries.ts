@@ -31,3 +31,20 @@ export async function listMyNotifications(userId: string, page: number, unreadOn
   if (error) throw new Error("Notifications could not be loaded.", { cause: error });
   return { rows: data ?? [], total: count ?? 0 };
 }
+
+export type EmailPreferences = { applications: boolean; work: boolean; payments: boolean };
+
+/** A missing row means every category is on. */
+export async function getMyEmailPreferences(userId: string): Promise<EmailPreferences> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("notification_preferences")
+    .select("email_applications, email_work, email_payments")
+    .eq("user_id", userId)
+    .maybeSingle();
+  return {
+    applications: data?.email_applications ?? true,
+    work: data?.email_work ?? true,
+    payments: data?.email_payments ?? true,
+  };
+}

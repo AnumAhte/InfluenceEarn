@@ -30,8 +30,13 @@ export function countryName(code: string): string {
   }
 }
 
-/** Codes sorted by English display name, for selects. */
-export function countryOptions(): { code: CountryCode; name: string }[] {
+export type CountryOption = { code: CountryCode; name: string };
+
+/**
+ * Codes sorted by English display name, for selects. Build this on the server and pass it to client
+ * components: Node and browsers ship different ICU data, so names can differ and break hydration.
+ */
+export function countryOptions(): CountryOption[] {
   return COUNTRY_CODES.map((code) => ({ code, name: countryName(code) })).sort((a, b) =>
     a.name.localeCompare(b.name, "en"),
   );

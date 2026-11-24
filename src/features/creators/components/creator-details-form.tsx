@@ -8,17 +8,16 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { CATEGORIES, CREATOR_GENDERS, GENDER_LABELS, type CategorySlug } from "@/domain/campaigns/catalog";
-import { countryOptions } from "@/domain/geo/countries";
+import type { CountryOption } from "@/domain/geo/countries";
 import { IDLE, type ActionState } from "@/lib/forms/action-state";
 import { cn } from "@/lib/utils/cn";
 
 import { saveCreatorDetails, type CreatorField } from "../actions";
 import type { CreatorDetails } from "../queries";
 
-const COUNTRIES = countryOptions();
 
 /** Private eligibility details. Advertisers only see an application snapshot (age, not date of birth). */
-export function CreatorDetailsForm({ details, maxBirthDate }: { details: CreatorDetails; maxBirthDate: string }) {
+export function CreatorDetailsForm({ details, maxBirthDate, countries }: { details: CreatorDetails; maxBirthDate: string; countries: CountryOption[] }) {
   const [state, action] = useActionState<ActionState<CreatorField>, FormData>(saveCreatorDetails, IDLE);
   const [categories, setCategories] = useState<CategorySlug[]>(details.categories);
   const errors = state.status === "error" ? (state.fieldErrors ?? {}) : {};
@@ -32,7 +31,7 @@ export function CreatorDetailsForm({ details, maxBirthDate }: { details: Creator
         <Field id="countryCode" label="Country" error={errors.countryCode} hint="Used for campaigns that target a location.">
           <Select id="countryCode" name="countryCode" defaultValue={details.countryCode ?? ""} aria-describedby="countryCode-hint">
             <option value="">Not set</option>
-            {COUNTRIES.map((c) => (
+            {countries.map((c) => (
               <option key={c.code} value={c.code}>{c.name}</option>
             ))}
           </Select>

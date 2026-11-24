@@ -12,6 +12,7 @@
 // the last passed/failed check and the last HTTP request, and exits with code 2. A run that
 // finishes prints "N passed, M failed" and exits 0 or 1. Anything else is not a valid result.
 import { execFileSync } from "node:child_process";
+import { randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { resolve } from "node:path";
@@ -84,6 +85,8 @@ async function http(method, path, init, label = `${method} ${path}`) {
 
 export class Session {
   jar = new Map();
+  // Each session looks like a separate client to the app's per-IP rate limits (x-forwarded-for).
+  ip = `10.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}`;
   store(res) {
     for (const c of res.headers.getSetCookie()) {
       const [pair] = c.split(";");
@@ -94,7 +97,7 @@ export class Session {
   }
   cookie() { return [...this.jar].map(([k, v]) => `${k}=${v}`).join("; "); }
   async get(path) {
-    const { res, text } = await http("GET", path, { headers: { cookie: this.cookie() } });
+    const { res, text } = await http("GET", path, { headers: { cookie: this.cookie(), "x-forwarded-for": this.ip } });
     this.store(res);
     return { status: res.status, location: res.headers.get("location"), text };
   }
@@ -104,7 +107,7 @@ export class Session {
     const id = ACTION[name];
     if (!id) throw new Error(`No server action "${name}" in ${MANIFEST} (is the app built/compiled for MODE=${MODE}?)`);
     let body;
-    const headers = { "Next-Action": id, cookie: this.cookie(), Accept: "text/x-component" };
+    const headers = { "Next-Action": id, cookie: this.cookie(), Accept: "text/x-component", "x-forwarded-for": this.ip };
     const formIndex = args.findIndex((a) => a instanceof FormData);
     if (formIndex === -1) {
       body = JSON.stringify(args);
@@ -169,4 +172,82 @@ export function requireMode(mode, why) {
     console.log(`This suite needs MODE=${mode}: ${why}`);
     process.exit(1);
   }
+}
+
+/**
+ * Funds and publishes a campaign for test setup.
+ *
+ * MODE=dev: through the real "Fund & publish" action (the mock funding provider exists).
+ * MODE=prod: the action must be refused (no verified funding provider in production), so after
+ * checking that, the campaign is funded through the database function as the signed-in owner.
+ * That works only because the local database is in test mode (seed.sql), never on a hosted project.
+ * `sb` is a Supabase client signed in as the campaign owner.
+ */
+export async function fundForTest(session, sb, campaignId) {
+  if (MODE === "dev") {
+    const r = await session.action(`/campaigns/${campaignId}/fund`, "fundCampaign", [{ status: "idle" }, form({ campaignId, idempotencyKey: randomUUID() })]);
+    return Boolean(r.redirect?.includes("funded=1"));
+  }
+  const r = await session.action(`/campaigns/${campaignId}/fund`, "fundCampaign", [{ status: "idle" }, form({ campaignId, idempotencyKey: randomUUID() })]);
+  check("production refuses Fund & publish (no verified payment provider)", !r.redirect && r.text.includes("funding_unavailable"), `${r.redirect} ${r.text.slice(0, 200)}`);
+  const { data, error } = await sb.rpc("fund_and_publish_campaign", { p_campaign_id: campaignId, p_idempotency_key: randomUUID() });
+  return !error && data?.[0]?.already_funded === false;
+}
+
+/** Creates a complete Instagram campaign draft and funds it (see fundForTest). Returns ids and the owner's client. */
+export async function createFundedCampaign(session, title, { paymentPerCreator = "25", creatorsRequired = 1, minFollowers = null } = {}) {
+  const draft = {
+    title,
+    description: "Promote our summer drop with one Instagram Reel showing two outfits from the collection.",
+    categorySlug: "fashion", campaignType: "product_launch",
+    eligibility: { minFollowers, genders: [], ageMin: null, ageMax: null, creatorCategories: [], locations: [] },
+    platforms: ["instagram"], tasks: [{ platform: "instagram", taskType: "instagram_reel", quantity: 1 }],
+    instructions: "", captionInstructions: "", hashtags: [], mentions: [], referenceUrl: "",
+    applicationDeadline: new Date(Date.now() + 10 * 864e5).toISOString().slice(0, 10),
+    taskDeadline: new Date(Date.now() + 20 * 864e5).toISOString().slice(0, 10),
+    paymentPerCreator, creatorsRequired,
+  };
+  const r = await session.action("/campaigns/new", "saveCampaignDraft", [{ campaignId: null, intent: "save", draft }]);
+  const campaignId = (r.text.match(/"campaignId":"([0-9a-f-]{36})"/) ?? [])[1];
+  await session.action(`/campaigns/${campaignId}/edit`, "saveCampaignDraft", [{ campaignId, intent: "continue", draft }]);
+  const sb = createClient(SUPABASE_URL, PUBLISHABLE_KEY, { auth: { persistSession: false } });
+  await sb.auth.signInWithPassword({ email: session.email, password: PASSWORD });
+  const total = Math.round(Number(paymentPerCreator) * creatorsRequired * 120);
+  const key = randomUUID();
+  await sb.rpc("record_test_deposit", { p_amount_cents: total, p_currency: "USD", p_provider_reference: `mock_${key.slice(0, 12)}`, p_status: "succeeded", p_idempotency_key: key });
+  const funded = await fundForTest(session, sb, campaignId);
+  return { campaignId, sb, funded };
+}
+
+/** Reads a value from .env.local (the app's local configuration). */
+export function envLocal(name) {
+  try {
+    const line = readFileSync(resolve(ROOT, ".env.local"), "utf8").split(/\r?\n/).find((l) => l.startsWith(`${name}=`));
+    return line ? line.slice(name.length + 1).replace(/^"|"$/g, "") : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/** Calls the notification email worker until the queue is drained; returns the summed summary. */
+export async function runEmailWorker(secret = envLocal("EMAIL_WORKER_SECRET")) {
+  const total = { claimed: 0, sent: 0, retrying: 0, failed: 0, errors: 0, status: 200 };
+  for (let i = 0; i < 20; i++) {
+    const { res, text } = await http("POST", "/api/internal/notification-emails", { headers: { authorization: `Bearer ${secret}` } });
+    total.status = res.status;
+    if (res.status !== 200) return { ...total, body: text };
+    const s = JSON.parse(text);
+    for (const k of ["claimed", "sent", "retrying", "failed", "errors"]) total[k] += s[k];
+    if (s.claimed === 0) break;
+  }
+  return total;
+}
+
+/** Mailpit messages addressed to `email` (newest first). */
+export async function mailpitMessages(email) {
+  const search = await (await fetch(`${MAILPIT}/api/v1/search?query=${encodeURIComponent("to:" + email)}`)).json();
+  return search.messages ?? [];
+}
+export async function mailpitMessage(id) {
+  return (await fetch(`${MAILPIT}/api/v1/message/${id}`)).json();
 }

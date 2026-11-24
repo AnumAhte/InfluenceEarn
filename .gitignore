@@ -50,3 +50,4 @@ supabase/.temp
 
 # design source uploads (personal reference images)
 design/uploads/
+.qa/

@@ -16,6 +16,8 @@ const ACTION_LABEL: Record<string, string> = {
   "payout.paid": "Payout paid",
   "payout.failed": "Payout failed",
   "payout.hold": "Put payout on hold",
+  "user.suspended": "Suspended account",
+  "user.unsuspended": "Reinstated account",
 };
 
 function describe(details: unknown): string {
@@ -38,7 +40,7 @@ export default async function ActivityPage({ searchParams }: PageProps<"/admin/a
 
   return (
     <div className="mx-auto flex max-w-[1080px] flex-col gap-6">
-      <PageHeader title="Activity log" description="Every payout action taken by an agency admin. Entries can't be edited or deleted." />
+      <PageHeader title="Activity log" description="Every payout and account action taken by an agency admin. Entries can't be edited or deleted." />
       <Card className="overflow-hidden">
         {rows.length === 0 ? (
           <EmptyState icon={History} title="No admin activity yet" description="Holds, releases and payout results are recorded here." />

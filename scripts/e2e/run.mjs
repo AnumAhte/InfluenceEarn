@@ -8,8 +8,8 @@
 import { spawnSync } from "node:child_process";
 
 const SUITES = {
-  prod: ["wallet-campaigns.mjs", "social-applications.mjs", "submissions-reviews.mjs", "payouts-refunds.mjs"],
-  dev: ["payouts-refunds.mjs", "payout-retry.mjs"],
+  prod: ["wallet-campaigns.mjs", "social-applications.mjs", "submissions-reviews.mjs", "payouts-refunds.mjs", "marketplace-phase6.mjs"],
+  dev: ["payouts-refunds.mjs", "payout-retry.mjs", "marketplace-phase6.mjs"],
 };
 
 const mode = process.argv[2];
