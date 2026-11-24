@@ -492,7 +492,7 @@ per email), sign-up and password reset (per IP/email), password/email change and
 Supabase Auth from the server, where Supabase sees only the server IP. A failed Data API write rolls back its own hit.
 
 ### Security
-Next.js 16.4.2 (critical advisories in 16.0–16.4.0). Per-request nonce CSP from the proxy (`'strict-dynamic'`, no
+Next.js 16.4.6 (critical advisories in 16.0–16.4.0; moderate advisories in 16.0–16.4.4). Per-request nonce CSP from the proxy (`'strict-dynamic'`, no
 `unsafe-eval` in production, `frame-ancestors`/`object-src 'none'`); every page renders dynamically. Server-side
 Supabase requests time out after 15 s. Audit: RLS on every public table, `search_path` pinned on every
 `SECURITY DEFINER` function; client writes limited to editable columns.
